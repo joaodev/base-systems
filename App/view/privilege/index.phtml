@@ -1,0 +1,129 @@
+<?php 
+$data = $this->view->data; 
+?>
+<?php if ($_SESSION['ROLE_ADM'] == '1'): ?>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="table_role2" style="width: 99.9%;">
+            <thead>
+                <tr class="text-center bg-dark">
+                <th class="text-white" style="font-size: 14px;">Recurso</th>
+                    <th class="text-white" style="font-size: 14px;">Módulo</th>
+                    <th class="text-white" style="font-size: 14px;">Ativo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($data as $entity): ?>
+                    <tr class="text-center">
+                        <td style="font-size: 15px">
+                            <?php echo $entity['resource']; ?>
+                        </td>
+                        <td style="font-size: 15px">
+                            <?php echo $entity['module']; ?>
+                        </td>
+                        <td style="font-size: 15px">
+                            <input type="checkbox" id="my-checkbox-<?php echo $entity['id']; ?>"
+                                data-bootstrap-switch data-off-color="danger" 
+                                data-on-color="success" onchange="getVal(<?php echo $entity['id']; ?>);"
+                                <?php echo ($entity['status'] == 1) ? 'checked' : ''; ?>>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("input[data-bootstrap-switch]").each(function(){
+                $(this).bootstrapSwitch();
+            });
+       
+            var buttonCommon = {
+                exportOptions: {
+                    format: {
+                        body: function ( data, row, column, node ) {
+                            return data;
+                        }
+                    }
+                }
+            };	
+
+            $('#table_role2').DataTable({
+                "sDom": 'fltip',
+                searching: true,
+                buttons: [
+                    $.extend( true, {}, buttonCommon, {
+                        extend: 'excel',
+                        title: 'PRIVILÉGIOS DE ACESSO',
+                        exportOptions: {columns: [0,1]}
+                    }), 
+                    {extend: 'pdf', 
+                        title: 'PRIVILÉGIOS DE ACESSO',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                        exportOptions: {columns: [0,1]}
+                    }
+                ],
+                order: [ [0, "asc"] ],
+                responsive: true,
+                info: true,
+                processing: true,
+                scrollCollapse: true,
+                paging: true,
+                "pageLength": 18,
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ &nbsp;",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Filtrar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                }
+            });
+        });
+
+        function getVal(id) {
+            let status_acl = "";
+            if ($('#my-checkbox-' + id).is(":checked")) {
+                status_acl = 1;    
+            } else {
+                status_acl = 0;
+            }
+            
+            $("#modalLargeLoader").show();
+        
+            $.ajax({
+                type: "POST",
+                url: "controle-acesso/altera-permissao",
+                data: {
+                    id: id,
+                    status: status_acl
+                },
+                dataType: 'json',
+                async: true
+            }).done(function(data) {
+                showAlert(data.type, data.title, data.msg, data.pos);
+                $("#modalLargeLoader").hide();
+            }).fail(function() {
+                showInternalErrorAlert(); 
+                $("#modalLargeLoader").hide();   
+            }); 
+        }
+    </script>
+<?php endif; ?>

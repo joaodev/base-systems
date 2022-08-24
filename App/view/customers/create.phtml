@@ -1,0 +1,140 @@
+<?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 2, 6)): ?>
+    <form method="post" name="formCreateCustomer" id="formCreateCustomer">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" class="form-control" name="name" id="name" required maxlength="255">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="cnpj">CPF</label>
+                    <input type="text" class="form-control" name="document_1" id="document_1"  maxlength="14">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="cnpj">CNPJ</label>
+                    <input type="text" class="form-control" name="document_2" id="document_2"  maxlength="18">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="contato">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" maxlength="200" required>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="phone">Telefone</label>
+                    <input type="text" class="form-control" name="phone" id="phone" maxlength="20">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="cellphone">Celular</label>
+                    <input type="text" class="form-control" name="cellphone" id="cellphone" maxlength="20">
+                </div>
+            </div>
+            <div class="col-md-12"><hr></div>
+            
+            <div class="col-md-4 text-center offset-md-4">
+                <button type="submit" class="btn btn-success bg-gradient-success" style="width: 100%;">
+                    <i class="fa fa-save pr-1"></i> Gravar
+                </button>
+            </div>
+        </div>
+    </form>
+    <script>
+
+        $(document).ready(function(){
+            $("input[id=initial_amount]").maskMoney({allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
+
+            $("#document_1").mask("999.999.999-99");
+            $("#document_2").mask("99.999.999/9999-99");
+
+            $("#phone").mask("(99)9999-9999");
+            $("#cellphone").mask("(99)99999-9999");
+
+            $('#formCreateCustomer').validate({
+                rules: {
+                    name: {
+                        remote: { 
+                            type: "post",
+                            url: "<?php echo baseUrl; ?>clientes/valor-existente",
+                        }
+                    },
+                    cnpj: {
+                        remote: { 
+                            type: "post",
+                            url: "<?php echo baseUrl; ?>clientes/valor-existente",
+                        }
+                    },
+                    document_1: {
+                        remote: { 
+                            type: "post",
+                            url: "<?php echo baseUrl; ?>clientes/valor-existente",
+                        }
+                    },
+                    document_2: {
+                        remote: { 
+                            type: "post",
+                            url: "<?php echo baseUrl; ?>clientes/valor-existente",
+                        }
+                    },
+                    email: {
+                        remote: { 
+                            type: "post",
+                            url: "<?php echo baseUrl; ?>clientes/valor-existente",
+                        }
+                    },
+                    cellphone: {
+                        remote: { 
+                            type: "post",
+                            url: "<?php echo baseUrl; ?>clientes/valor-existente",
+                        }
+                    },
+                },
+                messages: {
+                    name: {
+                        remote: "Nome já cadastrado"
+                    },
+                    document_1: {
+                        remote: "CPF já cadastrado"
+                    },
+                    document_2: {
+                        remote: "CNPJ já cadastrado"
+                    },
+                    email: {
+                        remote: "Email já cadastrado"
+                    },
+                    cellphone: {
+                        remote: "Celular já cadastrado"
+                    },
+                },
+                submitHandler: function( form ){
+                    var dados = $( form ).serialize();
+                    $("#modalXLLoader").show();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo baseUrl; ?>clientes/processa-cadastro",
+                        data: dados,
+                        dataType: 'json',
+                        async: true
+                    }).done(function(data) {
+                        showAlert(data.type, data.title, data.msg, data.pos);
+                        $("#modalXL").modal('hide');
+                        openModule('clientes');
+                    }).fail(function() {
+                        showInternalErrorAlert(); 
+                        $("#modalXLLoader").hide();   
+                    }); 
+
+                    return false;
+                }
+            });
+        });
+    </script>
+<?php endif; ?>

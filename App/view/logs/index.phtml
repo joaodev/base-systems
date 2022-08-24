@@ -1,0 +1,134 @@
+<?php 
+$data = $this->view->data; 
+
+$canView = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 4)) ? true : false;
+?>
+<?php if ($canView): ?>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-6">
+                    <h1 class="text-dark" style="position: relative; top: 5px">
+                        <i class="fas fa-th-list"></i>
+                        Logs do Sistema
+                    </h1>
+                </div>
+                <div class="col-6">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content" style="margin-left: 9px; margin-right: 9px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="tbl_prioridade" style="width: 99.9%;">
+                                    <thead>
+                                        <tr class="text-center bg-dark" style="height: 30px;">
+                                            <th class="text-white" style="font-size: 14px;">Data</th>
+                                            <th class="text-white" style="font-size: 14px;">Usuário</th>
+                                            <th class="text-white" style="font-size: 14px;">Ação</th>
+                                            <th class="text-white" style="font-size: 14px;">IP</th>
+                                            <th class="text-white" style="font-size: 14px;">Dispositivo</th>
+                                            <th class="text-white" style="font-size: 14px;">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($data as $entity): ?>
+                                            <tr class="text-center">
+                                                <td style="font-size: 15px">
+                                                    <?php echo $this->formatDateTime($entity['log_date']); ?>
+                                                </td>
+                                                <td style="font-size: 15px">
+                                                    <?php echo $entity['username']; ?>
+                                                </td>
+                                                <td style="font-size: 15px;">
+                                                    <?php 
+                                                    $pos = strpos($entity['log_action'], 'REQUISIÇÃO BLOQUEADA:');
+                                                    if ($pos === false):
+                                                        echo $entity['log_action'];
+                                                    else:
+                                                        echo 'Requisiçao bloqueada!';
+                                                    endif;
+                                                    ?>
+                                                </td>
+                                                <td style="font-size: 15px">
+                                                    <?php echo $entity['log_ip']; ?>
+                                                </td>
+                                                <td style="font-size: 15px">
+                                                    <?php echo $entity['log_user_agent']; ?>
+                                                </td>
+                                                <td style="font-size: 15px">
+                                                    <?php echo $entity['log_status']; ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var buttonCommon = {
+                exportOptions: {
+                    format: {
+                        body: function ( data, row, column, node ) {
+                            return data;
+                        }
+                    }
+                }
+            };	
+
+            $('#tbl_prioridade').DataTable({
+                "sDom": 'flBtip',
+                searching: true,
+                buttons: [
+                    $.extend( true, {}, buttonCommon, {
+                        extend: 'excel',
+                        title: 'Lista de Categorias',
+                        exportOptions: {columns: [0,1,2,3,4,5]}
+                    })
+                ],
+                order: [ [0, "desc"] ],
+                responsive: true,
+                info: true,
+                processing: true,
+                scrollCollapse: true,
+                paging: true,
+                "pageLength": 25,
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ &nbsp;",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Filtrar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                }
+            });
+        });
+    </script>
+<?php endif; ?>

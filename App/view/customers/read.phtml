@@ -1,0 +1,75 @@
+<?php $entity = $this->view->entity; ?>
+<?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 6)): ?>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control" readonly
+                    value="<?php echo $entity['name']; ?>">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="cnpj">CPF</label>
+                <input type="text" class="form-control" readonly
+                    value="<?php echo $entity['document_1']; ?>">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="cnpj">CNPJ</label>
+                <input type="text" class="form-control" readonly
+                    value="<?php echo $entity['document_2']; ?>">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="contato">Email</label>
+                <input type="email" class="form-control" readonly
+                    value="<?php echo $entity['email']; ?>">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="phone">Telefone</label>
+                <input type="text" class="form-control" readonly
+                    value="<?php echo $entity['phone']; ?>">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="cellphone">Celular</label>
+                <input type="text" class="form-control" readonly
+                    value="<?php echo $entity['cellphone']; ?>">
+            </div>
+        </div>
+        
+        <div class="col-md-12"><hr></div>
+        <div class="col-md-6 text-left">
+            <span for="dt_cadastro">Cadastrado em:</span> 
+            <b><?php echo $this->formatDateTime($entity['created_at']); ?></b>
+        </div>
+        <div class="col-md-6 text-right">
+            <?php if (!empty($entity['updated_at'])): ?>
+                <span for="dt_cadastro">Última atualização em:</span> 
+                <b><?php echo $this->formatDateTime($entity['updated_at']); ?></b>
+            <?php endif; ?>
+        </div>
+        <div class="col-md-12"><hr></div>
+        <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 3, 6)): ?>
+            <div class="col-3">
+                <button type="button" class="btn btn-primary bg-navy" onclick="updateCustomer(<?php echo $entity['id']; ?>);" style="width: 100%;">
+                    <i class="fa fa-pen pr-1"></i> Editar
+                </button>
+            </div>
+        <?php endif; ?>
+        <div class="col-8"></div>
+        <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 6)): ?>
+            <div class="col-1">
+                <button type="button" class="btn btn-danger bg-gradient-danger" onclick="deleteCustomer(<?php echo $entity['id']; ?>);" style="width: 100%;">
+                    <i class="fa fa-trash"></i> 
+                </button>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

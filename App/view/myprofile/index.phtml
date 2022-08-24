@@ -1,0 +1,149 @@
+<?php 
+$entity = $this->view->entity; 
+?>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12">
+                <h1 class="text-primary" style="position: relative; top: 6px">
+                    <i class="fas fa-user"></i>
+                    Meu Perfil
+                </h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content" style="margin-left: 9px; margin-right: 9px;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post" name="formUpdateMyProfile" id="formUpdateMyProfile" enctype="multipart/form-data" onsubmit="hashPass(this);">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="title">Imagem de Perfil</label>
+                                        <?php if (!empty($entity['file'])): ?><br>
+                                            <img src="<?php echo baseUrl . 'public/uploads/users/'
+                                                . $entity['file']; ?>" style="max-height: 200px; margin-bottom: 15px;">
+                                                
+                                        <?php endif; ?>
+                                        <input type="file" class="form-control" name="file" id="file">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="name">Nome</label>
+                                        <input type="text" class="form-control" name="name" id="name" required
+                                            value="<?php echo $entity['name']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="job_role">Profissão</label>
+                                        <input type="text" class="form-control" name="job_role" id="job_role" required
+                                            value="<?php echo $entity['job_role']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="name">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email" required
+                                            value="<?php echo $entity['email']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="cellphone">Celular</label>
+                                        <input type="text" class="form-control" name="cellphone" id="cellphone"
+                                            value="<?php echo $entity['cellphone']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-12"><hr></div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="password">Nova senha</label>
+                                            <input type="password" class="form-control"name="password" id="password">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="confirmation">Confirmar senha</label>
+                                        <input type="password" class="form-control" name="confirmation" id="confirmation">
+                                    </div>
+                                </div>
+                                <div class="col-md-12"><hr></div>
+                                <div class="col-md-4 text-center offset-md-4">
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="btnSubmit">
+                                        <i class="fa fa-save pr-1"></i> Gravar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="<?php echo baseUrl; ?>public/js/md5.min.js"></script>
+<script>
+    function hashPass(form) {
+        if (form.password.value != '') {
+            let psw = md5(form.password.value);
+            form.password.value = psw;
+        }
+
+        if (form.confirmation.value != '') {
+            let pswc = md5(form.confirmation.value);
+            form.confirmation.value = pswc;
+        }
+    }
+</script>
+<script>
+    $(document).ready(function() {
+        $("#cellphone").mask("(99)99999-9999");
+        $('#formUpdateMyProfile').validate({
+            submitHandler: function( form ){
+                var dados = $( form ).serialize();
+                var file_data = $('#file').prop('files')[0];   
+                var form_data = new FormData();         
+
+                form_data.append('file', file_data);    
+                form_data.append('name', $("#name").val());    
+                form_data.append('job_role', $("#job_role").val());    
+                form_data.append('email', $("#email").val());    
+                form_data.append('cellphone', $("#cellphone").val());    
+                form_data.append('password', $("#password").val());    
+                form_data.append('confirmation', $("#confirmation").val());    
+
+                $("#baseLoader").show();
+                $("#btnSubmit").show('disabled', true);
+
+                $.ajax({
+                    type: "POST",
+                    url: "meu-perfil/processa-edicao",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: form_data,
+                    dataType: 'json',
+                    async: true
+                }).done(function(data) {
+                    showAlert(data.type, data.title, data.msg, data.pos);
+                    $("#baseLoader").hide();  
+                    openModule('meu-perfil');
+                }).fail(function() {
+                    showInternalErrorAlert(); 
+                    $("#baseLoader").hide();   
+                    $("#btnSubmit").show('disabled', false);
+                }); 
+
+                return false;
+            }
+        });
+    });
+</script>

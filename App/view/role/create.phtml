@@ -1,0 +1,70 @@
+<?php if ($_SESSION['ROLE_ADM'] == '1'): ?>
+    <form method="post" name="formCreateRole" id="formCreateRole">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" class="form-control" name="name" id="name" required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="is_admin">Administrador?</label>
+                    <select name="is_admin" id="is_admin" class="form-control" required>
+                        <option value="0">Não</option>
+                        <option value="1">Sim</option>
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12"><hr></div>
+            <div class="col-md-4 text-center offset-md-4">
+                <button type="submit" class="btn btn-primary" style="width: 100%;" id="btnSubmit">
+                    <i class="fa fa-save pr-1"></i> Gravar
+                </button>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(document).ready(function(){
+            $('#formCreateRole').validate({
+                rules: {
+                    name: {
+                        remote: { 
+                            type: "post",
+                            url: "controle-acesso/valor-existente",
+                        }
+                    },
+                },
+                messages: {
+                    name: {
+                        remote: "Nome já cadastrado"
+                    },
+                },
+                submitHandler: function( form ){
+                    var dados = $( form ).serialize();
+                    $("#modalLargeLoader").show();
+                    $("#btnSubmit").show('disabled', true);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "controle-acesso/processa-cadastro",
+                        data: dados,
+                        dataType: 'json',
+                        async: true
+                    }).done(function(data) {
+                        showAlert(data.type, data.title, data.msg, data.pos);
+                        $("#modalLarge").modal('hide');
+                        openModule('controle-acesso');
+                    }).fail(function() {
+                        showInternalErrorAlert(); 
+                        $("#modalLargeLoader").hide();  
+                        $("#btnSubmit").show('disabled', false); 
+                    }); 
+
+                    return false;
+                }
+            });
+        });
+    </script>
+<?php endif; ?>

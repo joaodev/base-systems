@@ -1,0 +1,105 @@
+<?php 
+$entity = $this->view->entity; 
+
+$canView    = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 5)) ? true : false;
+$canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 3, 5)) ? true : false;
+?>
+<?php if ($canView): ?>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h1 class="text-primary" style="position: relative; top: 6px">
+                        <i class="fas fa-eye"></i>
+                        Política de Privacidade
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content" style="margin-left: 9px; margin-right: 9px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="post" name="formUpdatePL" id="formUpdatePL">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            
+                                            <?php if ($canUpdate): ?>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="description">Descrição</label>
+                                                        <textarea name="description" id="description" rows="12" class="form-control" 
+                                                            required><?php echo $entity['description']; ?></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12"><hr></div>
+                                                <div class="col-md-4 text-center offset-md-4">
+                                                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="btnSubmit">
+                                                        <i class="fa fa-save pr-1"></i> Gravar
+                                                    </button>
+                                                </div>
+                                            <?php else: ?>
+                                                <div class="col-md-12">
+                                                    <?php echo $entity['description']; ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <link rel="stylesheet" type="text/css" href="<?php echo baseUrl; ?>public/app/tinymce/tinymce.min.css">
+    <script src="<?php echo baseUrl; ?>public/app/tinymce/tinymce.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function(){
+            tinymce.init({
+              selector: 'textarea',
+              height: 350,
+              plugins: [
+                'advlist autolink lists link image charmap print preview anchor textcolor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code help wordcount'
+              ],
+              toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+              content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css']
+            });
+
+            $('#formUpdatePL').validate({
+                submitHandler: function( form ){
+                    var dados = $( form ).serialize();
+       
+                    $("#baseLoader").show();
+                    $("#btnSubmit").show('disabled', true);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "politica-privacidade/processa-edicao",
+                        data: dados,
+                        dataType: 'json',
+                    }).done(function(data) {
+                        showAlert(data.type, data.title, data.msg, data.pos);
+                        openModule('politica-privacidade');
+                    }).fail(function() {
+                        showInternalErrorAlert(); 
+                        $("#baseLoader").hide();   
+                        $("#btnSubmit").show('disabled', false);
+                    }); 
+  
+                    return false;
+                }
+            });
+        });
+    </script>
+<?php endif; ?>
+                                    

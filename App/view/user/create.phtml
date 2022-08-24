@@ -1,0 +1,144 @@
+<?php $roles = $this->view->roles; ?>
+<?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 2, 1)): ?>
+    <form method="post" name="formCreateUser" id="formCreateUser" onsubmit="hashPass(this);">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" class="form-control" name="name" id="name" required>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label for="name">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="cellphone">Celular</label>
+                    <input type="text" class="form-control" name="cellphone" id="cellphone">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="job_role">Cargo</label>
+                    <input type="text" class="form-control" name="job_role" id="job_role" required>
+                </div>
+            </div>
+            
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Nível de Acesso</label>
+                    <select name="role_id" id="role_id" class="form-control" required>
+                        <option value="">-</option>
+                        <?php foreach($roles as $role): ?>
+                            <option value="<?php echo $role['id']; ?>">
+                                <?php echo $role['name']; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="password">Nova senha</label>
+                        <input type="password" class="form-control"name="password" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="confirmation">Confirmar senha</label>
+                    <input type="password" class="form-control" name="confirmation" required>
+                </div>
+            </div>
+            <div class="col-md-12"><hr></div>
+            <div class="col-md-4 text-center offset-md-4">
+                <button type="submit" class="btn btn-primary" style="width: 100%;" id="btnSubmit">
+                    <i class="fa fa-save pr-1"></i> Gravar
+                </button>
+            </div>
+        </div>
+    </form>
+    <script src="<?php echo baseUrl; ?>public/js/md5.min.js"></script>
+    <script>
+        function hashPass(form) {
+            if (form.password.value != '') {
+                let psw = md5(form.password.value);
+                form.password.value = psw;
+            }
+
+            if (form.confirmation.value != '') {
+                let pswc = md5(form.confirmation.value);
+                form.confirmation.value = pswc;
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+            $("#cellphone").mask("(99)99999-9999");
+
+            $('#formCreateUser').validate({
+                rules: {
+                    name: {
+                        remote: { 
+                            type: "post",
+                            url: "usuarios/valor-existente",
+                        }
+                    },
+                    email: {
+                        remote: { 
+                            type: "post",
+                            url: "usuarios/valor-existente",
+                        }
+                    },
+                    cellphone: {
+                        remote: { 
+                            type: "post",
+                            url: "usuarios/valor-existente",
+                        }
+                    },
+                },
+                messages: {
+                    name: {
+                        remote: "Nome já cadastrado"
+                    },
+                    email: {
+                        remote: "Email já cadastrado"
+                    },
+                    cellphone: {
+                        remote: "Celular já cadastrado"
+                    }
+                },
+                submitHandler: function( form ){
+                    var dados = $( form ).serialize();
+                    $("#modalLargeLoader").show();
+                    $("#btnSubmit").show('disabled', true);
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: "usuarios/processa-cadastro",
+                        data: dados,
+                        dataType: 'json',
+                        async: true
+                    }).done(function(data) {
+                        showAlert(data.type, data.title, data.msg, data.pos);
+                        $("#modalLargeLoader").hide();
+                        
+                        if (data.type == 'success') {
+                            $("#modalLarge").modal('hide');
+                            openModule('usuarios');
+                        }
+                    }).fail(function() {
+                        showInternalErrorAlert(); 
+                        $("#modalLargeLoader").hide();   
+                        $("#btnSubmit").show('disabled', false);
+                    }); 
+
+                    return false;
+                }
+            });
+        });
+    </script>
+<?php endif; ?>
