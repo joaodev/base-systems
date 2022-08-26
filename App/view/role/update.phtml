@@ -20,7 +20,7 @@
             </div>
             <div class="col-md-12"><hr></div>
             <div class="col-md-4 text-center offset-md-4">
-                <input type="hidden" name="id" value="<?php echo $entity['id']; ?>">
+                <input type="hidden" name="uuid" value="<?php echo $entity['uuid']; ?>">
                 <button type="submit" class="btn btn-success" style="width: 100%;">
                     <i class="fa fa-save pr-1"></i> Gravar
                 </button>
@@ -35,7 +35,7 @@
                         remote: { 
                             type: "post",
                             url: "controle-acesso/valor-existente",
-                            data: {id: '<?php echo $_POST['id']; ?>'}
+                            data: {uuid: '<?php echo $_POST['uuid']; ?>'}
                         }
                     },
                 },

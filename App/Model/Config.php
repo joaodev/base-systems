@@ -15,17 +15,14 @@ class Config extends Model
     {
         try {
             $query = "
-                SELECT id, site_title, primary_color, secondary_color, email,phone,
+                SELECT uuid, site_title, primary_color, secondary_color, email,phone,
                         cellphone, full_address, logo, logo_icon, mail_host, mail_port,
                         mail_username, mail_password, mail_from_address, mail_to_address, updated_at
                 FROM {$this->getTable()}
-                WHERE id = :id
+                ORDER BY id LIMIT 1
             ";
 
-            $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":id", 1);
-            $stmt->execute();
-
+            $stmt = $this->openDb()->query($query);
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             $stmt = null;

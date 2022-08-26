@@ -11,17 +11,17 @@ class Role extends Model
         $this->setTable('role');
     }
 
-    public function getOne($id)
+    public function getOne($uuid)
     {
         try {
             $query = "
-                SELECT id, name, is_admin, created_at
+                SELECT uuid, name, is_admin, created_at, updated_at
                 FROM {$this->getTable()}
-                WHERE id = :id AND deleted = :deleted
+                WHERE uuid = :uuid AND deleted = :deleted
             ";
 
             $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":id", $id);
+            $stmt->bindValue(":uuid", $uuid);
             $stmt->bindValue(":deleted", '0');
             $stmt->execute();
 
@@ -40,7 +40,7 @@ class Role extends Model
     {
         try {
             $query = "
-                SELECT id, name, is_admin
+                SELECT uuid, name, is_admin
                 FROM {$this->getTable()}
                 WHERE deleted = :deleted
                 ORDER BY name ASC

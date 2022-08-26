@@ -20,7 +20,9 @@ class ActionController
         }
 
         if (!empty($_POST)) {
-            self::dataValidation($_POST);
+            if (empty($_POST['description'])) {
+                self::dataValidation($_POST);
+            }
         }
 
         $this->view = new \stdClass();
@@ -185,10 +187,10 @@ class ActionController
         return mktime(0, 0, 0, $mes, $dia, $ano);  
     }
 
-    public function acl($roleId, $resourceId, $moduleId)
+    public function acl($roleUuid, $resourceUuid, $moduleUuid)
     {
         $aclModel = Container::getClass("Acl", "app");
-        return $aclModel->getGrantedPrivilege($_SESSION['COD'], $roleId, $resourceId, $moduleId);
+        return $aclModel->getGrantedPrivilege($_SESSION['COD'], $roleUuid, $resourceUuid, $moduleUuid);
     }
 
     public function getSiteConfig()
@@ -199,11 +201,10 @@ class ActionController
         return $configData;
     }
 
-    public function getUser($id)
+    public function getUser($uuid)
     {
-        $userModel = Container::getClass("PreCandidate", "app");
-        $userData  = $userModel->getOne($id);
-
+        $userModel = Container::getClass("User", "app");
+        $userData  = $userModel->getOne($uuid);
         return $userData;
     }
 
@@ -250,5 +251,31 @@ class ActionController
         } else {
             return null;
         }
+    }
+
+    public function resourceCodes($key)
+    {
+        $codes = [
+            'view' => 'bd2cc1d6-712c-ec21-cef3-e634a1d78c28',
+            'create' => '9f4aaeb8-3fd2-5d53-53f7-3547596d06d2',
+            'update' => 'fd52263b-5fe3-185b-c06f-5344e2eba9c0',
+            'delete' => '82fa103f-2628-9c51-7063-ef2aabe7afa4'
+        ];
+
+        return $codes[$key];
+    }
+
+    public function moduleCodes($key)
+    {
+        $codes = [
+            'user' => '92050339-fffe-6bf0-a10b-b2e0b7cb5a86',
+            'privileges' => '60e112b8-c2d7-12e1-3106-084f31537b6c',
+            'configs' => 'c315421e-af07-aa52-8c8e-715a511be94d',
+            'logs' => 'a985e89b-ca02-cf03-5080-c81b8578709b',
+            'politics' => 'eccd0f74-2c1a-3600-fafb-ff14d65b0160',
+            'customers' => '4a779c2b-1864-e061-9c12-615f9466b5df',
+        ];
+
+        return $codes[$key];
     }
 }

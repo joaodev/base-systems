@@ -11,24 +11,24 @@ class Customers extends Model
         $this->setTable('customers');
     }
 
-    public function getOne($id)
+    public function getOne($uuid)
     {
         try {
             $query = "
-                SELECT c.id, c.name, c.email, c.phone, c.cellphone, 
-                    c.customer_type, c.document_1, c.document_2,
+                SELECT c.uuid, c.name, c.email, c.phone, c.cellphone, 
+                    c.document_1, c.document_2, c.whatsapp, 
                     c.postal_code, c.address, c.number, c.complement, 
                     c.neighborhood, c.city, c.state, 
                     c.status, c.created_at, c.updated_at,
                     u.name as username
                 FROM {$this->getTable()} AS c
                 INNER JOIN user AS u    
-                    ON c.user_id = u.id 
-                WHERE c.id = :id AND c.deleted = :deleted
+                    ON c.user_uuid = u.uuid 
+                WHERE c.uuid = :uuid AND c.deleted = :deleted
             ";
 
             $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":id", $id);
+            $stmt->bindValue(":uuid", $uuid);
             $stmt->bindValue(":deleted", '0');
             $stmt->execute();
 
@@ -47,11 +47,11 @@ class Customers extends Model
     {
         try {
             $query = " 
-                SELECT id, name, email, phone, cellphone, 
-                    customer_type, document_1, document_2, 
+                SELECT uuid, name, email, phone, cellphone, 
+                    document_1, document_2, whatsapp, 
                     postal_code, address, number, complement, 
                     neighborhood, city, state, 
-                    status, created_at, updated_at, user_id
+                    status, created_at, updated_at, user_uuid
                 FROM {$this->getTable()}
                 WHERE deleted = :deleted
                 ORDER BY name ASC
@@ -76,7 +76,7 @@ class Customers extends Model
     {
         try {
             $query = " 
-                SELECT id
+                SELECT uuid
                 FROM {$this->getTable()}
                 WHERE deleted = :deleted
             ";

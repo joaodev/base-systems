@@ -11,17 +11,17 @@ class Module extends Model
         $this->setTable('modules');
     }
 
-    public function getOne($id)
+    public function getOne($uuid)
     {
         try {
             $query = "
-                SELECT id, name, created_at
+                SELECT uuid, name, created_at
                 FROM {$this->getTable()}
-                WHERE id = :id
+                WHERE uuid = :uuid
             ";
 
             $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":id", $id);
+            $stmt->bindValue(":uuid", $uuid);
             $stmt->execute();
 
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -39,7 +39,8 @@ class Module extends Model
     {
         try {
             $query = "
-                SELECT id, name, view_id, create_id, update_id, delete_id
+                SELECT uuid, name, view_uuid, 
+                        create_uuid, update_uuid, delete_uuid
                 FROM {$this->getTable()}
             ";
 

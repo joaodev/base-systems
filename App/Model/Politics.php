@@ -15,15 +15,12 @@ class Politics extends Model
     {
         try {
             $query = "
-                SELECT *
+                SELECT uuid, description
                 FROM {$this->getTable()}
-                WHERE id = :id
+                ORDER BY id LIMIT 1
             ";
 
-            $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":id", 1);
-            $stmt->execute();
-
+            $stmt = $this->openDb()->query($query);
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             $stmt = null;

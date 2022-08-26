@@ -21,9 +21,9 @@ $data = $this->view->data;
                             <?php echo $entity['module']; ?>
                         </td>
                         <td style="font-size: 15px">
-                            <input type="checkbox" id="my-checkbox-<?php echo $entity['id']; ?>"
+                            <input type="checkbox" id="my-checkbox-<?php echo $entity['uuid']; ?>"
                                 data-bootstrap-switch data-off-color="danger" 
-                                data-on-color="success" onchange="getVal(<?php echo $entity['id']; ?>);"
+                                data-on-color="success" onchange="getVal('<?php echo $entity['uuid']; ?>');"
                                 <?php echo ($entity['status'] == 1) ? 'checked' : ''; ?>>
                         </td>
                     </tr>
@@ -98,9 +98,9 @@ $data = $this->view->data;
             });
         });
 
-        function getVal(id) {
+        function getVal(uuid) {
             let status_acl = "";
-            if ($('#my-checkbox-' + id).is(":checked")) {
+            if ($('#my-checkbox-' + uuid).is(":checked")) {
                 status_acl = 1;    
             } else {
                 status_acl = 0;
@@ -112,7 +112,7 @@ $data = $this->view->data;
                 type: "POST",
                 url: "controle-acesso/altera-permissao",
                 data: {
-                    id: id,
+                    uuid: uuid,
                     status: status_acl
                 },
                 dataType: 'json',

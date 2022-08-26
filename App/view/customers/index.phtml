@@ -1,10 +1,14 @@
 <?php 
 $data = $this->view->data; 
 
-$canView    = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 6)) ? true : false;
-$canCreate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 2, 6)) ? true : false;
-$canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 3, 6)) ? true : false;
-$canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 6)) ? true : false;
+$isAdmin = ($_SESSION['ROLE_ADM'] == '1') ? true : false;
+$role    = $_SESSION['ROLE'];
+
+$canView    = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this->moduleCodes('customers'))) ? true : false;
+$canCreate  = ($isAdmin || $this->acl($role, $this->resourceCodes('create'), $this->moduleCodes('customers'))) ? true : false;
+$canUpdate  = ($isAdmin || $this->acl($role, $this->resourceCodes('update'), $this->moduleCodes('customers'))) ? true : false;
+$canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $this->moduleCodes('customers'))) ? true : false;
+
 ?>
 <?php if ($canView): ?>
     <section class="content-header">
@@ -45,12 +49,15 @@ $canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 
                                             <th class="text-white" style="font-size: 14px;">Email</th>
                                             <th class="text-white" style="font-size: 14px;">Telefone</th>
                                             <th class="text-white" style="font-size: 14px;">Celular</th>
+                                            <th class="text-white" style="font-size: 14px;">Cidade</th>
+                                            <th class="text-white" style="font-size: 14px;">Status</th>
+                                            <th style="display: none;">Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach ($data as $entity): ?>
                                             <tr class="text-center" style="height: 30px; cursor: pointer;" 
-                                                onclick="openDetailsCustomer(<?php echo $entity['id']; ?>);">
+                                                onclick="openDetailsCustomer('<?php echo $entity['uuid']; ?>');">
                                                 <td style="font-size: 15px">
                                                     <?php echo $entity['name']; ?>
                                                 </td>
@@ -63,6 +70,19 @@ $canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 
                                                 <td style="font-size: 15px">
                                                     <?php echo $entity['cellphone']; ?>
                                                 </td>
+                                                <td style="font-size: 15px">
+                                                    <?php echo $entity['city'] . (!empty($entity['state']) ? '-' . $entity['state'] : ''); ?>
+                                                </td>
+                                                <td>
+                                                    <?php if ($entity['status'] == '1'): ?>
+                                                        <i class="fa fa-circle" style="color: green;"></i>
+                                                    <?php else: ?>
+                                                        <i class="fa fa-circle" style="color: red;"></i>
+                                                    <?php endif; ?>
+                                                </td>  
+                                                <td style="display: none;">
+                                                    <?php echo ($entity['status'] == '1') ? 'Ativo' : 'Inativo'; ?>
+                                                </td> 
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -94,11 +114,11 @@ $canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 
                     $.extend( true, {}, buttonCommon, {
                         extend: 'excel',
                         title: 'CLIENTES',
-                        exportOptions: {columns: [0,1,2,3]}
+                        exportOptions: {columns: [0,1,2,3,4,6]}
                     }),
                 ],
                 order: [ [0, "asc"] ],
-               
+                columnDefs: [{orderable: false, targets: [5]}],
                 responsive: true,
                 info: true,
                 processing: true,
@@ -131,16 +151,16 @@ $canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 
             });
         });
 
-        function openDetailsCustomer(id) {
+        function openDetailsCustomer(uuid) {
             $("#modalXLResult").empty();
-            $("#modalXLTitle").html('<i class="fa fa-users"></i> Dados do Cliente');
+            $("#modalXLTitle").html('<i class="fa fa-info-circle pr-2"></i> Informações');
             $("#modalXLLoader").show();
             $("#modalXL").modal('show');
 
             $.ajax({
                 type: 'post',
                 url: "<?php echo baseUrl; ?>clientes/detalhes",
-                data: {id:id},
+                data: {uuid:uuid},
                 async: true
             }).done(function(data) {
                 $("#modalXLResult").html(data);
@@ -156,7 +176,7 @@ $canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 
         <script>
             function createCustomer() {
                 $("#modalXLResult").empty();
-                $("#modalXLTitle").html('<i class="fa fa-users"></i> Novo Cliente');
+                $("#modalXLTitle").html('<i class="fa fa-plus mr-2"></i> Cliente');
                 $("#modalXLLoader").show();
                 $("#modalXL").modal('show');
 
@@ -176,16 +196,16 @@ $canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 
     <?php endif; ?>
     <?php if ($canUpdate): ?>
         <script>
-            function updateCustomer(id) {
+            function updateCustomer(uuid) {
                 $("#modalXLResult").empty();
-                $("#modalXLTitle").html('<i class="fa fa-users"></i> Editar Cliente');
+                $("#modalXLTitle").html('<i class="fa fa-pen mr-2"></i> Cliente');
                 $("#modalXLLoader").show();
                 $("#modalXL").modal('show');
 
                 $.ajax({
                     type: 'post',
                     url: "<?php echo baseUrl; ?>clientes/editar",
-                    data: {id:id},
+                    data: {uuid:uuid},
                     async: true
                 }).done(function(data) {
                     $("#modalXLResult").html(data);
@@ -199,28 +219,34 @@ $canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 
     <?php endif; ?>
     <?php if ($canDelete): ?>
         <script>
-            function deleteCustomer(id) {
-                a = confirm("Deseja remover este Cliente?");
-                if (a) {
-                    $("#modalXLLoader").show();
-                    
+            function deleteCustomer(uuid) {
+                $("#modalXL").modal('hide');
+                $("#modalDeleteResult").empty();
+                $("#modalDeleteTitle").html('<i class="fa fa-trash pr-2"></i> Cliente');
+                $("#modalDeleteLoader").hide();
+                $("#modalDelete").modal('show');
+                $("#modalDeleteResult").html('<button type="button" class="btn btn-danger" onclick="runDelete(\''+uuid+'\');"><i class="fa fa-trash"></i> CONFIRMAR E EXCLUIR</button>');
+            }   
+
+            function runDelete(uuid) {
+                if (uuid !== null || uuid !== undefined) {
+                    $("#modalDeleteLoader").show();
+
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo baseUrl; ?>clientes/excluir",
-                        data: {id: id},
+                        url: "clientes/excluir",
+                        data: {uuid: uuid},
                         dataType: 'json',
                         async: true
                     }).done(function(data) {
                         showAlert(data.type, data.title, data.msg, data.pos);
-                        $("#modalXL").modal('hide');
+                        $("#modalDelete").modal('hide');
                         openModule('clientes');
                     }).fail(function() {
                         showInternalErrorAlert();
-                        $("#modalXLLoader").hide();
+                        $("#modalDeleteLoader").hide();
                     });
-                } else {
-                    return false;
-                }	
+                }
             }
         </script>
     <?php endif; ?>

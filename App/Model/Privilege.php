@@ -11,22 +11,22 @@ class Privilege extends Model
         $this->setTable('privilege');
     }
 
-    public function getOne($id)
+    public function getOne($uuid)
     {
         try {
             $query = "
-            SELECT p.id, p.role_id, p.resource_id, p.module_id,
+            SELECT p.uuid, p.role_uuid, p.resource_uuid, p.module_uuid,
                 rl.name as role, res.name as resource, md.name as module,
                 p.created_at, p.status
                 FROM {$this->getTable()} AS p
-                INNER JOIN role AS rl ON p.role_id = rl.id
-                INNER JOIN resource AS res ON p.resource_id = res.id
-                INNER JOIN modules AS md ON p.module_id = md.id
-                WHERE p.id = :id
+                INNER JOIN role AS rl ON p.role_uuid = rl.uuid
+                INNER JOIN resource AS res ON p.resource_uuid = res.uuid
+                INNER JOIN modules AS md ON p.module_uuid = md.uuid
+                WHERE p.uuid = :uuid
             ";
 
             $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":id", $id);
+            $stmt->bindValue(":uuid", $uuid);
             $stmt->execute();
 
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -44,12 +44,12 @@ class Privilege extends Model
     {
         try {
             $query = "
-                SELECT p.id, p.role_id, p.resource_id, p.module_id, p.status,
+                SELECT p.uuid, p.role_uuid, p.resource_uuid, p.module_uuid, p.status,
                         rl.name as role, res.name as resource, md.name as module
                 FROM {$this->getTable()} AS p
-                INNER JOIN role AS rl ON p.role_id = rl.id
-                INNER JOIN resource AS res ON p.resource_id = res.id
-                INNER JOIN modules AS md ON p.module_id = md.id
+                INNER JOIN role AS rl ON p.role_uuid = rl.uuid
+                INNER JOIN resource AS res ON p.resource_uuid = res.uuid
+                INNER JOIN modules AS md ON p.module_uuid = md.uuid
                 ORDER BY md.name ASC
             ";
 
@@ -65,21 +65,21 @@ class Privilege extends Model
         }
     }
 
-    public function getAllByRoleId($id)
+    public function getAllByRoleUuid($uuid)
     {
         try {
             $query = "
-                SELECT p.id, p.role_id, p.resource_id, p.module_id, p.status,
+                SELECT p.uuid, p.role_uuid, p.resource_uuid, p.module_uuid, p.status,
                 rl.name as role, res.name as resource, md.name as module
                 FROM {$this->getTable()} AS p
-                INNER JOIN role AS rl ON p.role_id = rl.id
-                INNER JOIN resource AS res ON p.resource_id = res.id
-                INNER JOIN modules AS md ON p.module_id = md.id
-                WHERE p.role_id = :role_id
+                INNER JOIN role AS rl ON p.role_uuid = rl.uuid
+                INNER JOIN resource AS res ON p.resource_uuid = res.uuid
+                INNER JOIN modules AS md ON p.module_uuid = md.uuid
+                WHERE p.role_uuid = :role_uuid
             ";
 
             $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":role_id", $id);
+            $stmt->bindValue(":role_uuid", $uuid);
             $stmt->execute();
 
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);

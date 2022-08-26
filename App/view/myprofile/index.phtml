@@ -37,39 +37,54 @@ $entity = $this->view->entity;
                                 <div class="col-md-8">
                                     <div class="form-group">
                                         <label for="name">Nome</label>
-                                        <input type="text" class="form-control" name="name" id="name" required
+                                        <input type="text" class="form-control" name="name" id="name" required maxlength="100"
                                             value="<?php echo $entity['name']; ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="job_role">Profissão</label>
-                                        <input type="text" class="form-control" name="job_role" id="job_role" required
+                                        <input type="text" class="form-control" name="job_role" id="job_role" required maxlength="50"
                                             value="<?php echo $entity['job_role']; ?>">
                                     </div>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="name">Email</label>
-                                        <input type="email" class="form-control" name="email" id="email" required
-                                            value="<?php echo $entity['email']; ?>">
+                                        <label for="phone">Telefone</label>
+                                        <input type="text" class="form-control" name="phone" id="phone" maxlength="13"
+                                            value="<?php echo $entity['phone']; ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="cellphone">Celular</label>
-                                        <input type="text" class="form-control" name="cellphone" id="cellphone"
+                                        <input type="text" class="form-control" name="cellphone" id="cellphone" maxlength="14"
                                             value="<?php echo $entity['cellphone']; ?>">
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="whatsapp">WhatsApp</label>
+                                        <input type="text" class="form-control" name="whatsapp" id="whatsapp" maxlength="14"
+                                            value="<?php echo $entity['whatsapp']; ?>">
+                                    </div>
+                                </div>
                                 <div class="col-md-12"><hr></div>
+                                
                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email" required maxlength="100"
+                                            value="<?php echo $entity['email']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="password">Nova senha</label>
                                             <input type="password" class="form-control"name="password" id="password">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="confirmation">Confirmar senha</label>
                                         <input type="password" class="form-control" name="confirmation" id="confirmation">
@@ -77,7 +92,7 @@ $entity = $this->view->entity;
                                 </div>
                                 <div class="col-md-12"><hr></div>
                                 <div class="col-md-4 text-center offset-md-4">
-                                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="btnSubmit">
+                                    <button type="submit" class="btn btn-success" style="width: 100%;" id="btnSubmit">
                                         <i class="fa fa-save pr-1"></i> Gravar
                                     </button>
                                 </div>
@@ -105,7 +120,10 @@ $entity = $this->view->entity;
 </script>
 <script>
     $(document).ready(function() {
+        $("#phone").mask("(99)9999-9999");
         $("#cellphone").mask("(99)99999-9999");
+        $("#whatsapp").mask("(99)99999-9999");
+
         $('#formUpdateMyProfile').validate({
             submitHandler: function( form ){
                 var dados = $( form ).serialize();
@@ -116,7 +134,9 @@ $entity = $this->view->entity;
                 form_data.append('name', $("#name").val());    
                 form_data.append('job_role', $("#job_role").val());    
                 form_data.append('email', $("#email").val());    
+                form_data.append('phone', $("#phone").val());    
                 form_data.append('cellphone', $("#cellphone").val());    
+                form_data.append('whatsapp', $("#whatsapp").val());    
                 form_data.append('password', $("#password").val());    
                 form_data.append('confirmation', $("#confirmation").val());    
 

@@ -23,17 +23,16 @@ class Crud extends InitDb
             $stmt = $this->openDb()->prepare($query);
             $stmt->execute();
             
-            $lastId = $this->db->lastInsertId();
             $stmt = null; 
             $this->closeDb();
 
-            return $lastId;
+            return true;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function update($data, $id, $idField, $secondParams = null)
+    public function update($data, $uuid, $uuidField, $secondParams = null)
     {
         try {
             $otherParam = "";
@@ -56,13 +55,13 @@ class Crud extends InitDb
                 $query .= $key;
             }
 
-            $query .= " WHERE {$idField} =:id {$otherParam}";
+            $query .= " WHERE {$uuidField} =:uuid {$otherParam}";
             $stmt = $this->openDb()->prepare($query);
 
             foreach ($data as $column => $value) {
                 $stmt->bindValue(":" . $column, $value);
             }
-            $stmt->bindValue(":id", $id);
+            $stmt->bindValue(":uuid", $uuid);
             $update = $stmt->execute();
 
             $stmt = null; 
@@ -74,16 +73,16 @@ class Crud extends InitDb
         }
     }
 
-    public function delete($id, $idField)
+    public function delete($uuid, $uuidField)
     {
         try {
             $query = "
                 DELETE FROM {$this->getTable()}  
-                WHERE {$idField} = :id
+                WHERE {$uuidField} = :uuid
             ";
 
             $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":id", $id);
+            $stmt->bindValue(":uuid", $uuid);
             $stmt->execute();
 
             $stmt = null; 

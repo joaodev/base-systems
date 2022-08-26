@@ -8,8 +8,6 @@ use Core\Db\Crud;
 use App\Interfaces\CrudInterface;
 use Core\Db\Bcrypt;
 
-use function PHPSTORM_META\map;
-
 class UserController extends ActionController implements CrudInterface
 {
     private $model;
@@ -43,6 +41,31 @@ class UserController extends ActionController implements CrudInterface
     public function createProcessAction()
     {
         if (!empty($_POST)) {
+            if (!empty($_POST['role_uuid'])) {
+                $role = $this->roleModel->getOne($_POST['role_uuid']);
+                if (!$role) {
+                    $data  = [
+                        'title' => 'Erro!', 
+                        'msg' => 'Nível de acesso inválido.',
+                        'type' => 'error',
+                        'pos'   => 'top-center'
+                    ];
+                    
+                    echo json_encode($data);
+                    return true;
+                }
+            } else {
+                $data  = [
+                    'title' => 'Erro!', 
+                    'msg' => 'Nível de acesso inválido.',
+                    'type' => 'error',
+                    'pos'   => 'top-center'
+                ];
+                
+                echo json_encode($data);
+                return true;
+            }
+
             if ($_POST['password'] != $_POST['confirmation']) {
                 $data  = [
                     'title' => 'Erro!', 
@@ -54,23 +77,25 @@ class UserController extends ActionController implements CrudInterface
                 unset($_POST['confirmation']);
                 $_POST['password'] = Bcrypt::hash($_POST['password']);
     
+                $_POST['uuid'] = $this->model->NewUUID();
                 $crud = new Crud();
                 $crud->setTable($this->model->getTable());
                 $transaction = $crud->create($_POST);
     
                 if ($transaction){
-                    $privileges = $this->privilegeModel->getAllByRoleId($_POST['role_id']);
+                    $privileges = $this->privilegeModel->getAllByRoleUuid($_POST['role_uuid']);
                     foreach ($privileges as $privilege) {
                         $aclData = [
-                            'user_id' => $transaction,
-                            'privilege_id' => $privilege['id']
+                            'uuid' => $this->privilegeModel->NewUUID(),
+                            'user_uuid' => $_POST['uuid'],
+                            'privilege_uuid' => $privilege['uuid']
                         ];
     
                         $crud->setTable($this->aclModel->getTable());
                         $crud->create($aclData);
                     }
     
-                    $this->toLog("Cadastrou o usuário: {$_POST['name']} #{$transaction}");
+                    $this->toLog("Cadastrou o usuário: {$_POST['name']} #{$_POST['uuid']}");
                     $data  = [
                         'title' => 'Sucesso!', 
                         'msg'   => 'Usuário cadastrado.',
@@ -96,8 +121,8 @@ class UserController extends ActionController implements CrudInterface
 
 	public function readAction()
     {
-        if (!empty($_POST['id'])) {
-            $entity = $this->model->getOne($_POST['id']);
+        if (!empty($_POST['uuid'])) {
+            $entity = $this->model->getOne($_POST['uuid']);
             $this->view->entity = $entity;
             return $this->render('read', false);
         } else {
@@ -111,7 +136,7 @@ class UserController extends ActionController implements CrudInterface
             $roles = $this->roleModel->getAll(null);
             $this->view->roles = $roles;
 
-            $entity = $this->model->getOne($_POST['id']);
+            $entity = $this->model->getOne($_POST['uuid']);
             $this->view->entity = $entity;
 
             return $this->render('update', false);
@@ -140,13 +165,17 @@ class UserController extends ActionController implements CrudInterface
                 unset($_POST['confirmation']);
             }
 
+            if (!empty($_POST['role_uuid'])) {
+                unset($_POST['role_uuid']);
+            }
+            
             $_POST['updated_at'] = date('Y-m-d H:i:s');
             $crud = new Crud();
             $crud->setTable($this->model->getTable());
-            $transaction = $crud->update($_POST, $_POST['id'], 'id');
+            $transaction = $crud->update($_POST, $_POST['uuid'], 'uuid');
 
             if ($transaction){
-                $this->toLog("Atualizou o usuário: {$_POST['name']} #{$_POST['id']}");
+                $this->toLog("Atualizou o usuário: {$_POST['name']} #{$_POST['uuid']}");
                 $data  = [
                     'title' => 'Sucesso!', 
                     'msg'   => 'Usuário atualizado.',
@@ -172,7 +201,7 @@ class UserController extends ActionController implements CrudInterface
 	public function deleteAction()
     {
         if (!empty($_POST)) {
-            if (($_POST['id'] != $_SESSION['COD']) && ($_POST['id'] != 1)) {
+            if (($_POST['uuid'] != $_SESSION['COD'])) {
                 $updateData = [
                     'updated_at' => date('Y-m-d H:i:s'),
                     'deleted' => '1'
@@ -180,10 +209,10 @@ class UserController extends ActionController implements CrudInterface
 
                 $crud = new Crud();
                 $crud->setTable($this->model->getTable());
-                $transaction = $crud->update($updateData, $_POST['id'], 'id');
+                $transaction = $crud->update($updateData, $_POST['uuid'], 'uuid');
 
                 if ($transaction){
-                    $this->toLog("Removeu o usuário: #{$_POST['id']}");
+                    $this->toLog("Removeu o usuário: #{$_POST['uuid']}");
                     $data  = [
                         'title' => 'Sucesso!', 
                         'msg'   => 'Usuário removido.',
@@ -217,13 +246,13 @@ class UserController extends ActionController implements CrudInterface
     public function fieldExistsAction()
     {
         if (!empty($_POST)) {
-            $id     = (!empty($_POST['id']) ? $_POST['id'] : null);
+            $uuid     = (!empty($_POST['uuid']) ? $_POST['uuid'] : null);
 
             if (!empty($_POST['name'])) $field      = 'name';
             if (!empty($_POST['email'])) $field     = 'email';
             if (!empty($_POST['cellphone'])) $field = 'cellphone';
             
-            $exists = $this->model->fieldExists($field, $_POST[$field], 'id', $id);
+            $exists = $this->model->fieldExists($field, $_POST[$field], 'uuid', $uuid);
             if ($exists) {
                 echo 'false';
             } else {
@@ -237,7 +266,7 @@ class UserController extends ActionController implements CrudInterface
     public function aclAction()
     {
         if (!empty($_POST)) {
-            $data = $this->aclModel->getUserPrivileges($_POST['id']);
+            $data = $this->aclModel->getUserPrivileges($_POST['uuid']);
             $this->view->data = $data;
             return $this->render('acl', false);
         } else {
@@ -250,10 +279,10 @@ class UserController extends ActionController implements CrudInterface
         if (!empty($_POST)) {
             $crud = new Crud();
             $crud->setTable($this->aclModel->getTable());
-            $transaction = $crud->update($_POST, $_POST['id'], 'id');
+            $transaction = $crud->update($_POST, $_POST['uuid'], 'uuid');
 
             if ($transaction){
-                $this->toLog("Permissões de usuário atualizadas: #{$_POST['id']}");
+                $this->toLog("Permissões de usuário atualizadas: #{$_POST['uuid']}");
                 $data  = [
                     'title' => 'Sucesso!', 
                     'msg'   => 'Privilégio atualizado.',

@@ -43,6 +43,8 @@ class ConfigController extends ActionController
                             } 
                         }
                     }
+                } else {
+                    unset($_POST['logo']);
                 }
                
                 if (!empty( $_FILES["logo_icon"])) {
@@ -61,6 +63,8 @@ class ConfigController extends ActionController
                             } 
                         }
                     }
+                } else {
+                    unset($_POST['logo_icon']);
                 }
             } else {
                 unset($_POST['logo']);
@@ -73,7 +77,7 @@ class ConfigController extends ActionController
 
             $crud = new Crud();
             $crud->setTable($this->model->getTable());
-            $transaction = $crud->update($_POST, 1, 'id');
+            $transaction = $crud->update($_POST, $_POST['uuid'], 'uuid');
 
             if ($transaction){
                 $this->toLog("Atualizou as configurações do sistema");

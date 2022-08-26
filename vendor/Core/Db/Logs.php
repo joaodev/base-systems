@@ -3,14 +3,17 @@
 namespace Core\Db;
 
 use Core\Db\Crud;
+use Core\Db\Model;
 
 class Logs extends InitDb
 {
 	public function toLog($msg)
 	{
 		try {
+			$model = new Model();
 			$dataPost = [
-				'log_user_id' => (!empty($_SESSION['COD']) ? $_SESSION['COD'] : 0),
+				'uuid' => $model->NewUUID(),
+				'log_user_uuid' => (!empty($_SESSION['COD']) ? $_SESSION['COD'] : ''),
 				'log_action' => $msg,
 				'log_date' => date('Y-m-d H:i:s'),
 				'log_ip' => self::getUserIp(),

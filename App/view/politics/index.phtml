@@ -1,8 +1,9 @@
 <?php 
 $entity = $this->view->entity; 
+$role = $_SESSION['ROLE'];
 
-$canView    = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 5)) ? true : false;
-$canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 3, 5)) ? true : false;
+$canView    = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resourceCodes('view'), $this->moduleCodes('politics'))) ? true : false;
+$canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resourceCodes('update'), $this->moduleCodes('politics'))) ? true : false;
 ?>
 <?php if ($canView): ?>
     <section class="content-header">
@@ -38,6 +39,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 3, 
                                                 </div>
                                                 <div class="col-md-12"><hr></div>
                                                 <div class="col-md-4 text-center offset-md-4">
+                                                    <input type="hidden" name="uuid" value="<?php echo $entity['uuid']; ?>">
                                                     <button type="submit" class="btn btn-success" style="width: 100%;" id="btnSubmit">
                                                         <i class="fa fa-save pr-1"></i> Gravar
                                                     </button>

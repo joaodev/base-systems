@@ -1,5 +1,12 @@
 <?php 
 $config = $this->getSiteConfig();
+
+$canViewCustomers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('customers'));
+$canViewUsers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('user'));
+$canViewConfigs = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('configs'));
+$canViewPolitics = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('politics'));
+$canViewLogs = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('logs'));
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,12 +80,28 @@ $config = $this->getSiteConfig();
             background: <?php echo $config['secondary_color']; ?> !important;
         }
 
+        .bg-secondary {
+            background: <?php echo $config['secondary_color']; ?> !important;
+        }
+
+        .bg-secondary:hover {
+            background: <?php echo $config['primary_color']; ?> !important;
+        }
+
         .btn-primary {
             background: <?php echo $config['primary_color']; ?> !important;
         }
 
         .btn-primary:hover {
             background: <?php echo $config['secondary_color']; ?> !important;
+        }
+
+        .btn-secondary {
+            background: <?php echo $config['secondary_color']; ?> !important;
+        }
+
+        .btn-secondary:hover {
+            background: <?php echo $config['primary_color']; ?> !important;
         }
         
         .page-link:hover {
@@ -165,7 +188,7 @@ $config = $this->getSiteConfig();
                         </p>
                     </a>
                 </li>    
-                <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 6)): ?>
+                <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewCustomers): ?>
                     <li class="nav-item">
                         <a onclick="openModule('clientes');" class="nav-link text-white" style="cursor: pointer;" id="box_clientes">
                             <i class="nav-icon fas fa-users"></i>
@@ -175,10 +198,10 @@ $config = $this->getSiteConfig();
                 <?php endif; ?>
                 <?php if (
                         $_SESSION['ROLE_ADM'] == '1' 
-                        || $this->acl($_SESSION['ROLE'], 1, 1)
-                        || $this->acl($_SESSION['ROLE'], 1, 3)
-                        || $this->acl($_SESSION['ROLE'], 1, 4)
-                        || $this->acl($_SESSION['ROLE'], 1, 5)
+                        || $canViewUsers
+                        || $canViewConfigs
+                        || $canViewLogs
+                        || $canViewPolitics
                     ): ?>
                     <li class="nav-item">
                         <a href="#" class="nav-link text-white">
@@ -189,7 +212,7 @@ $config = $this->getSiteConfig();
                             </p>
                         </a>
                         <ul class="nav nav-treeview" style="display: none;">                 
-                            <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 3)): ?>
+                            <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewConfigs): ?>
                                 <li class="nav-item ml-2">
                                     <a onclick="openModule('configuracoes');" class="nav-link text-white" style="cursor: pointer;">
                                         <i class="nav-icon fas fa-cogs"></i>
@@ -209,7 +232,7 @@ $config = $this->getSiteConfig();
                                     </a>
                                 </li>
                             <?php endif; ?>
-                            <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 4)): ?>
+                            <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewLogs): ?>
                                 <li class="nav-item ml-2">
                                     <a onclick="openModule('logs');" class="nav-link text-white" style="cursor: pointer;">
                                         <i class="nav-icon fas fa-list"></i>
@@ -219,7 +242,7 @@ $config = $this->getSiteConfig();
                                     </a>
                                 </li>
                             <?php endif; ?>
-                            <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 5)): ?>
+                            <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewPolitics): ?>
                                 <li class="nav-item ml-2">
                                     <a onclick="openModule('politica-privacidade');" class="nav-link text-white" style="cursor: pointer;">
                                         <i class="nav-icon fas fa-eye"></i>
@@ -229,7 +252,7 @@ $config = $this->getSiteConfig();
                                     </a>
                                 </li>
                             <?php endif; ?>
-                            <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 1)): ?>
+                            <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewUsers): ?>
                                 <li class="nav-item ml-2">
                                     <a onclick="openModule('usuarios');" class="nav-link text-white" style="cursor: pointer;">
                                         <i class="nav-icon fas fa-user-cog"></i>
@@ -276,23 +299,7 @@ $config = $this->getSiteConfig();
             </div>
         </div>
 
-        <!-- Modal Large -->
-        <div class="modal fade" id="modalLarge" data-keyboard="false">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="overlay" id="modalLargeLoader">
-                        <i class="fas fa-2x fa-sync fa-spin"></i>
-                    </div>
-                    <div class="modal-header text-white bg-primary">
-                        <h4 class="modal-title" id="modalLargeTitle"></h4>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="modalLargeResult"></div>
-                </div>
-            </div>
-        </div>
+        
         
         <!-- Modal XL -->
         <div class="modal fade" id="modalXL" >
@@ -311,6 +318,47 @@ $config = $this->getSiteConfig();
                 </div>
             </div>
         </div>
+
+        <!-- Modal Large -->
+        <div class="modal fade" id="modalLarge" data-keyboard="false">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="overlay" id="modalLargeLoader">
+                        <i class="fas fa-2x fa-sync fa-spin"></i>
+                    </div>
+                    <div class="modal-header text-white bg-primary">
+                        <h4 class="modal-title" id="modalLargeTitle"></h4>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalLargeResult"></div>
+                </div>
+            </div>
+        </div>
+
+                
+        <!-- Modal Delete -->
+        <div class="modal fade" id="modalDelete" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="overlay" id="modalDeleteLoader">
+                        <i class="fas fa-2x fa-sync fa-spin"></i>
+                    </div>
+                    <div class="modal-header text-white bg-primary">
+                        <h4 class="modal-title" id="modalDeleteTitle"></h4>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="text-center pt-3">
+                        <b>Tem certeza que deseja excluir este registro? <br>Após esta operação, não será possível revertê-la.</b>
+                    </div>
+                    <div class="modal-body text-center" id="modalDeleteResult"></div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="overlay-wrapper" id="baseLoader" style="display: none;">
             <div class="overlay">

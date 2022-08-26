@@ -1,6 +1,18 @@
-<?php $entity = $this->view->entity; ?>
-<?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 6)): ?>
+<?php 
+$entity = $this->view->entity; 
+
+$isAdmin = ($_SESSION['ROLE_ADM'] == '1') ? true : false;
+$role    = $_SESSION['ROLE'];
+
+$canView    = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this->moduleCodes('customers'))) ? true : false;
+$canUpdate  = ($isAdmin || $this->acl($role, $this->resourceCodes('update'), $this->moduleCodes('customers'))) ? true : false;
+$canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $this->moduleCodes('customers'))) ? true : false;
+?>
+<?php if ($canView): ?>
     <div class="row">
+        <div class="col-md-12 bg-primary mb-3" style="border-radius: 5px;">
+            <h4 class="pt-2 text-center">Dados Pessoais</h4>
+        </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="nome">Nome</label>
@@ -22,7 +34,7 @@
                     value="<?php echo $entity['document_2']; ?>">
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="form-group">
                 <label for="contato">Email</label>
                 <input type="email" class="form-control" readonly
@@ -43,35 +55,97 @@
                     value="<?php echo $entity['cellphone']; ?>">
             </div>
         </div>
-        
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="whatsapp">WhastApp</label>
+                <input type="text" class="form-control" readonly
+                    value="<?php echo $entity['whatsapp']; ?>">
+            </div>
+        </div>
+        <div class="col-md-12 bg-primary mt-3 mb-3" style="border-radius: 5px;">
+            <h4 class="pt-2 text-center">Localização</h4>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="postal_code">CEP</label>
+                <input type="text" class="form-control"  readonly
+                    value="<?php echo $entity['postal_code']; ?>">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="address">Endereço</label>
+                <input type="text" class="form-control" readonly 
+                    value="<?php echo $entity['address']; ?>">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label for="number">Número</label>
+                <input type="text" class="form-control"  readonly 
+                    value="<?php echo $entity['number']; ?>">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="complement">Complemento</label>
+                <input type="text" class="form-control" readonly
+                    value="<?php echo $entity['complement']; ?>">
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="form-group">
+                <label for="neighborhood">Bairro</label>
+                <input type="text" class="form-control"  readonly
+                    value="<?php echo $entity['neighborhood']; ?>">
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="form-group">
+                <label for="city">Cidade</label>
+                <input type="text" class="form-control" readonly 
+                    value="<?php echo $entity['city']; ?>">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label for="state">UF</label>
+                <input type="text" class="form-control" readonly 
+                    value="<?php echo $entity['state']; ?>">
+            </div>
+        </div>
         <div class="col-md-12"><hr></div>
         <div class="col-md-3 text-left">
-            <span for="dt_cadastro">Cadastro em:</span> 
+            <span for="dt_cadastro">Status</span> <br>
+            <b><?php echo ($entity['status'] == '1') ? 'Ativo' : 'Inativo'; ?></b>
+        </div>
+        <div class="col-md-3 text-center">
+            <span for="dt_cadastro">Cadastro em:</span> <br>
             <b><?php echo $this->formatDateTime($entity['created_at']); ?></b>
         </div>
-        <div class="col-md-3 text-left">
+        <div class="col-md-3 text-center">
             <?php if (!empty($entity['updated_at'])): ?>
-                <span for="dt_cadastro">Atualizado em:</span> 
+                <span for="dt_cadastro">Atualizado em:</span> <br>
                 <b><?php echo $this->formatDateTime($entity['updated_at']); ?></b>
             <?php endif; ?>
         </div>
-        <div class="col-md-6 text-right">
-            <span for="dt_cadastro">Cadastrado por:</span> 
+        <div class="col-md-3 text-right">
+            <span for="dt_cadastro">Cadastrado por:</span> <br>
             <b><?php echo $entity['username']; ?></b>
         </div>
         <div class="col-md-12"><hr></div>
-        <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 3, 6)): ?>
+        <?php if ($canUpdate): ?>
             <div class="col-3">
-                <button type="button" class="btn btn-primary" onclick="updateCustomer(<?php echo $entity['id']; ?>);" style="width: 100%;">
+                <button type="button" class="btn btn-primary" onclick="updateCustomer('<?php echo $entity['uuid']; ?>');" style="width: 100%;">
                     <i class="fa fa-pen pr-1"></i> Editar
                 </button>
             </div>
         <?php endif; ?>
-        <div class="col-8"></div>
-        <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 6)): ?>
-            <div class="col-1">
-                <button type="button" class="btn btn-danger" onclick="deleteCustomer(<?php echo $entity['id']; ?>);" style="width: 100%;">
-                    <i class="fa fa-trash"></i> 
+        <div class="col-6"></div>
+        <?php if ($canDelete): ?>
+            <div class="col-3">
+                <button type="button" class="btn btn-danger" onclick="deleteCustomer('<?php echo $entity['uuid']; ?>');" style="width: 100%;">
+                    <i class="fa fa-trash"></i> Excluir
                 </button>
             </div>
         <?php endif; ?>

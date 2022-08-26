@@ -32,13 +32,22 @@ class CustomersController extends ActionController implements CrudInterface
     public function createProcessAction()
     {
         if (!empty($_POST)) {
-            $_POST['user_id'] = $_SESSION['COD'];
+            if ($_POST['document_1'] == '___.___.___-__') {
+                $_POST['document_1'] = null;
+            }
+
+            if ($_POST['document_2'] == '__.___.___/____-__') {
+                $_POST['document_2'] = null;
+            }
+            
+            $_POST['uuid'] = $this->model->NewUUID();
+            $_POST['user_uuid'] = $_SESSION['COD'];
             $crud = new Crud();
             $crud->setTable($this->model->getTable());
 
             $transaction = $crud->create($_POST);
             if ($transaction){
-                $this->toLog("Cadastrou o Cliente {$_POST['name']} #{$transaction}");
+                $this->toLog("Cadastrou o Cliente {$_POST['name']} #{$_POST['uuid']}");
                 $data  = [
                     'title' => 'Sucesso!', 
                     'msg'   => 'Cliente cadastrado.',
@@ -63,8 +72,8 @@ class CustomersController extends ActionController implements CrudInterface
     
     public function updateAction()
     {
-        if (!empty($_POST['id'])) {
-            $entity = $this->model->getOne($_POST['id']);
+        if (!empty($_POST['uuid'])) {
+            $entity = $this->model->getOne($_POST['uuid']);
             $this->view->entity = $entity;
             return $this->render('update', false);
         } else {
@@ -75,13 +84,21 @@ class CustomersController extends ActionController implements CrudInterface
     public function updateProcessAction()
     {
         if (!empty($_POST)) {
+            if ($_POST['document_1'] == '___.___.___-__') {
+                $_POST['document_1'] = null;
+            }
+
+            if ($_POST['document_2'] == '__.___.___/____-__') {
+                $_POST['document_2'] = null;
+            }
+
             $_POST['updated_at'] = date('Y-m-d H:i:s');
             $crud = new Crud();
             $crud->setTable($this->model->getTable());
-            $transaction = $crud->update($_POST, $_POST['id'], 'id');
+            $transaction = $crud->update($_POST, $_POST['uuid'], 'uuid');
 
             if ($transaction){
-                $this->toLog("Atualizou o Cliente {$_POST['name']} #{$_POST['id']}");
+                $this->toLog("Atualizou o Cliente {$_POST['name']} #{$_POST['uuid']}");
                 $data  = [
                     'title' => 'Sucesso!', 
                     'msg'   => 'Cliente atualizado.',
@@ -106,8 +123,8 @@ class CustomersController extends ActionController implements CrudInterface
 
     public function readAction()
     {
-        if (!empty($_POST['id'])) {
-            $entity = $this->model->getOne($_POST['id']);
+        if (!empty($_POST['uuid'])) {
+            $entity = $this->model->getOne($_POST['uuid']);
             $this->view->entity = $entity;
             return $this->render('read', false);
         } else {
@@ -124,10 +141,10 @@ class CustomersController extends ActionController implements CrudInterface
             $transaction = $crud->update([
                 'deleted' => '1',
                 'updated_at' => date('Y-m-d H:i:s')
-            ], $_POST['id'], 'id');
+            ], $_POST['uuid'], 'uuid');
 
             if ($transaction){
-                $this->toLog("Removeu o Cliente #{$_POST['id']}");
+                $this->toLog("Removeu o Cliente #{$_POST['uuid']}");
                 $data  = [
                     'title' => 'Sucesso!', 
                     'msg'   => 'Cliente removido.',
@@ -153,15 +170,15 @@ class CustomersController extends ActionController implements CrudInterface
     public function fieldExistsAction()
     {
         if (!empty($_POST)) {
-            $id     = (!empty($_POST['id']) ? $_POST['id'] : null);
+            $uuid     = (!empty($_POST['uuid']) ? $_POST['uuid'] : null);
 
             if (!empty($_POST['name'])) $field = 'name';
             if (!empty($_POST['document_1'])) $field = 'document_1';
             if (!empty($_POST['document_2'])) $field = 'document_2';
             if (!empty($_POST['email'])) $field = 'email';
             if (!empty($_POST['cellphone'])) $field = 'cellphone';
-
-            $exists = $this->model->fieldExists($field, $_POST[$field], 'id', $id);
+            
+            $exists = $this->model->fieldExists($field, $_POST[$field], 'uuid', $uuid);
             if ($exists) {
                 echo 'false';
             } else {

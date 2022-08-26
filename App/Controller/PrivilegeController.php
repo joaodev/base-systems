@@ -18,7 +18,7 @@ class PrivilegeController extends ActionController
 
     public function indexAction()
     {
-        $data = $this->model->getAllByRoleId($_POST['id']);
+        $data = $this->model->getAllByRoleUuid($_POST['uuid']);
         $this->view->data = $data;
 
         return $this->render('index', false);
@@ -33,10 +33,10 @@ class PrivilegeController extends ActionController
 
             $crud = new Crud();
             $crud->setTable($this->model->getTable());
-            $transaction = $crud->update($update, $_POST['id'], 'id');
+            $transaction = $crud->update($update, $_POST['uuid'], 'uuid');
 
             if ($transaction){
-                $this->toLog("Acão aplicada ao privilegio #{$_POST['id']}");
+                $this->toLog("Acão aplicada ao privilegio #{$_POST['uuid']}");
                 $data  = [
                     'title' => 'Sucesso!', 
                     'msg'   => 'Ação realizada.',

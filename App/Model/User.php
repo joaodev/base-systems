@@ -12,22 +12,24 @@ class User extends Model
         $this->setTable('user');
     }
 
-    public function getOne($id)
+    public function getOne($uuid)
     {
         try {
             $query = "
-                SELECT u.id, u.name, u.email, u.status, u.role_id,
-                        u.cellphone, u.job_role, r.name as role, 
-                        r.is_admin, u.created_at, u.updated_at, u.file
+                SELECT u.uuid, u.name, u.email, u.status, u.role_uuid, u.whatsapp,
+                        u.cellphone, u.job_role, r.name as role, u.phone,
+                        r.is_admin, u.created_at, u.updated_at, u.file,
+                        u.postal_code, u.address, u.number, u.complement, 
+                        u.neighborhood, u.city, u.state, u.document_1, u.document_2 
                 FROM {$this->getTable()} AS u
                 INNER JOIN role AS r
-                    ON u.role_id = r.id
-                WHERE u.id = :id AND u.deleted = '0'
+                    ON u.role_uuid = r.uuid
+                WHERE u.uuid = :uuid AND u.deleted = '0'
                 ORDER BY u.name ASC
             ";
 
             $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":id", $id);
+            $stmt->bindValue(":uuid", $uuid);
             $stmt->execute();
 
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -45,11 +47,13 @@ class User extends Model
     {
         try {
             $query = "
-                SELECT u.id, u.name, u.email, u.status, u.file, 
-                        u.cellphone, u.job_role, r.name as role, u.created_at, u.updated_at
+                SELECT u.uuid, u.name, u.email, u.status, u.file, u.phone, u.whatsapp,
+                        u.cellphone, u.job_role, r.name as role, u.created_at, u.updated_at,
+                        u.postal_code, u.address, u.number, u.complement, 
+                        u.neighborhood, u.city, u.state, u.document_1, u.document_2
                 FROM {$this->getTable()} AS u
                 INNER JOIN role AS r
-                    ON u.role_id = r.id
+                    ON u.role_uuid = r.uuid
                 WHERE u.deleted = '0'
                 ORDER BY u.name ASC
             ";
@@ -70,7 +74,7 @@ class User extends Model
     {
         try {
             $query = "
-                SELECT id
+                SELECT uuid
                 FROM {$this->getTable()} 
                 WHERE deleted = '0'
             ";
@@ -88,20 +92,20 @@ class User extends Model
     }
   
   
-    public function getAllByRoleId($id)
+    public function getAllByRoleUuid($uuid)
     {
         try {
             $query = "
-                SELECT u.id, u.name, u.email, u.status, u.file, 
+                SELECT u.uuid, u.name, u.email, u.status, u.file,  u.phone,
                         u.cellphone, u.job_role, r.name as role, u.created_at
                 FROM {$this->getTable()} AS u
                 INNER JOIN role AS r
-                    ON u.role_id = r.id
-                WHERE u.role_id = :role_id AND u.deleted = '0'
+                    ON u.role_uuid = r.uuid
+                WHERE u.role_uuid = :role_uuid AND u.deleted = '0'
             ";
 
             $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":role_id", $id);
+            $stmt->bindValue(":role_uuid", $uuid);
             $stmt->execute();
 
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -120,11 +124,11 @@ class User extends Model
     	try {
             if (!empty($email) && !empty($password)) {
                 $query = "
-                    SELECT u.id, u.name, u.email, u.password, u.file,
-                            r.name as role, u.role_id, r.is_admin
+                    SELECT u.uuid, u.name, u.email, u.password, u.file,
+                            r.name as role, u.role_uuid, r.is_admin
                     FROM {$this->getTable()} AS u
                     INNER JOIN role AS r
-                        ON u.role_id = r.id
+                        ON u.role_uuid = r.uuid
                     WHERE u.email=:email AND u.password=:password
                         AND u.status = :status
                         AND u.deleted = :deleted
@@ -160,11 +164,11 @@ class User extends Model
         if (!empty($email) && !empty($password)) {
             try {
                 $query = "
-                    SELECT u.id, u.name, u.email, u.password, u.file,
-                            r.name as role, u.role_id, r.is_admin
+                    SELECT u.uuid, u.name, u.email, u.password, u.file,
+                            r.name as role, u.role_uuid, r.is_admin
                     FROM {$this->getTable()} AS u
                     INNER JOIN role AS r
-                        ON u.role_id = r.id
+                        ON u.role_uuid = r.uuid
                     WHERE u.email=:email
                         AND u.status = :status
                         AND u.deleted = :deleted
@@ -199,15 +203,16 @@ class User extends Model
         }
     }
     
-    public function checkDeletePermission($roleId)
+    public function checkDeletePermission($roleUuid)
     {
         try {
-            $query = "SELECT role_id 
+            $query = "SELECT role_uuid 
                         FROM {$this->getTable()}
-                        WHERE role_id = :role_id";
+                        WHERE role_uuid = :role_uuid AND deleted = :deleted";
 
             $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":role_id", $roleId);
+            $stmt->bindValue(":role_uuid", $roleUuid);
+            $stmt->bindValue(":deleted", '0');
             $stmt->execute();
 
             $results = $stmt->rowCount();   

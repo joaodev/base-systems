@@ -36,12 +36,12 @@ class LoginController extends ActionController
 	        					->findByCrenditials($email, $password); 
 
 	        if ($credentials) {
-                $_SESSION['COD']         = $credentials['id'];
+                $_SESSION['COD']         = $credentials['uuid'];
 	            $_SESSION['NAME']        = $credentials['name'];
 	            $_SESSION['EMAIL']       = $credentials['email'];
 	            $_SESSION['PASS']        = $credentials['password'];
 	            $_SESSION['ROLE_NAME']   = $credentials['role'];
-	            $_SESSION['ROLE']        = $credentials['role_id'];
+	            $_SESSION['ROLE']        = $credentials['role_uuid'];
 	            $_SESSION['ROLE_ADM']    = $credentials['is_admin'];
 	            $_SESSION['PHOTO']       = $credentials['file'];
 
@@ -49,7 +49,7 @@ class LoginController extends ActionController
 
 	            return self::redirect('');
 	        } else {
-	            return self::redirect('', 'usuario-invalido');
+	            return self::redirect('', 'usuario-invaluuido');
 	        }
         } else {
         	return self::redirect('');
@@ -75,9 +75,9 @@ class LoginController extends ActionController
     public function forgotPasswordAction()
     {
         if (!empty($_POST)) {
-            $userId = $this->userModel->getIdByField('email', $_POST['email'], 'id');
-            if ($userId > 0) {
-                $user = $this->userModel->find($userId, 'id, name, email', 'id');
+            $userUuid = $this->userModel->getUuidByField('email', $_POST['email'], 'uuid');
+            if ($userUuid > 0) {
+                $user = $this->userModel->find($userUuid, 'uuid, name, email', 'uuid');
                 $code = $this->randomString();
 
                 $crud = new Crud();
@@ -86,14 +86,14 @@ class LoginController extends ActionController
                 $updateCode = $crud->update([
                     'code' => md5($code),
                     'updated_at' => date('Y-m-d H:i:s')
-                ], $userId, 'id');
+                ], $userUuid, 'uuid');
 
                 if ($updateCode) {
                     $config = $this->getSiteConfig();
 
                     $message = "
                         <p>Olá, " . $user['name'] . "!</p>
-                        <p>Este é o seu código para validar sua alteração da sua senha:</p>
+                        <p>Este é o seu código para valuuidar sua alteração da sua senha:</p>
                         <p style='font-size: 30px;'><b>" . $code . "</b></p>
                     ";
         
@@ -118,36 +118,36 @@ class LoginController extends ActionController
                 }
             } 
             
-            return self::redirect('validar-codigo');
+            return self::redirect('valuuidar-codigo');
         } else {
             return $this->render('forgot-password', false);
         }
     }
     
-    public function codeValidationAction()
+    public function codeValuuidationAction()
     {
         if (!empty($_POST)) {
             $code = md5($_POST['code']);
-            $userId = $this->userModel->getIdByField('code', $code, 'id');
-            if ($userId > 0) {
+            $userUuid = $this->userModel->getUuidByField('code', $code, 'uuid');
+            if ($userUuid > 0) {
                 $crud = new Crud();
                 $crud->setTable($this->userModel->getTable());
-                $validatedCode = $crud->update([
-                    'code_validated' => '1',
+                $valuuidatedCode = $crud->update([
+                    'code_valuuidated' => '1',
                     'updated_at' => date('Y-m-d H:i:s')
-                ], $userId, 'id');
+                ], $userUuid, 'uuid');
     
-                if ($validatedCode) {
+                if ($valuuidatedCode) {
                     $this->view->code = $code;
                     return $this->render('change-password', false);
                 } else {
-                    return self::redirect('validar-codigo', 'codigo-invalido');
+                    return self::redirect('valuuidar-codigo', 'codigo-invaluuido');
                 }
             } else {
-                return self::redirect('validar-codigo', 'codigo-invalido');
+                return self::redirect('valuuidar-codigo', 'codigo-invaluuido');
             }
         } else {
-            return $this->render('code-validation', false);
+            return $this->render('code-valuuidation', false);
         }
     }
 
@@ -155,18 +155,18 @@ class LoginController extends ActionController
     {
         if (!empty($_POST)) {
             if (empty($_POST['info'])) {
-                return self::redirect('validar-codigo', 'codigo-invalido');
+                return self::redirect('valuuidar-codigo', 'codigo-invaluuido');
             } else {
                 if ($_POST['password'] != $_POST['confirmation']) {
                     $this->view->code = $_POST['info'];
                     $this->view->errorPasswords = 'Senhas incorretas!';
                     return $this->render('change-password', false);
                 } else {
-                    $userId = $this->userModel->getIdByField('code', $_POST['info'], 'id');
-                    if ($userId > 0) {
-                        $user = $this->userModel->find($userId, 'id, email, password, code, code_validated', 'id');
-                        if ($user['code'] != $_POST['info'] || $user['code_validated'] != '1') {
-                            return self::redirect('validar-codigo', 'codigo-invalido');
+                    $userUuid = $this->userModel->getUuidByField('code', $_POST['info'], 'uuid');
+                    if ($userUuid > 0) {
+                        $user = $this->userModel->find($userUuid, 'uuid, email, password, code, code_valuuidated', 'uuid');
+                        if ($user['code'] != $_POST['info'] || $user['code_valuuidated'] != '1') {
+                            return self::redirect('valuuidar-codigo', 'codigo-invaluuido');
                         } else {
                             $crud = new Crud();
                             $crud->setTable($this->userModel->getTable());
@@ -175,21 +175,21 @@ class LoginController extends ActionController
                             $updatedPassword = $crud->update([
                                 'password' => $newPassword,
                                 'code' => null,
-                                'code_validated' => '0',
+                                'code_valuuidated' => '0',
                                 'updated_at' => date('Y-m-d H:i:s')
-                            ], $user['id'], 'id');
+                            ], $user['uuid'], 'uuid');
 
                             if ($updatedPassword) {   
                                 $credentials = $this->userModel
 	        					    ->authByCrenditials($user['email'], $newPassword); 
                             
                                 if ($credentials) {
-                                    $_SESSION['COD']         = $credentials['id'];
+                                    $_SESSION['COD']         = $credentials['uuid'];
                                     $_SESSION['NAME']        = $credentials['name'];
                                     $_SESSION['EMAIL']       = $credentials['email'];
                                     $_SESSION['PASS']        = $newPassword;
                                     $_SESSION['ROLE_NAME']   = $credentials['role'];
-                                    $_SESSION['ROLE']        = $credentials['role_id'];
+                                    $_SESSION['ROLE']        = $credentials['role_uuid'];
                                     $_SESSION['ROLE_ADM']    = $credentials['is_admin'];
                                     $_SESSION['PHOTO']       = $credentials['file'];
                                     
@@ -197,19 +197,19 @@ class LoginController extends ActionController
 
                                     return self::redirect('');
                                 } else {
-                                    return self::redirect('', 'usuario-invalido');
+                                    return self::redirect('', 'usuario-invaluuido');
                                 }
                             } else {
-                                return self::redirect('validar-codigo', 'codigo-invalido');
+                                return self::redirect('valuuidar-codigo', 'codigo-invaluuido');
                             }
                         }
                     } else {
-                        return self::redirect('validar-codigo', 'codigo-invalido');
+                        return self::redirect('valuuidar-codigo', 'codigo-invaluuido');
                     }
                 }
             }
         } else {
-            return self::redirect('validar-codigo', 'codigo-invalido');
+            return self::redirect('valuuidar-codigo', 'codigo-invaluuido');
         }
     }
 }

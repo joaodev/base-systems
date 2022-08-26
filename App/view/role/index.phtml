@@ -39,7 +39,7 @@
                                     <tbody>
                                         <?php foreach ($data as $entity): ?>
                                             <tr class="text-center" style="cursor: pointer;" 
-                                                onclick="openDetails(<?php echo $entity['id']; ?>);">
+                                                onclick="openDetails('<?php echo $entity['uuid']; ?>');">
                                                 <td style="font-size: 15px">
                                                     <?php echo $entity['name']; ?>
                                                 </td>
@@ -112,16 +112,16 @@
             });
         });
 
-        function openDetails(id) {
+        function openDetails(uuid) {
             $("#modalLargeResult").empty();
-            $("#modalLargeTitle").html('<i class="fa fa-lock"></i> Dados do Perfil');
+            $("#modalLargeTitle").html('<i class="fa fa-info-circle pr-2"></i> Informações');
             $("#modalLargeLoader").show();
             $("#modalLarge").modal('show');
 
             $.ajax({
                 type: 'post',
                 url: "controle-acesso/detalhes",
-                data: {id:id},
+                data: {uuid:uuid},
                 async: true
             }).done(function(data) {
                 $("#modalLargeResult").html(data);
@@ -132,16 +132,16 @@
             });
         }
 
-        function rolePrivileges(id) {
+        function rolePrivileges(uuid) {
             $("#modalLargeResult").empty();
-            $("#modalLargeTitle").html('<i class="fa fa-unlock"></i> Permissões');
+            $("#modalLargeTitle").html('<i class="fa fa-unlock pr-2"></i> Permissões');
             $("#modalLargeLoader").show();
             $("#modalLarge").modal('show');
             
             $.ajax({
                 type: 'post',
                 url: "controle-acesso/permissoes",
-                data: {id:id},
+                data: {uuid:uuid},
                 async: true
             }).done(function(data) {
                 $("#modalLargeResult").html(data);
@@ -154,7 +154,7 @@
 
         function createRole() {
             $("#modalLargeResult").empty();
-            $("#modalLargeTitle").html('<i class="fa fa-lock"></i> Novo Perfil');
+            $("#modalLargeTitle").html('<i class="fa fa-plus pr-2"></i> Perfil');
             $("#modalLargeLoader").show();
             $("#modalLarge").modal('show');
 
@@ -171,16 +171,16 @@
             });
         }
 
-        function updateRole(id) {
+        function updateRole(uuid) {
             $("#modalLargeResult").empty();
-            $("#modalLargeTitle").html('<i class="fa fa-lock"></i> Editar Perfil');
+            $("#modalLargeTitle").html('<i class="fa fa-pen pr-2"></i> Perfil');
             $("#modalLargeLoader").show();
             $("#modalLarge").modal('show');
 
             $.ajax({
                 type: 'post',
                 url: "controle-acesso/editar",
-                data: {id:id},
+                data: {uuid:uuid},
                 async: true
             }).done(function(data) {
                 $("#modalLargeResult").html(data);
@@ -191,28 +191,34 @@
             });
         }
 
-        function deleteRole(id) {
-            a = confirm("Deseja remover este Nível?");
-            if (a) {
-                $("#modalLargeLoader").show();
-                
+        function deleteRole(uuid) {
+            $("#modalLarge").modal('hide');
+            $("#modalDeleteResult").empty();
+            $("#modalDeleteTitle").html('<i class="fa fa-trash pr-2"></i> Perfil de Acesso');
+            $("#modalDeleteLoader").hide();
+            $("#modalDelete").modal('show');
+            $("#modalDeleteResult").html('<button type="button" class="btn btn-danger" onclick="runDelete(\''+uuid+'\');"><i class="fa fa-trash"></i> CONFIRMAR E EXCLUIR</button>');
+        }   
+
+        function runDelete(uuid) {
+            if (uuid !== null || uuid !== undefined) {
+                $("#modalDeleteLoader").show();
+
                 $.ajax({
                     type: "POST",
                     url: "controle-acesso/excluir",
-                    data: {id: id},
+                    data: {uuid: uuid},
                     dataType: 'json',
                     async: true
                 }).done(function(data) {
                     showAlert(data.type, data.title, data.msg, data.pos);
-                    $("#modalLarge").modal('hide');
+                    $("#modalDelete").modal('hide');
                     openModule('controle-acesso');
                 }).fail(function() {
                     showInternalErrorAlert();
-                    $("#modalLargeLoader").hide();
+                    $("#modalDeleteLoader").hide();
                 });
-            } else {
-                return false;
-            }	
+            }
         }
     </script>
 <?php endif; ?>

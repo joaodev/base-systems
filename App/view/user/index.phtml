@@ -1,11 +1,13 @@
 <?php 
-$data = $this->view->data; 
+$data    = $this->view->data; 
+$isAdmin = ($_SESSION['ROLE_ADM'] == '1') ? true : false;
+$role    = $_SESSION['ROLE'];
 
-$canView    = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 1)) ? true : false;
-$canCreate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 2, 1)) ? true : false;
-$canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 3, 1)) ? true : false;
-$canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 1)) ? true : false;
-$canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 2)) ? true : false;
+$canView    = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this->moduleCodes('user'))) ? true : false;
+$canCreate  = ($isAdmin || $this->acl($role, $this->resourceCodes('create'), $this->moduleCodes('user'))) ? true : false;
+$canUpdate  = ($isAdmin || $this->acl($role, $this->resourceCodes('update'), $this->moduleCodes('user'))) ? true : false;
+$canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $this->moduleCodes('user'))) ? true : false;
+$canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this->moduleCodes('privileges'))) ? true : false;
 ?>
 <?php if ($canView): ?>
     <section class="content-header">
@@ -14,8 +16,8 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
                 <div class="col-10">
                     <h1 style="position: relative; top: 5px">
                         <i class="fas fa-user-cog"></i>
-                        Usuários
-                    </h1>
+                        Usuários <?php print_r($canViewAcl); ?>
+                    </h1> 
                 </div>
                 <div class="col-2">
                     <?php if ($canCreate): ?>
@@ -54,7 +56,7 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
                                     <tbody>
                                         <?php foreach ($data as $entity): ?>
                                             <tr class="text-center" style="cursor: pointer;" 
-                                                onclick="openDetails(<?php echo $entity['id']; ?>);">
+                                                onclick="openDetails('<?php echo $entity['uuid']; ?>');">
                                                 <td style="font-size: 15px; ">
                                                     <?php echo $entity['name']; ?>
                                                 </td>
@@ -147,23 +149,23 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
             });
         });
 
-        function openDetails(id) {
-            $("#modalLargeResult").empty();
-            $("#modalLargeTitle").html('<i class="fa fa-user-cog"></i> Dados do Usuário');
-            $("#modalLargeLoader").show();
-            $("#modalLarge").modal('show');
+        function openDetails(uuid) {
+            $("#modalXLResult").empty();
+            $("#modalXLTitle").html('<i class="fa fa-info-circle pr-2"></i> Informações');
+            $("#modalXLLoader").show();
+            $("#modalXL").modal('show');
 
             $.ajax({
                 type: 'post',
                 url: "usuarios/detalhes",
-                data: {id:id},
+                data: {uuid:uuid},
                 async: true
             }).done(function(data) {
-                $("#modalLargeResult").html(data);
-                $("#modalLargeLoader").hide();
+                $("#modalXLResult").html(data);
+                $("#modalXLLoader").hide();
             }).fail(function() {
                 showInternalErrorAlert();
-                $("#modalLargeLoader").hide();
+                $("#modalXLLoader").hide();
             });
         }
 
@@ -171,78 +173,86 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
     <?php if ($canCreate): ?>
         <script>
             function createUser() {
-                $("#modalLargeResult").empty();
-                $("#modalLargeTitle").html('<i class="fa fa-user-cog"></i> Novo Usuário');
-                $("#modalLargeLoader").show();
-                $("#modalLarge").modal('show');
+                $("#modalXLResult").empty();
+                $("#modalXLTitle").html('<i class="fa fa-plus pr-2"></i> Usuário');
+                $("#modalXLLoader").show();
+                $("#modalXL").modal('show');
 
                 $.ajax({
                     type: 'post',
                     url: "usuarios/cadastrar",
                     async: true
                 }).done(function(data) {
-                    $("#modalLargeResult").html(data);
-                    $("#modalLargeLoader").hide();
+                    $("#modalXLResult").html(data);
+                    $("#modalXLLoader").hide();
                 }).fail(function() {
                     showInternalErrorAlert();
-                    $("#modalLargeLoader").hide();
+                    $("#modalXLLoader").hide();
                 });
             }
         </script>
     <?php endif; ?>
     <?php if ($canUpdate): ?>
         <script>
-            function updateUser(id) {
-                $("#modalLargeResult").empty();
-                $("#modalLargeTitle").html('<i class="fa fa-user-cog"></i> Editar Usuário');
-                $("#modalLargeLoader").show();
-                $("#modalLarge").modal('show');
+            function updateUser(uuid) {
+                $("#modalXLResult").empty();
+                $("#modalXLTitle").html('<i class="fa fa-pen pr-2"></i> Usuário');
+                $("#modalXLLoader").show();
+                $("#modalXL").modal('show');
 
                 $.ajax({
                     type: 'post',
                     url: "usuarios/editar",
-                    data: {id:id},
+                    data: {uuid:uuid},
                     async: true
                 }).done(function(data) {
-                    $("#modalLargeResult").html(data);
-                    $("#modalLargeLoader").hide();
+                    $("#modalXLResult").html(data);
+                    $("#modalXLLoader").hide();
                 }).fail(function() {
                     showInternalErrorAlert();
-                    $("#modalLargeLoader").hide();
+                    $("#modalXLLoader").hide();
                 });
             }
         </script>
     <?php endif; ?>
     <?php if ($canDelete): ?>
         <script>
-            function deleteUser(id) {
-                a = confirm("Deseja remover este Usuário?");
-                if (a) {
-                    $("#modalLargeLoader").show();
-                    
+            function deleteUser(uuid) {
+                $("#modalXL").modal('hide');
+                $("#modalDeleteResult").empty();
+                $("#modalDeleteTitle").html('<i class="fa fa-trash pr-2"></i> Usuário');
+                $("#modalDeleteLoader").hide();
+                $("#modalDelete").modal('show');
+                $("#modalDeleteResult").html('<button type="button" class="btn btn-danger" onclick="runDelete(\''+uuid+'\');"><i class="fa fa-trash"></i> CONFIRMAR E EXCLUIR</button>');
+            }   
+
+            function runDelete(uuid) {
+                if (uuid !== null || uuid !== undefined) {
+                    $("#modalDeleteLoader").show();
+
                     $.ajax({
                         type: "POST",
                         url: "usuarios/excluir",
-                        data: {id: id},
+                        data: {uuid: uuid},
                         dataType: 'json',
                         async: true
                     }).done(function(data) {
                         showAlert(data.type, data.title, data.msg, data.pos);
-                        $("#modalLarge").modal('hide');
+                        $("#modalDelete").modal('hide');
+                        $("#modalXL").modal('hide');
                         openModule('usuarios');
                     }).fail(function() {
                         showInternalErrorAlert();
-                        $("#modalLargeLoader").hide();
+                        $("#modalDeleteLoader").hide();
                     });
-                } else {
-                    return false;
-                }	
+                }
             }
         </script>
     <?php endif; ?>
     <?php if ($canViewAcl): ?>
         <script>
-            function aclUser(id) {
+            function aclUser(uuid) {
+                $("#modalXL").modal('hide');
                 $("#modalLargeResult").empty();
                 $("#modalLargeTitle").html('<i class="fa fa-lock"></i> Permissões do Usuário');
                 $("#modalLargeLoader").show();
@@ -251,7 +261,7 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
                 $.ajax({
                     type: 'post',
                     url: "usuarios/acl",
-                    data: {id:id},
+                    data: {uuid:uuid},
                     async: true
                 }).done(function(data) {
                     $("#modalLargeResult").html(data);

@@ -1,2 +1,4 @@
 _config/conf.php
 vendor/Core/Init/Bootstrap.php
+public/uploads/logo/*
+public/uploads/users/*

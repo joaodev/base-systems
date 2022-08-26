@@ -38,9 +38,10 @@ class RoleController extends ActionController implements CrudInterface
     private function savePrivilege($role, $resource, $module)
     {
         $data = [
-            'role_id' => $role,
-            'resource_id' => $resource,
-            'module_id' => $module
+            'uuid' => $this->model->NewUUID(),
+            'role_uuid' => $role,
+            'resource_uuid' => $resource,
+            'module_uuid' => $module
         ];
 
         $crud = new Crud();
@@ -51,6 +52,7 @@ class RoleController extends ActionController implements CrudInterface
     public function createProcessAction()
     {
         if (!empty($_POST)) {
+            $_POST['uuid'] = $this->model->NewUUID();
             $crud = new Crud();
             $crud->setTable($this->model->getTable());
             $transaction = $crud->create($_POST);
@@ -58,24 +60,24 @@ class RoleController extends ActionController implements CrudInterface
             if ($transaction){
                 $modules = $this->modulesModel->getAll();
                 foreach ($modules as $module) {
-                    if ($module['view_id'] != 0) {
-                        $this->savePrivilege($transaction, $module['view_id'], $module['id']);
+                    if ($module['view_uuid'] != 0) {
+                        $this->savePrivilege($_POST['uuid'], $module['view_uuid'], $module['uuid']);
                     }
 
-                    if ($module['create_id'] != 0) {
-                        $this->savePrivilege($transaction, $module['create_id'], $module['id']);
+                    if ($module['create_uuid'] != 0) {
+                        $this->savePrivilege($_POST['uuid'], $module['create_uuid'], $module['uuid']);
                     }   
 
-                    if ($module['update_id'] != 0) {
-                        $this->savePrivilege($transaction, $module['update_id'], $module['id']);
+                    if ($module['update_uuid'] != 0) {
+                        $this->savePrivilege($_POST['uuid'], $module['update_uuid'], $module['uuid']);
                     }
 
-                    if ($module['delete_id'] != 0) {
-                        $this->savePrivilege($transaction, $module['delete_id'], $module['id']);
+                    if ($module['delete_uuid'] != 0) {
+                        $this->savePrivilege($_POST['uuid'], $module['delete_uuid'], $module['uuid']);
                     }
                 }
                 
-                $this->toLog("Cadastrou o perfil de acesso: {$_POST['name']} #{$transaction}");
+                $this->toLog("Cadastrou o perfil de acesso: {$_POST['name']} #{$_POST['uuid']}");
                 $data  = [
                     'title' => 'Sucesso!', 
                     'msg'   => 'Perfil cadastrado.',
@@ -100,8 +102,8 @@ class RoleController extends ActionController implements CrudInterface
 
 	public function readAction()
     {
-        if (!empty($_POST['id'])) {
-            $entity = $this->model->getOne($_POST['id']);
+        if (!empty($_POST['uuid'])) {
+            $entity = $this->model->getOne($_POST['uuid']);
             $this->view->entity = $entity;
             return $this->render('read', false);
         } else {
@@ -112,7 +114,7 @@ class RoleController extends ActionController implements CrudInterface
 	public function updateAction()
     {
         if (!empty($_POST)) {
-            $entity = $this->model->getOne($_POST['id']);
+            $entity = $this->model->getOne($_POST['uuid']);
             $this->view->entity = $entity;
 
             return $this->render('update', false);
@@ -127,10 +129,10 @@ class RoleController extends ActionController implements CrudInterface
             $_POST['updated_at'] = date('Y-m-d H:i:s');
             $crud = new Crud();
             $crud->setTable($this->model->getTable());
-            $transaction = $crud->update($_POST, $_POST['id'], 'id');
+            $transaction = $crud->update($_POST, $_POST['uuid'], 'uuid');
 
             if ($transaction){
-                $this->toLog("Atualizou o perfil de acesso: {$_POST['name']} #{$_POST['id']}");
+                $this->toLog("Atualizou o perfil de acesso: {$_POST['name']} #{$_POST['uuid']}");
                 $data  = [
                     'title' => 'Sucesso!', 
                     'msg'   => 'Perfil atualizado.',
@@ -156,7 +158,7 @@ class RoleController extends ActionController implements CrudInterface
 	public function deleteAction()
     {
         if (!empty($_POST)) {
-            $checkDeletePermission = $this->userModel->checkDeletePermission($_POST['id']);
+            $checkDeletePermission = $this->userModel->checkDeletePermission($_POST['uuid']);
             if ($checkDeletePermission) {
                 $updateData = [
                     'updated_at' => date('Y-m-d H:i:s'),
@@ -165,10 +167,10 @@ class RoleController extends ActionController implements CrudInterface
 
                 $crud = new Crud();
                 $crud->setTable($this->model->getTable());
-                $transaction = $crud->update($updateData, $_POST['id'], 'id');
+                $transaction = $crud->update($updateData, $_POST['uuid'], 'uuid');
 
                 if ($transaction){
-                    $this->toLog("Removeu o perfil de acesso: #{$_POST['id']}");
+                    $this->toLog("Removeu o perfil de acesso: #{$_POST['uuid']}");
                     $data  = [
                         'title' => 'Sucesso!', 
                         'msg'   => 'Perfil removido.',
@@ -202,11 +204,11 @@ class RoleController extends ActionController implements CrudInterface
     public function fieldExistsAction()
     {
         if (!empty($_POST)) {
-            $id     = (!empty($_POST['id']) ? $_POST['id'] : null);
+            $uuid     = (!empty($_POST['uuid']) ? $_POST['uuid'] : null);
 
             if (!empty($_POST['name'])) $field = 'name';
             
-            $exists = $this->model->fieldExists($field, $_POST[$field], 'id', $id);
+            $exists = $this->model->fieldExists($field, $_POST[$field], 'uuid', $uuid);
             if ($exists) {
                 echo 'false';
             } else {

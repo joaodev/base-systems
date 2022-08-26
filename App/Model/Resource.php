@@ -11,17 +11,17 @@ class Resource extends Model
         $this->setTable('resource');
     }
 
-    public function getOne($id)
+    public function getOne($uuid)
     {
         try {
             $query = "
-                SELECT id, name, created_at
+                SELECT uuid, name, created_at
                 FROM {$this->getTable()}
-                WHERE id = :id
+                WHERE uuid = :uuid
             ";
 
             $stmt = $this->openDb()->prepare($query);
-            $stmt->bindValue(":id", $id);
+            $stmt->bindValue(":uuid", $uuid);
             $stmt->execute();
 
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -39,7 +39,7 @@ class Resource extends Model
     {
         try {
             $query = "
-                SELECT id, name
+                SELECT uuid, name
                 FROM {$this->getTable()}
             ";
 

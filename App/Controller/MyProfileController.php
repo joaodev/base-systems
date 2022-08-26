@@ -70,7 +70,7 @@ class MyProfileController extends ActionController
             $_POST['updated_at'] = date('Y-m-d H:i:s');
             $crud = new Crud();
             $crud->setTable($this->model->getTable());
-            $transaction = $crud->update($_POST, $_SESSION['COD'], 'id');
+            $transaction = $crud->update($_POST, $_SESSION['COD'], 'uuid');
 
             if ($transaction){
                 $_SESSION['NAME']  = $_POST['name'];

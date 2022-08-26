@@ -1,11 +1,17 @@
-<?php $entity = $this->view->entity; ?>
-<?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 3, 6)): ?>
+<?php 
+$entity = $this->view->entity;
+$role = $_SESSION['ROLE'];
+?>
+<?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resourceCodes('update'), $this->moduleCodes('customers'))): ?>
     <form method="post" name="formUpdateCustomer" id="formUpdateCustomer">
         <div class="row">
+            <div class="col-md-12 bg-primary mb-3" style="border-radius: 5px;">
+                <h4 class="pt-2 text-center">Dados Pessoais</h4>
+            </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="name">Nome</label>
-                    <input type="text" class="form-control" name="name" id="name" required
+                    <input type="text" class="form-control" name="name" id="name" required maxlength="200"
                         value="<?php echo $entity['name']; ?>">
                 </div>
             </div>
@@ -13,56 +19,125 @@
                 <div class="form-group">
                     <label for="cnpj">CPF</label>
                     <input type="text" class="form-control" name="document_1" id="document_1"  maxlength="14"
-                        value="<?php echo $entity['document_1']; ?>">
+                        value="<?php echo $entity['document_1']; ?>" onchange="validateCPF();">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="cnpj">CNPJ</label>
                     <input type="text" class="form-control" name="document_2" id="document_2"  maxlength="18"
-                        value="<?php echo $entity['document_2']; ?>">
+                        value="<?php echo $entity['document_2']; ?>" onchange="validateCNPJ();">
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="contato">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" required maxlength="200"
+                    <input type="email" class="form-control" name="email" id="email" required maxlength="100"
                         value="<?php echo $entity['email']; ?>">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="phone">Telefone</label>
-                    <input type="text" class="form-control" name="phone" id="phone" maxlength="20"
+                    <input type="text" class="form-control" name="phone" id="phone" maxlength="13"
                         value="<?php echo $entity['phone']; ?>">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="cellphone">Celular</label>
-                    <input type="text" class="form-control" name="cellphone" id="cellphone" maxlength="20"
+                    <input type="text" class="form-control" name="cellphone" id="cellphone" maxlength="14"
                         value="<?php echo $entity['cellphone']; ?>">
                 </div>
             </div>
-            
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="whatsapp">WhastApp</label>
+                    <input type="text" class="form-control" name="whatsapp" id="whatsapp" maxlength="14"
+                        value="<?php echo $entity['whatsapp']; ?>">
+                </div>
+            </div>
+            <div class="col-md-12 bg-primary mt-3 mb-3" style="border-radius: 5px;">
+                <h4 class="pt-2 text-center">Localização</h4>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="postal_code">CEP</label>
+                    <input type="text" class="form-control" name="postal_code" id="postal_code"  maxlength="9"
+                        value="<?php echo $entity['postal_code']; ?>">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="address">Endereço</label>
+                    <input type="text" class="form-control" name="address" id="address"  maxlength="100"
+                        value="<?php echo $entity['address']; ?>">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="number">Número</label>
+                    <input type="text" class="form-control" name="number" id="number"  maxlength="50"
+                        value="<?php echo $entity['number']; ?>">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="complement">Complemento</label>
+                    <input type="text" class="form-control" name="complement" id="complement"  maxlength="50"
+                        value="<?php echo $entity['complement']; ?>">
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="neighborhood">Bairro</label>
+                    <input type="text" class="form-control" name="neighborhood" id="neighborhood"  maxlength="100"
+                        value="<?php echo $entity['neighborhood']; ?>">
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="city">Cidade</label>
+                    <input type="text" class="form-control" name="city" id="city"  maxlength="100"
+                        value="<?php echo $entity['city']; ?>">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="state">UF</label>
+                    <input type="text" class="form-control" name="state" id="state"  maxlength="2"
+                        value="<?php echo $entity['state']; ?>">
+                </div>
+            </div>
+            <div class="col-md-12"><hr></div>
+            <div class="col-md-4 offset-md-4 mt-3">
+                <div class="form-group text-center">
+                    <select name="status" id="status" class="form-control text-center" required>
+                        <option value="1" <?php echo ($entity['status'] == '1') ? 'selected' : ''; ?>>Ativo no sistema</option>
+                        <option value="0" <?php echo ($entity['status'] == '0') ? 'selected' : ''; ?>>Inativo no sistema</option>
+                    </select>
+                </div>
+            </div>
             <div class="col-md-12"><hr></div>
             <div class="col-md-4 text-center offset-md-4">
-                <input type="hidden" name="id" value="<?php echo $entity['id']; ?>">
-                <button type="submit" class="btn btn-success bg-gradient-success" style="width: 100%;">
+                <input type="hidden" name="uuid" value="<?php echo $entity['uuid']; ?>">
+                <button type="submit" class="btn btn-success" style="width: 100%;">
                     <i class="fa fa-save pr-1"></i> Gravar
                 </button>
             </div>
         </div>
     </form>
+    <script src="<?php echo baseUrl; ?>public/js/api_cep.js"></script>
+    <script src="<?php echo baseUrl; ?>public/js/documents_validators.js"></script>
     <script>
         $(document).ready(function(){
-            //$("input[id=initial_amount]").maskMoney({allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
-
+            $("#postal_code").mask("99999-999");
             $("#document_1").mask("999.999.999-99");
             $("#document_2").mask("99.999.999/9999-99");
 
             $("#phone").mask("(99)9999-9999");
             $("#cellphone").mask("(99)99999-9999");
+            $("#whatsapp").mask("(99)99999-9999");
 
             $('#formUpdateCustomer').validate({
                 rules: {
@@ -70,35 +145,35 @@
                         remote: { 
                             type: "post",
                             url: "<?php echo baseUrl; ?>clientes/valor-existente",
-                            data: {id: '<?php echo $_POST['id']; ?>'}
+                            data: {uuid: '<?php echo $_POST['uuid']; ?>'}
                         }
                     },
                     document_1: {
                         remote: { 
                             type: "post",
                             url: "<?php echo baseUrl; ?>clientes/valor-existente",
-                            data: {id: '<?php echo $_POST['id']; ?>'}
+                            data: {uuid: '<?php echo $_POST['uuid']; ?>'}
                         }
                     },
                     document_2: {
                         remote: { 
                             type: "post",
                             url: "<?php echo baseUrl; ?>clientes/valor-existente",
-                            data: {id: '<?php echo $_POST['id']; ?>'}
+                            data: {uuid: '<?php echo $_POST['uuid']; ?>'}
                         }
                     },
                     email: {
                         remote: { 
                             type: "post",
                             url: "<?php echo baseUrl; ?>clientes/valor-existente",
-                            data: {id: '<?php echo $_POST['id']; ?>'}
+                            data: {uuid: '<?php echo $_POST['uuid']; ?>'}
                         }
                     },
                     cellphone: {
                         remote: { 
                             type: "post",
                             url: "<?php echo baseUrl; ?>clientes/valor-existente",
-                            data: {id: '<?php echo $_POST['id']; ?>'}
+                            data: {uuid: '<?php echo $_POST['uuid']; ?>'}
                         }
                     },
                 },
