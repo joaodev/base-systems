@@ -11,7 +11,7 @@ $canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-6">
-                    <h1 class="text-dark" style="position: relative; top: 5px">
+                    <h1 style="position: relative; top: 5px">
                         <i class="fas fa-users"></i>
                         Clientes
                     </h1>
@@ -20,7 +20,7 @@ $canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 
                     <?php if ($canCreate): ?>
                         <ol class="breadcrumb float-right">
                             <li class="breadcrumb-item">
-                                <button type="button" class="btn btn-block bg-navy btn-flat"
+                                <button type="button" class="btn btn-primary btn-flat"
                                     onclick="createCustomer();">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -40,7 +40,7 @@ $canDelete  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover" id="tbl_prioridade" style="width: 99.9%;">
                                     <thead>
-                                        <tr class="text-center bg-navy" style="height: 30px;">
+                                        <tr class="text-center bg-primary" style="height: 30px;">
                                             <th class="text-white" style="font-size: 14px;">Nome</th>
                                             <th class="text-white" style="font-size: 14px;">Email</th>
                                             <th class="text-white" style="font-size: 14px;">Telefone</th>

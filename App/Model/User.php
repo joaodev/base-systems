@@ -65,6 +65,28 @@ class User extends Model
             echo $e->getMessage();
         }
     }
+
+    public function totalUsers()
+    {
+        try {
+            $query = "
+                SELECT id
+                FROM {$this->getTable()} 
+                WHERE deleted = '0'
+            ";
+
+            $stmt = $this->openDb()->query($query);
+            $result = $stmt->rowCount();
+
+            $stmt = null;
+            $this->closeDb();
+
+            return $result;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+  
   
     public function getAllByRoleId($id)
     {

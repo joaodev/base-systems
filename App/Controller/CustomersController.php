@@ -32,6 +32,7 @@ class CustomersController extends ActionController implements CrudInterface
     public function createProcessAction()
     {
         if (!empty($_POST)) {
+            $_POST['user_id'] = $_SESSION['COD'];
             $crud = new Crud();
             $crud->setTable($this->model->getTable());
 

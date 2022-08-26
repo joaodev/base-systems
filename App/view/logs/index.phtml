@@ -8,7 +8,7 @@ $canView = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 4))
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-6">
-                    <h1 class="text-dark" style="position: relative; top: 5px">
+                    <h1 style="position: relative; top: 5px">
                         <i class="fas fa-th-list"></i>
                         Logs do Sistema
                     </h1>
@@ -28,7 +28,7 @@ $canView = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 4))
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover" id="tbl_prioridade" style="width: 99.9%;">
                                     <thead>
-                                        <tr class="text-center bg-dark" style="height: 30px;">
+                                        <tr class="text-center bg-primary" style="height: 30px;">
                                             <th class="text-white" style="font-size: 14px;">Data</th>
                                             <th class="text-white" style="font-size: 14px;">Usuário</th>
                                             <th class="text-white" style="font-size: 14px;">Ação</th>

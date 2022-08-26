@@ -35,29 +35,13 @@ $roles = $this->view->roles;
                         value="<?php echo $entity['cellphone']; ?>">
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="form-group">
                     <label for="job_role">Cargo</label>
                     <input type="text" class="form-control" name="job_role" id="job_role" required
                         value="<?php echo $entity['job_role']; ?>">
                 </div>
             </div>
-            <?php if ($_SESSION['ROLE'] == '1'): ?>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="name">Nível de Acesso</label>
-                        <select name="role_id" id="role_id" class="form-control" required>
-                            <option value="">-</option>
-                            <?php foreach($roles as $role): ?>
-                                <option value="<?php echo $role['id']; ?>"
-                                    <?php echo ($role['id'] == $entity['role_id']) ? 'selected' : ''; ?>>
-                                    <?php echo $role['name']; ?> 
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-            <?php endif; ?>
             <div class="col-md-12"><hr></div>
             <div class="col-md-6">
                 <div class="form-group">
@@ -74,7 +58,7 @@ $roles = $this->view->roles;
             <div class="col-md-12"><hr></div>
             <div class="col-md-4 text-center offset-md-4">
                 <input type="hidden" name="id" value="<?php echo $entity['id']; ?>">
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <button type="submit" class="btn btn-success" style="width: 100%;">
                     <i class="fa fa-save pr-1"></i> Gravar
                 </button>
             </div>

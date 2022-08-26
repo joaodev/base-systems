@@ -19,6 +19,10 @@ class ActionController
             self::dataValidation($_GET);
         }
 
+        if (!empty($_POST)) {
+            self::dataValidation($_POST);
+        }
+
         $this->view = new \stdClass();
     }
         

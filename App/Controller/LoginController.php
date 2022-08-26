@@ -42,7 +42,7 @@ class LoginController extends ActionController
 	            $_SESSION['PASS']        = $credentials['password'];
 	            $_SESSION['ROLE_NAME']   = $credentials['role'];
 	            $_SESSION['ROLE']        = $credentials['role_id'];
-	            $_SESSION['ROLE_ADM']    = $credentials['is_app'];
+	            $_SESSION['ROLE_ADM']    = $credentials['is_admin'];
 	            $_SESSION['PHOTO']       = $credentials['file'];
 
                 $this->toLog("Fez login no sistema");
@@ -89,7 +89,6 @@ class LoginController extends ActionController
                 ], $userId, 'id');
 
                 if ($updateCode) {
-                    $seo = $this->getSiteSeo();
                     $config = $this->getSiteConfig();
 
                     $message = "
@@ -106,12 +105,12 @@ class LoginController extends ActionController
                     $mail->Password   = $config['mail_password'];
                     $mail->Port       = $config['mail_port'];      
         
-                    $mail->setFrom($config['mail_from_address'], $seo['title']);
+                    $mail->setFrom($config['mail_from_address'], $config['site_title']);
                     $mail->addAddress($user['email']);
         
                     $message = wordwrap($message, 70, "\r\n");
                     $mail->isHTML(true);                                  
-                    $mail->Subject = utf8_decode($seo['title'] . ' - CÓDIGO DE RECUPERAÇÃO');
+                    $mail->Subject = utf8_decode($config['site_title'] . ' - CÓDIGO DE RECUPERAÇÃO');
                     $mail->Body    = utf8_decode($message);
                     $mail->send();
 
@@ -191,7 +190,7 @@ class LoginController extends ActionController
                                     $_SESSION['PASS']        = $newPassword;
                                     $_SESSION['ROLE_NAME']   = $credentials['role'];
                                     $_SESSION['ROLE']        = $credentials['role_id'];
-                                    $_SESSION['ROLE_ADM']    = $credentials['is_app'];
+                                    $_SESSION['ROLE_ADM']    = $credentials['is_admin'];
                                     $_SESSION['PHOTO']       = $credentials['file'];
                                     
                                     $this->toLog("Atualizou a senha e fez o login no sistema.");

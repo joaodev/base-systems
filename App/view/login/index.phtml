@@ -1,5 +1,4 @@
 ﻿<?php 
-$seo = ['title' => 'teste']; 
 $config = $this->getSiteConfig();
 ?>
 <!DOCTYPE html>
@@ -7,7 +6,7 @@ $config = $this->getSiteConfig();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $seo['title']; ?></title>
+    <title><?php echo $config['site_title']; ?></title>
     <meta author="João Augusto Bonfante">
     <link rel="icon" href="<?php echo baseUrl . 'public/uploads/logo/' . $config['logo_icon']; ?>" type="image/x-icon" />
 

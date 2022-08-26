@@ -12,7 +12,7 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-10">
-                    <h1 class="text-primary" style="position: relative; top: 6px">
+                    <h1 style="position: relative; top: 5px">
                         <i class="fas fa-user-cog"></i>
                         Usuários
                     </h1>
@@ -21,7 +21,7 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
                     <?php if ($canCreate): ?>
                         <ol class="breadcrumb float-right">
                             <li class="breadcrumb-item">
-                                <button type="button" class="btn btn-block bg-gradient-dark btn-flat"
+                                <button type="button" class="btn btn-primary btn-flat"
                                     onclick="createUser();" style="position: relative; top: 3px">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -41,7 +41,7 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover" id="table_user" style="width: 99.9%;">
                                     <thead>
-                                        <tr class="text-center bg-dark">
+                                        <tr class="text-center bg-primary">
                                             <th class="text-white" style="font-size: 14px; ">Nome</th>
                                             <th class="text-white" style="font-size: 14px;">Email</th>
                                             <th class="text-white" style="font-size: 14px;">Celular</th>
@@ -113,7 +113,7 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
                         exportOptions: {columns: [0,1,2,3,4,6]}
                     })
                 ],
-                order: [ [0, "asc"] ],
+                order: [ [4, "asc"] ],
                 columnDefs: [{orderable: false, targets: [5]}],
                 responsive: true,
                 info: true,
@@ -149,7 +149,7 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
 
         function openDetails(id) {
             $("#modalLargeResult").empty();
-            $("#modalLargeTitle").html('<i class="fa fa-user"></i> Dados do Usuário');
+            $("#modalLargeTitle").html('<i class="fa fa-user-cog"></i> Dados do Usuário');
             $("#modalLargeLoader").show();
             $("#modalLarge").modal('show');
 
@@ -172,7 +172,7 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
         <script>
             function createUser() {
                 $("#modalLargeResult").empty();
-                $("#modalLargeTitle").html('<i class="fa fa-user"></i> Novo Usuário');
+                $("#modalLargeTitle").html('<i class="fa fa-user-cog"></i> Novo Usuário');
                 $("#modalLargeLoader").show();
                 $("#modalLarge").modal('show');
 
@@ -194,7 +194,7 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
         <script>
             function updateUser(id) {
                 $("#modalLargeResult").empty();
-                $("#modalLargeTitle").html('<i class="fa fa-user"></i> Editar Usuário');
+                $("#modalLargeTitle").html('<i class="fa fa-user-cog"></i> Editar Usuário');
                 $("#modalLargeLoader").show();
                 $("#modalLarge").modal('show');
 
@@ -244,7 +244,7 @@ $canViewAcl = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 
         <script>
             function aclUser(id) {
                 $("#modalLargeResult").empty();
-                $("#modalLargeTitle").html('<i class="fa fa-user"></i> Permissões do Usuário');
+                $("#modalLargeTitle").html('<i class="fa fa-lock"></i> Permissões do Usuário');
                 $("#modalLargeLoader").show();
                 $("#modalLarge").modal('show');
 

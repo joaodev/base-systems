@@ -45,20 +45,24 @@
         </div>
         
         <div class="col-md-12"><hr></div>
-        <div class="col-md-6 text-left">
-            <span for="dt_cadastro">Cadastrado em:</span> 
+        <div class="col-md-3 text-left">
+            <span for="dt_cadastro">Cadastro em:</span> 
             <b><?php echo $this->formatDateTime($entity['created_at']); ?></b>
         </div>
-        <div class="col-md-6 text-right">
+        <div class="col-md-3 text-left">
             <?php if (!empty($entity['updated_at'])): ?>
-                <span for="dt_cadastro">Última atualização em:</span> 
+                <span for="dt_cadastro">Atualizado em:</span> 
                 <b><?php echo $this->formatDateTime($entity['updated_at']); ?></b>
             <?php endif; ?>
+        </div>
+        <div class="col-md-6 text-right">
+            <span for="dt_cadastro">Cadastrado por:</span> 
+            <b><?php echo $entity['username']; ?></b>
         </div>
         <div class="col-md-12"><hr></div>
         <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 3, 6)): ?>
             <div class="col-3">
-                <button type="button" class="btn btn-primary bg-navy" onclick="updateCustomer(<?php echo $entity['id']; ?>);" style="width: 100%;">
+                <button type="button" class="btn btn-primary" onclick="updateCustomer(<?php echo $entity['id']; ?>);" style="width: 100%;">
                     <i class="fa fa-pen pr-1"></i> Editar
                 </button>
             </div>
@@ -66,7 +70,7 @@
         <div class="col-8"></div>
         <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 4, 6)): ?>
             <div class="col-1">
-                <button type="button" class="btn btn-danger bg-gradient-danger" onclick="deleteCustomer(<?php echo $entity['id']; ?>);" style="width: 100%;">
+                <button type="button" class="btn btn-danger" onclick="deleteCustomer(<?php echo $entity['id']; ?>);" style="width: 100%;">
                     <i class="fa fa-trash"></i> 
                 </button>
             </div>

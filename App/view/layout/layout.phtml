@@ -1,7 +1,4 @@
 <?php 
-$seo = [
-    'title' => 'nome do sistema'
-]; 
 $config = $this->getSiteConfig();
 ?>
 <!DOCTYPE html>
@@ -9,7 +6,7 @@ $config = $this->getSiteConfig();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $seo['title']; ?></title>
+    <title><?php echo $config['site_title']; ?></title>
     <meta author="João Augusto Bonfante">
     <link rel="icon" href="<?php echo baseUrl . 'public/uploads/logo/' . $config['logo_icon']; ?>" type="image/x-icon" />
 
@@ -63,6 +60,42 @@ $config = $this->getSiteConfig();
             position: relative;
             top: -3px;
         }
+
+        h1 {
+            color: <?php echo $config['primary_color']; ?> !important;
+        }
+
+        .bg-primary {
+            background: <?php echo $config['primary_color']; ?> !important;
+        }
+
+        .bg-primary:hover {
+            background: <?php echo $config['secondary_color']; ?> !important;
+        }
+
+        .btn-primary {
+            background: <?php echo $config['primary_color']; ?> !important;
+        }
+
+        .btn-primary:hover {
+            background: <?php echo $config['secondary_color']; ?> !important;
+        }
+        
+        .page-link:hover {
+            z-index: 2;
+            color: #fff;
+            text-decoration: none;
+            background-color: <?php echo $config['secondary_color']; ?>;
+            border-color: <?php echo $config['secondary_color']; ?>;
+        }
+
+
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color: <?php echo $config['primary_color']; ?> !important;;
+            border-color: <?php echo $config['primary_color']; ?> !important;;
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -71,7 +104,7 @@ $config = $this->getSiteConfig();
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
         <img class="animation__shake" src="<?php echo baseUrl . 'public/uploads/logo/' . $config['logo_icon']; ?>" 
-        alt="<?php echo $seo['title']; ?>" height="200">
+        alt="<?php echo $config['site_title']; ?>" height="200">
     </div>
 
     <!-- Navbar -->
@@ -95,7 +128,7 @@ $config = $this->getSiteConfig();
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4 bg-gradient-dark">
+    <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: <?php echo $config['primary_color']; ?> !important;">
         <!-- Brand Logo -->
         <a href="<?php echo baseUrl; ?>">
             <img src="<?php echo baseUrl . 'public/uploads/logo/' . $config['logo']; ?>" alt="logo" style="width: 100%;">
@@ -268,7 +301,7 @@ $config = $this->getSiteConfig();
                     <div class="overlay" id="modalXLLoader">
                         <i class="fas fa-2x fa-sync fa-spin"></i>
                     </div>
-                    <div class="modal-header bg-navy text-white">
+                    <div class="modal-header bg-primary text-white">
                         <h4 class="modal-title" id="modalXLTitle"></h4>
                         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -288,7 +321,7 @@ $config = $this->getSiteConfig();
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-        <strong>&copy; <?php echo date('Y'); ?><?php echo $seo['title']; ?></strong>
+        <strong>&copy; <?php echo date('Y'); ?> <?php echo $config['site_title']; ?></strong>
         
         <div class="float-right d-none d-sm-inline-block">
         <b>Versão</b> 1.0.0
