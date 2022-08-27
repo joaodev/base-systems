@@ -63,21 +63,21 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Título</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="site_title" id="site_title"
+                                        <input type="text" class="form-control" name="site_title" id="site_title" maxlength="20"
                                             value="<?php echo $entity['site_title']; ?>" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Cor Primária</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="primary_color" id="primary_color"
+                                        <input type="text" class="form-control" name="primary_color" id="primary_color" maxlength="7"
                                             value="<?php echo $entity['primary_color']; ?>" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Cor Secundária</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="secondary_color" id="secondary_color"
+                                        <input type="text" class="form-control" name="secondary_color" id="secondary_color" maxlength="7"
                                             value="<?php echo $entity['secondary_color']; ?>" required>
                                     </div>
                                 </div>
@@ -85,21 +85,21 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Email</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" name="email" id="email" required
+                                        <input type="email" class="form-control" name="email" id="email" required maxlength="100"
                                             value="<?php echo $entity['email']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Telefone</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="phone" id="phone"
+                                        <input type="text" class="form-control" name="phone" id="phone" maxlength="13"
                                             value="<?php echo $entity['phone']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Celular (Whatsapp)</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="cellphone" id="cellphone" required
+                                        <input type="text" class="form-control" name="cellphone" id="cellphone" required maxlength="14"
                                             value="<?php echo $entity['cellphone']; ?>">
                                     </div>
                                 </div>
@@ -115,41 +115,41 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Servidor SMTP</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mail_host" id="mail_host"
+                                        <input type="text" class="form-control" name="mail_host" id="mail_host" maxlength="30"
                                             value="<?php echo $entity['mail_host']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Porta</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mail_port" id="mail_port"
+                                        <input type="text" class="form-control" name="mail_port" id="mail_port" maxlength="10"
                                             value="<?php echo $entity['mail_port']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Usuário</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mail_username" id="mail_username"
+                                        <input type="text" class="form-control" name="mail_username" id="mail_username" maxlength="50"
                                             value="<?php echo $entity['mail_username']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Senha</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mail_password" id="mail_password">
+                                        <input type="text" class="form-control" name="mail_password" id="mail_password" maxlength="50">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Email para envio</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mail_from_address" id="mail_from_address"
+                                        <input type="text" class="form-control" name="mail_from_address" id="mail_from_address" maxlength="100"
                                             value="<?php echo $entity['mail_from_address']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Email para Recebimento</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mail_to_address" id="mail_to_address"
+                                        <input type="text" class="form-control" name="mail_to_address" id="mail_to_address" maxlength="100"
                                             value="<?php echo $entity['mail_to_address']; ?>">
                                     </div>
                                 </div>
