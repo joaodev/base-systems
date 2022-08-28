@@ -64,13 +64,5 @@ $router['app'] = [
 	
 ];
 
-switch ($_SERVER['HTTP_HOST']) {
-    case 'localhost':
-        $systemDir = "/base-systems";
-        break;
-    default:
-        $systemDir = "";
-        break;
-}
-
+$systemDir = "/base-systems";
 $app = new Core\Init\Bootstrap($router, $systemDir);

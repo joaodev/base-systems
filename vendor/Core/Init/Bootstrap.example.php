@@ -102,23 +102,14 @@ class Bootstrap
 
     public static function getDb()
     {
-        switch ($_SERVER['HTTP_HOST']) {
-            case 'localhost':
-                $server = "127.0.0.1";
-                $db     = "";
-                $user   = "";
-                $pass   = ""; 
-                break;
-            default:
-                $server = '';
-                $db     = '';
-                $user   = '';
-                $pass   = ''; 
-                break;
-        }
+        $server = "127.0.0.1";
+        $db     = "";
+        $user   = "";
+        $pass   = ""; 
+        $port   = "";
 
         $db = new \PDO(
-            "mysql:host={$server};dbname={$db}", $user, $pass
+            "mysql:host={$server};port={$port};dbname={$db}", $user, $pass
         );
 
         $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
