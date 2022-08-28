@@ -32,20 +32,13 @@ class CustomersController extends ActionController implements CrudInterface
     public function createProcessAction()
     {
         if (!empty($_POST)) {
-            if ($_POST['document_1'] == '___.___.___-__') {
-                $_POST['document_1'] = null;
-            }
-
-            if ($_POST['document_2'] == '__.___.___/____-__') {
-                $_POST['document_2'] = null;
-            }
-            
             $_POST['uuid'] = $this->model->NewUUID();
             $_POST['user_uuid'] = $_SESSION['COD'];
             $crud = new Crud();
             $crud->setTable($this->model->getTable());
 
             $transaction = $crud->create($_POST);
+
             if ($transaction){
                 $this->toLog("Cadastrou o Cliente {$_POST['name']} #{$_POST['uuid']}");
                 $data  = [
@@ -84,14 +77,6 @@ class CustomersController extends ActionController implements CrudInterface
     public function updateProcessAction()
     {
         if (!empty($_POST)) {
-            if ($_POST['document_1'] == '___.___.___-__') {
-                $_POST['document_1'] = null;
-            }
-
-            if ($_POST['document_2'] == '__.___.___/____-__') {
-                $_POST['document_2'] = null;
-            }
-
             $_POST['updated_at'] = date('Y-m-d H:i:s');
             $crud = new Crud();
             $crud->setTable($this->model->getTable());

@@ -13,19 +13,19 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-10">
+                <div class="col-6">
                     <h1 style="position: relative; top: 5px">
-                        <i class="fas fa-user-cog"></i>
-                        Usuários
+                        <i class="fas fa-user-cog pr-1"></i>
+                        Colaboradores
                     </h1> 
                 </div>
-                <div class="col-2">
+                <div class="col-6">
                     <?php if ($canCreate): ?>
                         <ol class="breadcrumb float-right">
                             <li class="breadcrumb-item">
                                 <button type="button" class="btn btn-primary btn-flat"
                                     onclick="createUser();" style="position: relative; top: 3px">
-                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-plus pr-1"></i> Adicionar
                                 </button>
                             </li>
                         </ol>
@@ -64,7 +64,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                                                     <?php echo $entity['email']; ?>
                                                 </td>
                                                 <td style="font-size: 15px">
-                                                    <?php echo $entity['cellphone']; ?>
+                                                    <?php echo $this->inputMasked($entity['cellphone'], '(##) #####-####'); ?>
                                                 </td>
                                                 <td style="font-size: 15px">
                                                     <?php echo $entity['job_role']; ?>
@@ -150,22 +150,18 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
         });
 
         function openDetails(uuid) {
-            $("#modalXLResult").empty();
-            $("#modalXLTitle").html('<i class="fa fa-info-circle pr-2"></i> Informações');
-            $("#modalXLLoader").show();
-            $("#modalXL").modal('show');
-
+            $("#baseLoader").show();
             $.ajax({
                 type: 'post',
                 url: "usuarios/detalhes",
                 data: {uuid:uuid},
                 async: true
             }).done(function(data) {
-                $("#modalXLResult").html(data);
-                $("#modalXLLoader").hide();
+                $("#sis_content").html(data);
+                $("#baseLoader").hide();
             }).fail(function() {
                 showInternalErrorAlert();
-                $("#modalXLLoader").hide();
+                $("#baseLoader").hide();
             });
         }
 
@@ -173,21 +169,17 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
     <?php if ($canCreate): ?>
         <script>
             function createUser() {
-                $("#modalXLResult").empty();
-                $("#modalXLTitle").html('<i class="fa fa-plus pr-2"></i> Usuário');
-                $("#modalXLLoader").show();
-                $("#modalXL").modal('show');
-
+                $("#baseLoader").show();
                 $.ajax({
                     type: 'post',
                     url: "usuarios/cadastrar",
                     async: true
                 }).done(function(data) {
-                    $("#modalXLResult").html(data);
-                    $("#modalXLLoader").hide();
+                    $("#sis_content").html(data);
+                    $("#baseLoader").hide();
                 }).fail(function() {
                     showInternalErrorAlert();
-                    $("#modalXLLoader").hide();
+                    $("#baseLoader").hide();
                 });
             }
         </script>
@@ -195,22 +187,18 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
     <?php if ($canUpdate): ?>
         <script>
             function updateUser(uuid) {
-                $("#modalXLResult").empty();
-                $("#modalXLTitle").html('<i class="fa fa-pen pr-2"></i> Usuário');
-                $("#modalXLLoader").show();
-                $("#modalXL").modal('show');
-
+                $("#baseLoader").show();
                 $.ajax({
                     type: 'post',
                     url: "usuarios/editar",
                     data: {uuid:uuid},
                     async: true
                 }).done(function(data) {
-                    $("#modalXLResult").html(data);
-                    $("#modalXLLoader").hide();
+                    $("#sis_content").html(data);
+                    $("#baseLoader").hide();
                 }).fail(function() {
                     showInternalErrorAlert();
-                    $("#modalXLLoader").hide();
+                    $("#baseLoader").hide();
                 });
             }
         </script>
@@ -223,7 +211,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                 $("#modalDeleteTitle").html('<i class="fa fa-trash pr-2"></i> Usuário');
                 $("#modalDeleteLoader").hide();
                 $("#modalDelete").modal('show');
-                $("#modalDeleteResult").html('<button type="button" class="btn btn-danger" onclick="runDelete(\''+uuid+'\');"><i class="fa fa-trash"></i> CONFIRMAR E EXCLUIR</button>');
+                $("#modalDeleteResult").html('<button type="button" class="btn btn-default" onclick="runDelete(\''+uuid+'\');"><i class="fa fa-trash"></i> CONFIRMAR E EXCLUIR</button>');
             }   
 
             function runDelete(uuid) {
@@ -252,23 +240,18 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
     <?php if ($canViewAcl): ?>
         <script>
             function aclUser(uuid) {
-                $("#modalXL").modal('hide');
-                $("#modalLargeResult").empty();
-                $("#modalLargeTitle").html('<i class="fa fa-lock"></i> Permissões do Usuário');
-                $("#modalLargeLoader").show();
-                $("#modalLarge").modal('show');
-
+                $("#baseLoader").show();
                 $.ajax({
                     type: 'post',
                     url: "usuarios/acl",
                     data: {uuid:uuid},
                     async: true
                 }).done(function(data) {
-                    $("#modalLargeResult").html(data);
-                    $("#modalLargeLoader").hide();
+                    $("#sis_content").html(data);
+                    $("#baseLoader").hide();
                 }).fail(function() {
                     showInternalErrorAlert();
-                    $("#modalLargeLoader").hide();
+                    $("#baseLoader").hide();
                 });
             }
         </script>

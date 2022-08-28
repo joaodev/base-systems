@@ -16,7 +16,7 @@ $canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $th
             <div class="row mb-2">
                 <div class="col-6">
                     <h1 style="position: relative; top: 5px">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-users pr-1"></i>
                         Clientes
                     </h1>
                 </div>
@@ -26,7 +26,7 @@ $canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $th
                             <li class="breadcrumb-item">
                                 <button type="button" class="btn btn-primary btn-flat"
                                     onclick="createCustomer();">
-                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-plus pr-1"></i> Adicionar
                                 </button>
                             </li>
                         </ol>
@@ -65,10 +65,10 @@ $canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $th
                                                     <?php echo $entity['email']; ?>
                                                 </td>
                                                 <td style="font-size: 15px">
-                                                    <?php echo $entity['phone']; ?>
+                                                    <?php echo $this->inputMasked($entity['phone'], '(##) ####-####'); ?>
                                                 </td>
                                                 <td style="font-size: 15px">
-                                                    <?php echo $entity['cellphone']; ?>
+                                                    <?php echo $this->inputMasked($entity['cellphone'], '(##) #####-####'); ?>
                                                 </td>
                                                 <td style="font-size: 15px">
                                                     <?php echo $entity['city'] . (!empty($entity['state']) ? '-' . $entity['state'] : ''); ?>
@@ -152,22 +152,18 @@ $canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $th
         });
 
         function openDetailsCustomer(uuid) {
-            $("#modalXLResult").empty();
-            $("#modalXLTitle").html('<i class="fa fa-info-circle pr-2"></i> Informações');
-            $("#modalXLLoader").show();
-            $("#modalXL").modal('show');
-
+            $("#baseLoader").show();
             $.ajax({
                 type: 'post',
                 url: "<?php echo baseUrl; ?>clientes/detalhes",
                 data: {uuid:uuid},
                 async: true
             }).done(function(data) {
-                $("#modalXLResult").html(data);
-                $("#modalXLLoader").hide();
+                $("#sis_content").html(data);
+                $("#baseLoader").hide();
             }).fail(function() {
                 showInternalErrorAlert();
-                $("#modalXLLoader").hide();
+                $("#baseLoader").hide();
             });
         }
 
@@ -175,21 +171,17 @@ $canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $th
     <?php if ($canCreate): ?>
         <script>
             function createCustomer() {
-                $("#modalXLResult").empty();
-                $("#modalXLTitle").html('<i class="fa fa-plus mr-2"></i> Cliente');
-                $("#modalXLLoader").show();
-                $("#modalXL").modal('show');
-
+                $("#baseLoader").show();
                 $.ajax({
                     type: 'post',
                     url: "<?php echo baseUrl; ?>clientes/cadastrar",
                     async: true
                 }).done(function(data) {
-                    $("#modalXLResult").html(data);
-                    $("#modalXLLoader").hide();
+                    $("#sis_content").html(data);
+                    $("#baseLoader").hide();
                 }).fail(function() {
                     showInternalErrorAlert();
-                    $("#modalXLLoader").hide();
+                    $("#baseLoader").hide();
                 });
             }
         </script>
@@ -197,22 +189,18 @@ $canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $th
     <?php if ($canUpdate): ?>
         <script>
             function updateCustomer(uuid) {
-                $("#modalXLResult").empty();
-                $("#modalXLTitle").html('<i class="fa fa-pen mr-2"></i> Cliente');
-                $("#modalXLLoader").show();
-                $("#modalXL").modal('show');
-
+                $("#baseLoader").show();
                 $.ajax({
                     type: 'post',
                     url: "<?php echo baseUrl; ?>clientes/editar",
                     data: {uuid:uuid},
                     async: true
                 }).done(function(data) {
-                    $("#modalXLResult").html(data);
-                    $("#modalXLLoader").hide();
+                    $("#sis_content").html(data);
+                    $("#baseLoader").hide();
                 }).fail(function() {
                     showInternalErrorAlert();
-                    $("#modalXLLoader").hide();
+                    $("#baseLoader").hide();
                 });
             }
         </script>
@@ -220,18 +208,16 @@ $canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $th
     <?php if ($canDelete): ?>
         <script>
             function deleteCustomer(uuid) {
-                $("#modalXL").modal('hide');
                 $("#modalDeleteResult").empty();
-                $("#modalDeleteTitle").html('<i class="fa fa-trash pr-2"></i> Cliente');
+                $("#modalDeleteTitle").html('<i class="fa fa-trash pr-2"></i> Excluir Cliente');
                 $("#modalDeleteLoader").hide();
                 $("#modalDelete").modal('show');
-                $("#modalDeleteResult").html('<button type="button" class="btn btn-danger" onclick="runDelete(\''+uuid+'\');"><i class="fa fa-trash"></i> CONFIRMAR E EXCLUIR</button>');
+                $("#modalDeleteResult").html('<button type="button" class="btn btn-default" onclick="runDelete(\''+uuid+'\');"><i class="fa fa-trash"></i> CONFIRMAR E EXCLUIR</button>');
             }   
 
             function runDelete(uuid) {
                 if (uuid !== null || uuid !== undefined) {
                     $("#modalDeleteLoader").show();
-
                     $.ajax({
                         type: "POST",
                         url: "clientes/excluir",

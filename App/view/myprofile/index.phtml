@@ -6,7 +6,7 @@ $entity = $this->view->entity;
         <div class="row mb-2">
             <div class="col-12">
                 <h1 style="position: relative; top: 5px">
-                    <i class="fas fa-user"></i>
+                    <i class="fas fa-user pr-1"></i>
                     Meu Perfil
                 </h1>
             </div>
@@ -43,7 +43,7 @@ $entity = $this->view->entity;
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="job_role">Profissão</label>
+                                        <label for="job_role">Cargo</label>
                                         <input type="text" class="form-control" name="job_role" id="job_role" required maxlength="50"
                                             value="<?php echo $entity['job_role']; ?>">
                                     </div>
@@ -81,19 +81,20 @@ $entity = $this->view->entity;
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="password">Nova senha</label>
-                                            <input type="password" class="form-control"name="password" id="password">
+                                            <input type="password" class="form-control"name="password" id="password" minlength="8" maxlength="100">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="confirmation">Confirmar senha</label>
-                                        <input type="password" class="form-control" name="confirmation" id="confirmation">
+                                        <input type="password" class="form-control" name="confirmation" id="confirmation" minlength="8"  maxlength="100">
                                     </div>
                                 </div>
-                                <div class="col-md-12"><hr></div>
-                                <div class="col-md-4 text-center offset-md-4">
-                                    <button type="submit" class="btn btn-success" style="width: 100%;" id="btnSubmit">
-                                        <i class="fa fa-save pr-1"></i> Gravar
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-right mt-3 mb-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save pr-1"></i> Salvar
                                     </button>
                                 </div>
                             </div>

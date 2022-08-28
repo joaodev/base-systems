@@ -1,50 +1,77 @@
 <?php $entity = $this->view->entity; ?>
 <?php if ($_SESSION['ROLE_ADM'] == '1'): ?>
-<div class="row">
-    <div class="col-md-8">
-        <div class="form-group">
-            <label for="name">Nível:</label>
-            <input type="text" class="form-control" readonly
-                    value="<?php echo $entity['name']; ?>">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-6">
+                    <h1 style="position: relative; top: 5px">
+                        <i class="fas fa-info-circle pr-1"></i>
+                        Dados de Cadastro
+                    </h1>
+                </div>
+                <div class="col-6"></div>
+            </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="name">Administrador:</label>
-            <input type="text" class="form-control" readonly
-                    value="<?php echo ($entity['is_admin']) ? 'Sim' : 'Não'; ?>">
+    </section>
+    <section class="content" style="margin-left: 9px; margin-right: 9px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="name">Nível:</label>
+                                        <input type="text" class="form-control" readonly
+                                                value="<?php echo $entity['name']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="name">Administrador:</label>
+                                        <input type="text" class="form-control" readonly
+                                                value="<?php echo ($entity['is_admin']) ? 'Sim' : 'Não'; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-12"><hr></div>
+                                <div class="col-md-6 text-left">
+                                    <span for="dt_cadastro">Cadastrado em:</span> <br>
+                                    <b><?php echo $this->formatDateTime($entity['created_at']); ?></b>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <?php if (!empty($entity['updated_at'])): ?>
+                                        <span for="dt_cadastro">Atualizado em:</span> <br>
+                                        <b><?php echo $this->formatDateTime($entity['updated_at']); ?></b>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="col-md-12"><hr></div>
+                                <div class="col-6 col-md-6 mt-3">
+                                    <?php if ($entity['uuid'] != $_SESSION['COD'] && $entity['uuid'] != 1): ?>
+                                        <button type="button" class="btn btn-default mr-2 mb-2" onclick="deleteRole('<?php echo $entity['uuid']; ?>');">
+                                            <i class="fa fa-trash"></i> Remover
+                                        </button>
+                                    <?php endif; ?>
+                                    <?php if ($entity['is_admin'] == 0): ?>
+                                        <button type="button" class="btn btn-primary mb-2" onclick="rolePrivileges('<?php echo $entity['uuid']; ?>');">
+                                            <i class="fa fa-unlock pr-1"></i> Permissões
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="col-6 col-md-6 text-right mt-3 mb-2">
+                                    <button type="button" class="btn btn-default mr-2"
+                                            onclick="openModule('controle-acesso');">
+                                        <i class="fas fa-arrow-left pr-1"></i> Voltar
+                                    </button>
+                                    <button type="button" class="btn btn-primary" onclick="updateRole('<?php echo $entity['uuid']; ?>');">
+                                        <i class="fa fa-pen pr-1"></i> Editar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-md-12"><hr></div>
-    <div class="col-md-6 text-left">
-        <span for="dt_cadastro">Cadastrado em:</span> <br>
-        <b><?php echo $this->formatDateTime($entity['created_at']); ?></b>
-    </div>
-    <div class="col-md-6 text-right">
-        <?php if (!empty($entity['updated_at'])): ?>
-            <span for="dt_cadastro">Atualizado em:</span> <br>
-            <b><?php echo $this->formatDateTime($entity['updated_at']); ?></b>
-        <?php endif; ?>
-    </div>
-    <div class="col-md-12"><hr></div>
-    <div class="col-3">
-        <button type="button" class="btn btn-primary" onclick="updateRole('<?php echo $entity['uuid']; ?>');" style="width: 100%;">
-            <i class="fa fa-pen pr-1"></i> Editar
-        </button>
-    </div>
-    <div class="col-6">
-        <?php if ($entity['is_admin'] == 0): ?>
-            <button type="button" class="btn btn-secondary" onclick="rolePrivileges('<?php echo $entity['uuid']; ?>');" style="width: 100%;">
-                <i class="fa fa-unlock pr-1"></i> Permissões
-            </button>
-        <?php endif; ?>
-    </div>
-    <?php if ($entity['uuid'] != $_SESSION['COD'] && $entity['uuid'] != 1): ?>
-        <div class="col-3 text-right">
-            <button type="button" class="btn btn-danger" onclick="deleteRole('<?php echo $entity['uuid']; ?>');" style="width: 100%;">
-                <i class="fa fa-trash"></i> Excluir
-            </button>
-        </div>
-    <?php endif; ?>
-</div>
+    </section>
 <?php endif; ?>

@@ -1,3 +1,7 @@
+<?php
+$canViewCustomers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('customers'));
+$canViewUsers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('user'));
+?>
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -13,18 +17,15 @@
 <section class="content" style="margin-left: 9px; margin-right: 9px;">
     <div class="container-fluid">
         <div class="row">
-            <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 1)): ?>
-                <!-- ./col -->
+            <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewCustomers): ?>
                 <div class="col-lg-6 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-primary">
                         <div class="inner">
-                        <h3><?php echo $this->view->total_users; ?></h3>
-
-                        <p>Usuários</p>
+                            <h3><?php echo $this->view->total_customers; ?></h3>
+                            <p>Clientes</p>
                         </div>
                         <div class="icon">
-                        <i class="fas fa-users"></i>
+                            <i class="fas fa-users"></i>
                         </div>
                         <a onclick="openModule('clientes')" class="small-box-footer" style="cursor: pointer;">
                             Mais informações <i class="fas fa-arrow-circle-right"></i>
@@ -32,26 +33,22 @@
                     </div>
                 </div>
             <?php endif; ?>
-            <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($_SESSION['ROLE'], 1, 6)): ?>
-                <!-- ./col -->
+            <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewUsers): ?>
                 <div class="col-lg-6 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-primary">
                         <div class="inner">
-                        <h3><?php echo $this->view->total_users; ?></h3>
-
-                        <p>Clientes</p>
+                            <h3><?php echo $this->view->total_users; ?></h3>
+                            <p>Colaboradores</p>
                         </div>
                         <div class="icon">
-                        <i class="fas fa-users"></i>
+                            <i class="fas fa-users"></i>
                         </div>
-                        <a onclick="openModule('clientes')" class="small-box-footer" style="cursor: pointer;">
+                        <a onclick="openModule('usuarios')" class="small-box-footer" style="cursor: pointer;">
                             Mais informações <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
                 </div>
             <?php endif; ?>
-            <!-- ./col -->
         </div>
     </div>
 </section>

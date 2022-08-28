@@ -11,7 +11,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
             <div class="row mb-2">
                 <div class="col-12">
                     <h1 style="position: relative; top: 5px">
-                        <i class="fas fa-cogs"></i>
+                        <i class="fas fa-cogs pr-1"></i>
                         Configurações
                     </h1>
                 </div>
@@ -63,7 +63,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Título</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="site_title" id="site_title" maxlength="20"
+                                        <input type="text" class="form-control" name="site_title" id="site_title" maxlength="100"
                                             value="<?php echo $entity['site_title']; ?>" required>
                                     </div>
                                 </div>
@@ -90,16 +90,16 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="default-input" class="col-sm-2 form-control-label">Telefone</label>
+                                    <label for="default-input" class="col-sm-2 form-control-label">Telefone <br><small>(apenas númmeros)</small></label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="phone" id="phone" maxlength="13"
+                                        <input type="number" class="form-control" name="phone" id="phone" maxlength="10"
                                             value="<?php echo $entity['phone']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="default-input" class="col-sm-2 form-control-label">Celular (Whatsapp)</label>
+                                    <label for="default-input" class="col-sm-2 form-control-label">Celular <br><small>(Whatsapp, apenas númmeros)</small></label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="cellphone" id="cellphone" required maxlength="14"
+                                        <input type="number" class="form-control" name="cellphone" id="cellphone" required maxlength="11"
                                             value="<?php echo $entity['cellphone']; ?>">
                                     </div>
                                 </div>
@@ -154,11 +154,12 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                     </div>
                                 </div>
                                 <?php if ($canUpdate): ?>
-                                    <div class="col-md-12"><hr></div>
-                                    <div class="col-md-4 text-center offset-md-4">
-                                        <button type="submit" class="btn btn-success" style="width: 100%;" id="btnSubmit">
-                                            <i class="fa fa-save pr-1"></i> Gravar
-                                        </button>
+                                    <div class="row">
+                                        <div class="col-md-12 text-right mt-3 mb-2">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fa fa-save pr-1"></i> Salvar
+                                            </button>
+                                        </div>
                                     </div>
                                 <?php endif; ?>
                             </form>
@@ -171,8 +172,6 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
     <?php if ($canUpdate): ?>
         <script>
             $(document).ready(function(){
-                $("#phone").mask("(99)9999-9999");
-                $("#cellphone").mask("(99)99999-9999");
 
                 $('#formUpdateConfig').validate({
                     submitHandler: function( form ){

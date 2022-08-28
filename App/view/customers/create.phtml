@@ -2,118 +2,143 @@
 $role = $_SESSION['ROLE'];
 ?>
 <?php if ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resourceCodes('create'), $this->moduleCodes('customers'))): ?>
-    <form method="post" name="formCreateCustomer" id="formCreateCustomer">
-        <div class="row">
-            <div class="col-md-12 bg-primary mb-3" style="border-radius: 5px;">
-                <h4 class="pt-2 text-center">Dados Pessoais</h4>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="name">Nome</label>
-                    <input type="text" class="form-control" name="name" id="name" required maxlength="200">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-6">
+                    <h1 style="position: relative; top: 5px">
+                        <i class="fas fa-plus-square pr-1"></i>
+                        Adicionar Cliente
+                    </h1>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="cnpj">CPF</label>
-                    <input type="text" class="form-control" name="document_1" id="document_1"  maxlength="14" onchange="validateCPF();">
+                <div class="col-6">
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="cnpj">CNPJ</label>
-                    <input type="text" class="form-control" name="document_2" id="document_2"  maxlength="18" onchange="validateCNPJ();">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="contato">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" maxlength="100" required>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="phone">Telefone</label>
-                    <input type="text" class="form-control" name="phone" id="phone" maxlength="13">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="cellphone">Celular</label>
-                    <input type="text" class="form-control" name="cellphone" id="cellphone" maxlength="14">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="whatsapp">WhastApp</label>
-                    <input type="text" class="form-control" name="whatsapp" id="whatsapp" maxlength="14">
-                </div>
-            </div>
-            <div class="col-md-12 bg-primary mt-3 mb-3" style="border-radius: 5px;">
-                <h4 class="pt-2 text-center">Localização</h4>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="postal_code">CEP</label>
-                    <input type="text" class="form-control" name="postal_code" id="postal_code"  maxlength="9">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="address">Endereço</label>
-                    <input type="text" class="form-control" name="address" id="address"  maxlength="100">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label for="number">Número</label>
-                    <input type="text" class="form-control" name="number" id="number"  maxlength="50">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="complement">Complemento</label>
-                    <input type="text" class="form-control" name="complement" id="complement"  maxlength="50">
-                </div>
-            </div>
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label for="neighborhood">Bairro</label>
-                    <input type="text" class="form-control" name="neighborhood" id="neighborhood"  maxlength="100">
-                </div>
-            </div>
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label for="city">Cidade</label>
-                    <input type="text" class="form-control" name="city" id="city"  maxlength="100">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label for="state">UF</label>
-                    <input type="text" class="form-control" name="state" id="state"  maxlength="2">
-                </div>
-            </div>
-            <div class="col-md-12"><hr></div>
-            <div class="col-md-4 text-center offset-md-4">
-                <button type="submit" class="btn btn-success" style="width: 100%;">
-                    <i class="fa fa-save pr-1"></i> Gravar
-                </button>
             </div>
         </div>
-    </form>
+    </section>
+    <section class="content" style="margin-left: 9px; margin-right: 9px;">
+        <div class="container-fluid">
+            <form method="post" name="formCreateCustomer" id="formCreateCustomer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12" style="border-radius: 5px;">
+                                        <h5 class="pt-2"><i class="fas fa-user pr-1"></i> Dados Pessoais</h5>
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Nome</label>
+                                            <input type="text" class="form-control" name="name" id="name" required maxlength="200">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="document_1">CPF <small>(apenas númmeros)</small></label>
+                                            <input type="number" class="form-control" name="document_1" id="document_1" maxlength="11" onchange="validateCPF();">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="document_2">CNPJ <small>(apenas númmeros)</small></label>
+                                            <input type="number" class="form-control" name="document_2" id="document_2"  maxlength="14" onchange="validateCNPJ();">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" name="email" id="email" maxlength="100" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="phone">Telefone <small>(apenas númmeros)</small></label>
+                                            <input type="number" class="form-control" name="phone" id="phone" maxlength="10">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="cellphone">Celular <small>(apenas númmeros)</small></label>
+                                            <input type="number" class="form-control" name="cellphone" id="cellphone" maxlength="11">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="whatsapp">WhastApp <small>(apenas númmeros)</small></label>
+                                            <input type="number" class="form-control" name="whatsapp" id="whatsapp" maxlength="11">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" style="border-radius: 5px;">
+                                        <h5 class="pt-2"><i class="fas fa-map-marker-alt pr-1"></i> Localização</h5>
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="postal_code">CEP <small>(apenas númmeros)</small></label>
+                                            <input type="number" class="form-control" name="postal_code" id="postal_code"  maxlength="8">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="address">Endereço</label>
+                                            <input type="text" class="form-control" name="address" id="address"  maxlength="100">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="number">Número</label>
+                                            <input type="text" class="form-control" name="number" id="number"  maxlength="50" placeholder="Número">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="complement">Complemento</label>
+                                            <input type="text" class="form-control" name="complement" id="complement"  maxlength="50">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="neighborhood">Bairro</label>
+                                            <input type="text" class="form-control" name="neighborhood" id="neighborhood"  maxlength="100">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="city">Cidade</label>
+                                            <input type="text" class="form-control" name="city" id="city"  maxlength="100">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="state">UF</label>
+                                            <input type="text" class="form-control" name="state" id="state"  maxlength="2">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 text-right mt-3 mb-2">
+                                        <button type="button" class="btn btn-default mr-3"
+                                                onclick="openModule('clientes');">
+                                            <i class="fas fa-arrow-left pr-1"></i> Voltar
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-save pr-1"></i> Salvar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
     <script src="<?php echo baseUrl; ?>public/js/api_cep.js"></script>
     <script src="<?php echo baseUrl; ?>public/js/documents_validators.js"></script>
+    <script src="https://unpkg.com/imask"></script>
     <script>
         $(document).ready(function(){
             $("#name").focus();
-            $("#postal_code").mask("99999-999");
-            $("#document_1").mask("999.999.999-99");
-            $("#document_2").mask("99.999.999/9999-99");
-            $("#phone").mask("(99)9999-9999");
-            $("#cellphone").mask("(99)99999-9999");
-            $("#whatsapp").mask("(99)99999-9999");
-
             $('#formCreateCustomer').validate({
                 rules: {
                     name: {
@@ -172,7 +197,7 @@ $role = $_SESSION['ROLE'];
                 },
                 submitHandler: function( form ){
                     var dados = $( form ).serialize();
-                    $("#modalXLLoader").show();
+                    $("#baseLoader").show();
 
                     $.ajax({
                         type: "POST",
@@ -182,11 +207,11 @@ $role = $_SESSION['ROLE'];
                         async: true
                     }).done(function(data) {
                         showAlert(data.type, data.title, data.msg, data.pos);
-                        $("#modalXL").modal('hide');
+                        $("#baseLoader").hide();
                         openModule('clientes');
                     }).fail(function() {
                         showInternalErrorAlert(); 
-                        $("#modalXLLoader").hide();   
+                        $("#baseLoader").hide();   
                     }); 
 
                     return false;

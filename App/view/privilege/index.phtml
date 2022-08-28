@@ -2,37 +2,69 @@
 $data = $this->view->data; 
 ?>
 <?php if ($_SESSION['ROLE_ADM'] == '1'): ?>
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover" id="table_role2" style="width: 99.9%;">
-            <thead>
-                <tr class="text-center bg-primary">
-                <th class="text-white" style="font-size: 14px;">Recurso</th>
-                    <th class="text-white" style="font-size: 14px;">Módulo</th>
-                    <th class="text-white" style="font-size: 14px;">Ativo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($data as $entity): ?>
-                    <tr class="text-center">
-                        <td style="font-size: 15px">
-                            <?php echo $entity['resource']; ?>
-                        </td>
-                        <td style="font-size: 15px">
-                            <?php echo $entity['module']; ?>
-                        </td>
-                        <td style="font-size: 15px">
-                            <input type="checkbox" id="my-checkbox-<?php echo $entity['uuid']; ?>"
-                                data-bootstrap-switch data-off-color="danger" 
-                                data-on-color="success" onchange="getVal('<?php echo $entity['uuid']; ?>');"
-                                <?php echo ($entity['status'] == 1) ? 'checked' : ''; ?>>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-    
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-9">
+                    <h1 style="position: relative; top: 5px">
+                        <i class="fas fa-user"></i>
+                        <?php echo $this->view->role['name']; ?> - Permissões
+                    </h1>
+                </div>
+                <div class="col-3">
+                    <ol class="breadcrumb float-right">
+                        <li class="breadcrumb-item">
+                            <button type="button" class="btn btn-primary btn-flat"
+                                onclick="openDetails('<?php echo $this->view->role['uuid']; ?>');">
+                                <i class="fas fa-arrow-left pr-1"></i> Voltar
+                            </button>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content" style="margin-left: 9px; margin-right: 9px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="table_role2" style="width: 99.9%;">
+                                    <thead>
+                                        <tr class="text-center bg-primary">
+                                        <th class="text-white" style="font-size: 14px;">Recurso</th>
+                                            <th class="text-white" style="font-size: 14px;">Módulo</th>
+                                            <th class="text-white" style="font-size: 14px;">Ativo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($data as $entity): ?>
+                                            <tr class="text-center">
+                                                <td style="font-size: 15px">
+                                                    <?php echo $entity['resource']; ?>
+                                                </td>
+                                                <td style="font-size: 15px">
+                                                    <?php echo $entity['module']; ?>
+                                                </td>
+                                                <td style="font-size: 15px">
+                                                    <input type="checkbox" id="my-checkbox-<?php echo $entity['uuid']; ?>"
+                                                        data-bootstrap-switch data-off-color="danger" 
+                                                        data-on-color="success" onchange="getVal('<?php echo $entity['uuid']; ?>');"
+                                                        <?php echo ($entity['status'] == 1) ? 'checked' : ''; ?>>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <script type="text/javascript">
         $(document).ready(function(){
             $("input[data-bootstrap-switch]").each(function(){
@@ -106,7 +138,7 @@ $data = $this->view->data;
                 status_acl = 0;
             }
             
-            $("#modalLargeLoader").show();
+            $("#baseLoader").show();
         
             $.ajax({
                 type: "POST",
@@ -119,10 +151,10 @@ $data = $this->view->data;
                 async: true
             }).done(function(data) {
                 showAlert(data.type, data.title, data.msg, data.pos);
-                $("#modalLargeLoader").hide();
+                $("#baseLoader").hide();
             }).fail(function() {
                 showInternalErrorAlert(); 
-                $("#modalLargeLoader").hide();   
+                $("#baseLoader").hide();   
             }); 
         }
     </script>

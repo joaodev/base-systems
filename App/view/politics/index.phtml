@@ -11,7 +11,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
             <div class="row mb-2">
                 <div class="col-12">
                     <h1 style="position: relative; top: 5px">
-                        <i class="fas fa-eye"></i>
+                        <i class="fas fa-eye pr-1"></i>
                         Política de Privacidade
                     </h1>
                 </div>
@@ -37,11 +37,10 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                                             required><?php echo $entity['description']; ?></textarea>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12"><hr></div>
-                                                <div class="col-md-4 text-center offset-md-4">
+                                                <div class="col-md-12 text-right mt-3 mb-2">
                                                     <input type="hidden" name="uuid" value="<?php echo $entity['uuid']; ?>">
-                                                    <button type="submit" class="btn btn-success" style="width: 100%;" id="btnSubmit">
-                                                        <i class="fa fa-save pr-1"></i> Gravar
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="fa fa-save pr-1"></i> Salvar
                                                     </button>
                                                 </div>
                                             <?php else: ?>

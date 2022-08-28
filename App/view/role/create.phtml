@@ -1,30 +1,58 @@
 <?php if ($_SESSION['ROLE_ADM'] == '1'): ?>
-    <form method="post" name="formCreateRole" id="formCreateRole">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="form-group">
-                    <label for="name">Nome</label>
-                    <input type="text" class="form-control" name="name" id="name" required>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-6">
+                    <h1 style="position: relative; top: 5px">
+                        <i class="fas fa-plus-square pr-1"></i>
+                        Adicionar Perfil
+                    </h1>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="is_admin">Administrador?</label>
-                    <select name="is_admin" id="is_admin" class="form-control" required>
-                        <option value="0">Não</option>
-                        <option value="1">Sim</option>
-                        
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-12"><hr></div>
-            <div class="col-md-4 text-center offset-md-4">
-                <button type="submit" class="btn btn-success" style="width: 100%;" id="btnSubmit">
-                    <i class="fa fa-save pr-1"></i> Gravar
-                </button>
+                <div class="col-6"></div>
             </div>
         </div>
-    </form>
+    </section>
+    <section class="content" style="margin-left: 9px; margin-right: 9px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="post" name="formCreateRole" id="formCreateRole">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="name">Nome</label>
+                                            <input type="text" class="form-control" name="name" id="name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="is_admin">Administrador?</label>
+                                            <select name="is_admin" id="is_admin" class="form-control" required>
+                                                <option value="0">Não</option>
+                                                <option value="1">Sim</option>
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 text-right mt-3 mb-2">
+                                        <button type="button" class="btn btn-default mr-3"
+                                                onclick="openModule('controle-acesso');">
+                                            <i class="fas fa-arrow-left pr-1"></i> Voltar
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-save pr-1"></i> Salvar
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <script>
         $(document).ready(function(){
             $('#formCreateRole').validate({
@@ -43,7 +71,8 @@
                 },
                 submitHandler: function( form ){
                     var dados = $( form ).serialize();
-                    $("#modalLargeLoader").show();
+                    
+                    $("#baseLoader").show();
                     $("#btnSubmit").show('disabled', true);
 
                     $.ajax({
@@ -54,11 +83,11 @@
                         async: true
                     }).done(function(data) {
                         showAlert(data.type, data.title, data.msg, data.pos);
-                        $("#modalLarge").modal('hide');
+                        $("#baseLoader").hide();
                         openModule('controle-acesso');
                     }).fail(function() {
                         showInternalErrorAlert(); 
-                        $("#modalLargeLoader").hide();  
+                        $("#baseLoader").hide();
                         $("#btnSubmit").show('disabled', false); 
                     }); 
 

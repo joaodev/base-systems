@@ -9,15 +9,20 @@ use Core\Db\Crud;
 class PrivilegeController extends ActionController
 {
     private $model;
+    private $roleModel;
 
     public function __construct()
     {
         parent::__construct();
-        $this->model = Container::getClass("Privilege", "app");
+        $this->model     = Container::getClass("Privilege", "app");
+        $this->roleModel = Container::getClass("Role", "app");
     }
 
     public function indexAction()
     {
+        $role = $this->roleModel->getOne($_POST['uuid']);
+        $this->view->role = $role;
+        
         $data = $this->model->getAllByRoleUuid($_POST['uuid']);
         $this->view->data = $data;
 

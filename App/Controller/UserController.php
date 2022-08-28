@@ -148,21 +148,8 @@ class UserController extends ActionController implements CrudInterface
     public function updateProcessAction()
     {
         if (!empty($_POST)) {
-            if (!empty($_POST['password']) && !empty($_POST['confirmation'])) {
-                if ($_POST['password'] != $_POST['confirmation']) {
-                    $data  = [
-                        'title' => 'Erro!', 
-                        'msg' => 'Senhas incorretas.',
-                        'type' => 'error',
-                        'pos'   => 'top-center'
-                    ];
-                } else {
-                    unset($_POST['confirmation']);
-                    $_POST['password'] = Bcrypt::hash($_POST['password']);
-                }
-            } else {
+            if (!empty($_POST['password'])) {
                 unset($_POST['password']);
-                unset($_POST['confirmation']);
             }
 
             if (!empty($_POST['role_uuid'])) {
@@ -266,6 +253,9 @@ class UserController extends ActionController implements CrudInterface
     public function aclAction()
     {
         if (!empty($_POST)) {
+            $user = $this->model->getOne($_POST['uuid']);
+            $this->view->user = $user;
+            
             $data = $this->aclModel->getUserPrivileges($_POST['uuid']);
             $this->view->data = $data;
             return $this->render('acl', false);

@@ -42,7 +42,7 @@ $config = $this->getSiteConfig();
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Senha" name="password"  required>
+                        <input type="password" class="form-control" placeholder="Senha" name="password" minlength="8" required maxlength="100">
                         <div class="input-group-append">
                             <div class="input-group-text">
                             <span class="fas fa-lock"></span>
@@ -88,7 +88,7 @@ $config = $this->getSiteConfig();
     </script>
     <?php if (!empty($_GET['msg']) && $_GET['msg'] == 'usuario-invalido'): ?>
         <script>
-            showAlert('error', 'Ops!', 'Usuário inválido, tente novamente.', 'top-center');
+            showAlert('error', 'Ops!', 'Colaborador inválido, tente novamente.', 'top-center');
         </script>
     <?php endif; ?>
 </body>

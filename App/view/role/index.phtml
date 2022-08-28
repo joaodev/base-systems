@@ -13,8 +13,8 @@
                     <ol class="breadcrumb float-right">
                         <li class="breadcrumb-item">
                             <button type="button" class="btn btn-primary btn-flat"
-                                onclick="createRole();" style="position: relative; top: 3px">
-                                <i class="fas fa-plus"></i>
+                                onclick="createRole();">
+                                <i class="fas fa-plus pr-1"></i> Adicionar
                             </button>
                         </li>
                     </ol>
@@ -113,81 +113,65 @@
         });
 
         function openDetails(uuid) {
-            $("#modalLargeResult").empty();
-            $("#modalLargeTitle").html('<i class="fa fa-info-circle pr-2"></i> Informações');
-            $("#modalLargeLoader").show();
-            $("#modalLarge").modal('show');
-
+            $("#baseLoader").show();
             $.ajax({
                 type: 'post',
                 url: "controle-acesso/detalhes",
                 data: {uuid:uuid},
                 async: true
             }).done(function(data) {
-                $("#modalLargeResult").html(data);
-                $("#modalLargeLoader").hide();
+                $("#sis_content").html(data);
+                $("#baseLoader").hide();
             }).fail(function() {
                 showInternalErrorAlert();
-                $("#modalLargeLoader").hide();
+                $("#baseLoader").hide();
             });
         }
 
         function rolePrivileges(uuid) {
-            $("#modalLargeResult").empty();
-            $("#modalLargeTitle").html('<i class="fa fa-unlock pr-2"></i> Permissões');
-            $("#modalLargeLoader").show();
-            $("#modalLarge").modal('show');
-            
+            $("#baseLoader").show();
             $.ajax({
                 type: 'post',
                 url: "controle-acesso/permissoes",
                 data: {uuid:uuid},
                 async: true
             }).done(function(data) {
-                $("#modalLargeResult").html(data);
-                $("#modalLargeLoader").hide();
+                $("#sis_content").html(data);
+                $("#baseLoader").hide();
             }).fail(function() {
                 showInternalErrorAlert();
-                $("#modalLargeLoader").hide();
+                $("#baseLoader").hide();
             });
         }
 
         function createRole() {
-            $("#modalLargeResult").empty();
-            $("#modalLargeTitle").html('<i class="fa fa-plus pr-2"></i> Perfil');
-            $("#modalLargeLoader").show();
-            $("#modalLarge").modal('show');
-
+            $("#baseLoader").show();
             $.ajax({
                 type: 'post',
                 url: "controle-acesso/cadastrar",
                 async: true
             }).done(function(data) {
-                $("#modalLargeResult").html(data);
-                $("#modalLargeLoader").hide();
+                $("#sis_content").html(data);
+                $("#baseLoader").hide();
             }).fail(function() {
                 showInternalErrorAlert();
-                $("#modalLargeLoader").hide();
+                $("#baseLoader").hide();
             });
         }
 
         function updateRole(uuid) {
-            $("#modalLargeResult").empty();
-            $("#modalLargeTitle").html('<i class="fa fa-pen pr-2"></i> Perfil');
-            $("#modalLargeLoader").show();
-            $("#modalLarge").modal('show');
-
+            $("#baseLoader").show();
             $.ajax({
                 type: 'post',
                 url: "controle-acesso/editar",
                 data: {uuid:uuid},
                 async: true
             }).done(function(data) {
-                $("#modalLargeResult").html(data);
-                $("#modalLargeLoader").hide();
+                $("#sis_content").html(data);
+                $("#baseLoader").hide();
             }).fail(function() {
                 showInternalErrorAlert();
-                $("#modalLargeLoader").hide();
+                $("#baseLoader").hide();
             });
         }
 
@@ -197,7 +181,7 @@
             $("#modalDeleteTitle").html('<i class="fa fa-trash pr-2"></i> Perfil de Acesso');
             $("#modalDeleteLoader").hide();
             $("#modalDelete").modal('show');
-            $("#modalDeleteResult").html('<button type="button" class="btn btn-danger" onclick="runDelete(\''+uuid+'\');"><i class="fa fa-trash"></i> CONFIRMAR E EXCLUIR</button>');
+            $("#modalDeleteResult").html('<button type="button" class="btn btn-default" onclick="runDelete(\''+uuid+'\');"><i class="fa fa-trash"></i> CONFIRMAR E EXCLUIR</button>');
         }   
 
         function runDelete(uuid) {
