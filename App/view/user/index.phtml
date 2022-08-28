@@ -208,7 +208,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
             function deleteUser(uuid) {
                 $("#modalXL").modal('hide');
                 $("#modalDeleteResult").empty();
-                $("#modalDeleteTitle").html('<i class="fa fa-trash pr-2"></i> Usuário');
+                $("#modalDeleteTitle").html('<i class="fa fa-trash pr-2"></i> Remover Usuário');
                 $("#modalDeleteLoader").hide();
                 $("#modalDelete").modal('show');
                 $("#modalDeleteResult").html('<button type="button" class="btn btn-default" onclick="runDelete(\''+uuid+'\');"><i class="fa fa-trash"></i> CONFIRMAR E EXCLUIR</button>');
