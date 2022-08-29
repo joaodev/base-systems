@@ -6,7 +6,7 @@ $config = $this->getSiteConfig();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $config['site_title']; ?></title>
+    <title>Entrar | <?php echo $config['site_title']; ?></title>
     <meta author="João Augusto Bonfante">
     <link rel="icon" href="<?php echo baseUrl . 'public/uploads/logo/' . $config['logo_icon']; ?>" type="image/x-icon" />
 
@@ -21,7 +21,43 @@ $config = $this->getSiteConfig();
 
     <link rel="stylesheet" href="<?php echo baseUrl; ?>public/app/plugins/jquery-toast-plugin/dist/jquery.toast.min.css">
 
+    <style>
+        h1 {
+            color: <?php echo $config['primary_color']; ?> !important;
+        }
 
+        .bg-primary {
+            background: <?php echo $config['primary_color']; ?> !important;
+        }
+
+        .bg-primary:hover {
+            background: <?php echo $config['secondary_color']; ?> !important;
+        }
+
+        .bg-secondary {
+            background: <?php echo $config['secondary_color']; ?> !important;
+        }
+
+        .bg-secondary:hover {
+            background: <?php echo $config['primary_color']; ?> !important;
+        }
+
+        .btn-primary {
+            background: <?php echo $config['primary_color']; ?> !important;
+        }
+
+        .btn-primary:hover {
+            background: <?php echo $config['secondary_color']; ?> !important;
+        }
+
+        .btn-secondary {
+            background: <?php echo $config['secondary_color']; ?> !important;
+        }
+
+        .btn-secondary:hover {
+            background: <?php echo $config['primary_color']; ?> !important;
+        }
+    </style>
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
@@ -50,13 +86,13 @@ $config = $this->getSiteConfig();
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-8">
-                            <a href="esqueci-a-senha" style="position: relative; top: 6px; color: #000;">
+                        <div class="col-12 mt-1">
+                            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                        </div>
+                        <div class="col-12 text-center mt-2">
+                            <a href="esqueci-a-senha" style=" color: #000;">
                                 Esqueci a senha
                             </a>
-                        </div>
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-dark btn-block">Entrar</button>
                         </div>
                     </div>
                 </form>

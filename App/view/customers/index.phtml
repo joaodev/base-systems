@@ -65,10 +65,10 @@ $canDelete  = ($isAdmin || $this->acl($role, $this->resourceCodes('delete'), $th
                                                     <?php echo $entity['email']; ?>
                                                 </td>
                                                 <td style="font-size: 15px">
-                                                    <?php echo $this->inputMasked($entity['phone'], '(##) ####-####'); ?>
+                                                    <?php echo $entity['phone']; ?>
                                                 </td>
                                                 <td style="font-size: 15px">
-                                                    <?php echo $this->inputMasked($entity['cellphone'], '(##) #####-####'); ?>
+                                                    <?php echo $entity['cellphone']; ?>
                                                 </td>
                                                 <td style="font-size: 15px">
                                                     <?php echo $entity['city'] . (!empty($entity['state']) ? '-' . $entity['state'] : ''); ?>

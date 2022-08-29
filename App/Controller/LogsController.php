@@ -22,4 +22,16 @@ class LogsController extends ActionController
         $this->view->data = $data;
         return $this->render('index', false);
     }
+
+    public function readAction()
+    {
+        if (!empty($_POST['uuid'])) {
+            $entity = $this->model->getOne($_POST['uuid']);
+            $this->view->entity = $entity;
+            return $this->render('read', false);
+        } else {
+            return false;
+        }
+    }
+
 }

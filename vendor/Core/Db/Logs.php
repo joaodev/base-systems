@@ -32,12 +32,22 @@ class Logs extends InitDb
 	
     private static function getUserIp()
     {
-        if(!empty($_SERVER['HTTP_CLIENT_IP'])){
-            return $_SERVER['HTTP_CLIENT_IP'];
-        } elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
-            return $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            return $_SERVER['REMOTE_ADDR'];
-        }
+		$ipAddress = '';
+		if (isset($_SERVER['HTTP_CLIENT_IP']))
+			$ipAddress = $_SERVER['HTTP_CLIENT_IP'];
+		else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+			$ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		else if(isset($_SERVER['HTTP_X_FORWARDED']))
+			$ipAddress = $_SERVER['HTTP_X_FORWARDED'];
+		else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+			$ipAddress = $_SERVER['HTTP_FORWARDED_FOR'];
+		else if(isset($_SERVER['HTTP_FORWARDED']))
+			$ipAddress = $_SERVER['HTTP_FORWARDED'];
+		else if(isset($_SERVER['REMOTE_ADDR']))
+			$ipAddress = $_SERVER['REMOTE_ADDR'];
+		else
+			$ipAddress = 'UNKNOWN';
+			
+		return $ipAddress;
     }
 }

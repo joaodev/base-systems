@@ -48,6 +48,7 @@ $router['app'] = [
 	['namespace' => 'app', 'route' => '/politica-privacidade/processa-edicao', 'controller' => 'politics', 'action' => 'update-process'],
 
 	['namespace' => 'app', 'route' => '/logs', 'controller' => 'logs', 'action' => 'index'],
+	['namespace' => 'app', 'route' => '/logs/detalhes', 'controller' => 'logs', 'action' => 'read'],
 	
 	['namespace' => 'app', 'route' => '/meu-perfil', 'controller' => 'my-profile', 'action' => 'index'],
 	['namespace' => 'app', 'route' => '/meu-perfil/processa-edicao', 'controller' => 'my-profile', 'action' => 'update-process'],

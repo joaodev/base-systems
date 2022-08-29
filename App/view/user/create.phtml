@@ -36,14 +36,14 @@ $role = $_SESSION['ROLE'];
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="cnpj">CPF <small>(apenas númmeros)</small></label>
-                                            <input type="number" class="form-control" name="document_1" id="document_1"  maxlength="11" onchange="validateCPF();">
+                                            <label for="cnpj">CPF</label>
+                                            <input type="text" class="form-control" name="document_1" id="document_1" onchange="validateCPF();">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="cnpj">CNPJ <small>(apenas númmeros)</small></label>
-                                            <input type="number" class="form-control" name="document_2" id="document_2"  maxlength="14" onchange="validateCNPJ();">
+                                            <label for="cnpj">CNPJ</label>
+                                            <input type="text" class="form-control" name="document_2" id="document_2" onchange="validateCNPJ();">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -67,20 +67,20 @@ $role = $_SESSION['ROLE'];
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="phone">Telefone <small>(apenas númmeros)</small></label>
-                                            <input type="number" class="form-control" name="phone" id="phone" maxlength="10">
+                                            <label for="phone">Telefone</label>
+                                            <input type="text" class="form-control" name="phone" id="phone">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="cellphone">Celular <small>(apenas númmeros)</small></label>
-                                            <input type="number" class="form-control" name="cellphone" id="cellphone" maxlength="11">
+                                            <label for="cellphone">Celular</label>
+                                            <input type="text" class="form-control" name="cellphone" id="cellphone">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="whatsapp">WhatsApp <small>(apenas númmeros)</small></label>
-                                            <input type="number" class="form-control" name="whatsapp" id="whatsapp" maxlength="11">
+                                            <label for="whatsapp">WhatsApp</label>
+                                            <input type="text" class="form-control" name="whatsapp" id="whatsapp">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -107,8 +107,8 @@ $role = $_SESSION['ROLE'];
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="postal_code">CEP <small>(apenas númmeros)</small></label>
-                                            <input type="number" class="form-control" name="postal_code" id="postal_code"  maxlength="8">
+                                            <label for="postal_code">CEP</label>
+                                            <input type="text" class="form-control" name="postal_code" id="postal_code">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -182,6 +182,14 @@ $role = $_SESSION['ROLE'];
     <script src="<?php echo baseUrl; ?>public/js/documents_validators.js"></script>
     <script>
         $(document).ready(function() {
+            $("#name").focus();
+            $("#document_1").mask("999.999.999-99");
+            $("#document_2").mask("99.999.999/9999-99");
+            $("#phone").mask("(99)9999-9999");
+            $("#cellphone").mask("(99)99999-9999");
+            $("#whatsapp").mask("(99)99999-9999");
+            $("#postal_code").mask("99999-999");
+            
             $('#formCreateUser').validate({
                 rules: {
                     name: {

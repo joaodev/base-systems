@@ -36,4 +36,31 @@ class Logs extends Model
             echo $e->getMessage();
         }
     }
+    
+    public function getOne($uuid)
+    {
+        try {
+            $query = "
+                 SELECT l.uuid, l.log_user_uuid, l.log_action, l.log_date, 
+                        l.log_ip, l.log_user_agent, l.log_status, 
+                        u.name as username
+                FROM {$this->getTable()} AS l
+                    INNER JOIN user AS u 
+                        ON l.log_user_uuid = u.uuid
+                WHERE l.uuid = :uuid";
+
+            $stmt = $this->openDb()->prepare($query);
+            $stmt->bindValue(":uuid", $uuid);
+            $stmt->execute();
+
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            $stmt = null;
+            $this->closeDb();
+
+            return $result;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 }

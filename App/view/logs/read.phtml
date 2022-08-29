@@ -1,0 +1,105 @@
+<?php $entity = $this->view->entity; ?>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover" id="tbl_log_details" style="width: 99.9%;">
+        <thead>
+            <tr class="text-center bg-primary" style="height: 30px;">
+                <th class="text-white" style="font-size: 14px;">Descrição</th>
+                <th class="text-white" style="font-size: 14px;">Valor</th>
+            </tr>
+        </thead>
+        <tbody >
+            <tr>
+                <td style="font-size: 15px">Referência</td>
+                <td style="font-size: 15px"><?php echo $entity['uuid']; ?></td>
+            </tr>
+            <tr>
+                <td style="font-size: 15px">Data</td>
+                <td style="font-size: 15px"><?php echo $this->formatDateTime($entity['log_date']); ?></td>
+            </tr>
+            <tr>
+                <td style="font-size: 15px">Colaborador</td>
+                <td style="font-size: 15px"><?php echo $entity['username']; ?></td>
+            </tr>
+            <tr>
+                <td style="font-size: 15px">Ação</td>
+                <td style="font-size: 15px">
+                    <?php 
+                    $pos = strpos($entity['log_action'], 'REQUISIÇÃO BLOQUEADA:');
+                    if ($pos === false):
+                        echo $entity['log_action'];
+                    else:
+                        echo 'Requisiçao bloqueada!';
+                    endif;
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: 15px">IP</td>
+                <td style="font-size: 15px"><?php echo $entity['log_ip']; ?></td>
+            </tr>
+            <tr>
+                <td style="font-size: 15px">Dispositivo</td>
+                <td style="font-size: 15px"><?php echo $entity['log_user_agent']; ?></td>
+            </tr>
+            <tr>
+                <td style="font-size: 15px">Status</td>
+                <td style="font-size: 15px"><?php echo $entity['log_status']; ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var buttonCommon = {
+            exportOptions: {
+                format: {
+                    body: function ( data, row, column, node ) {
+                        return data;
+                    }
+                }
+            }
+        };	
+
+        $('#tbl_log_details').DataTable({
+            "sDom": 'flBtip',
+            searching: true,
+            buttons: [
+                $.extend( true, {}, buttonCommon, {
+                    extend: 'excel',
+                    title: 'Informações de LOG',
+                    exportOptions: {columns: [0,1]}
+                })
+            ],
+            order: [ [0, "desc"] ],
+            responsive: true,
+            info: true,
+            processing: true,
+            scrollCollapse: true,
+            paging: true,
+            "pageLength": 25,
+            "language": {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ &nbsp;",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Filtrar",
+                "oPaginate": {
+                    "sNext": "Próximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "Último"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                }
+            }
+        });
+    });
+</script>

@@ -19,15 +19,15 @@ $canViewUsers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $thi
         <div class="row">
             <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewCustomers): ?>
                 <div class="col-lg-6 col-6">
-                    <div class="small-box bg-primary">
+                    <div class="small-box bg-primary" onclick="openModule('clientes')" style="cursor: pointer;">
                         <div class="inner">
-                            <h3><?php echo $this->view->total_customers; ?></h3>
                             <p>Clientes</p>
+                            <h3><?php echo $this->view->total_customers; ?></h3>
                         </div>
                         <div class="icon">
-                            <i class="fas fa-users"></i>
+                            <i class="fas fa-users text-white"></i>
                         </div>
-                        <a onclick="openModule('clientes')" class="small-box-footer" style="cursor: pointer;">
+                        <a  class="small-box-footer" style="cursor: pointer;">
                             Mais informações <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
@@ -35,15 +35,15 @@ $canViewUsers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $thi
             <?php endif; ?>
             <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewUsers): ?>
                 <div class="col-lg-6 col-6">
-                    <div class="small-box bg-primary">
+                    <div class="small-box bg-primary" onclick="openModule('usuarios')" style="cursor: pointer;">
                         <div class="inner">
-                            <h3><?php echo $this->view->total_users; ?></h3>
                             <p>Colaboradores</p>
+                            <h3><?php echo $this->view->total_users; ?></h3>
                         </div>
                         <div class="icon">
-                            <i class="fas fa-users"></i>
+                            <i class="fas fa-users-cog text-white"></i>
                         </div>
-                        <a onclick="openModule('usuarios')" class="small-box-footer" style="cursor: pointer;">
+                        <a class="small-box-footer" style="cursor: pointer;">
                             Mais informações <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>

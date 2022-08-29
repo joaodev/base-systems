@@ -45,14 +45,14 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                                     <div class="form-group">
                                         <label for="cnpj">CPF</label>
                                         <input type="text" class="form-control" readonly
-                                            value="<?php echo $this->inputMasked($entity['document_1'], '###.###.###-##'); ?>">
+                                            value="<?php echo $entity['document_1']; ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="cnpj">CNPJ</label>
                                         <input type="text" class="form-control" readonly
-                                            value="<?php echo $this->inputMasked($entity['document_2'], '##.###.###/####-##'); ?>">
+                                        value="<?php echo $entity['document_2']; ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -80,21 +80,21 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                                     <div class="form-group">
                                         <label for="phone">Telefone:</label>
                                         <input type="text" class="form-control" readonly
-                                                value="<?php echo $this->inputMasked($entity['phone'], '(##) ####-####'); ?>">
+                                            value="<?php echo $entity['phone']; ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="cellphone">Celular:</label>
                                         <input type="text" class="form-control" readonly
-                                                value="<?php echo $this->inputMasked($entity['cellphone'], '(##) #####-####'); ?>">
+                                            value="<?php echo $entity['cellphone']; ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="whatsapp">WhatsApp:</label>
                                         <input type="text" class="form-control" readonly
-                                                value="<?php echo $this->inputMasked($entity['whatsapp'], '(##) #####-####'); ?>">
+                                                value="<?php echo $entity['whatsapp']; ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-12" style="border-radius: 5px;">
@@ -105,7 +105,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                                     <div class="form-group">
                                         <label for="postal_code">CEP</label>
                                         <input type="text" class="form-control"  readonly
-                                            value="<?php echo $this->inputMasked($entity['postal_code'], '#####-###'); ?>">
+                                            value="<?php echo $entity['postal_code']; ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
