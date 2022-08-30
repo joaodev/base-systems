@@ -23,7 +23,7 @@ $role = $_SESSION['ROLE'];
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form method="post" name="formUpdateUser" id="formUpdateUser" onsubmit="hashPass(this);">
+                            <form method="post" name="formUpdateUser" id="formUpdateUser">
                                 <div class="row">
                                     <div class="col-md-12" style="border-radius: 5px;">
                                         <h5 class="pt-2"><i class="fas fa-user pr-1"></i> Dados Pessoais</h5>
@@ -178,21 +178,7 @@ $role = $_SESSION['ROLE'];
         </div>
     </section>
     <script src="<?php echo baseUrl; ?>public/js/api_cep.js"></script>
-    <script src="<?php echo baseUrl; ?>public/js/md5.min.js"></script>
     <script src="<?php echo baseUrl; ?>public/js/documents_validators.js"></script>
-    <script>
-        function hashPass(form) {
-            if (form.password.value != '') {
-                let psw = md5(form.password.value);
-                form.password.value = psw;
-            }
-
-            if (form.confirmation.value != '') {
-                let pswc = md5(form.confirmation.value);
-                form.confirmation.value = pswc;
-            }
-        }
-    </script>
     <script>
         $(document).ready(function() {
             $("#document_1").mask("999.999.999-99");

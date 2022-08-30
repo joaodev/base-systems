@@ -235,7 +235,6 @@ $role = $_SESSION['ROLE'];
                     }).done(function(data) {
                         showAlert(data.type, data.title, data.msg, data.pos);
                         $("#baseLoader").hide();
-                        openModule('clientes');
                     }).fail(function() {
                         showInternalErrorAlert(); 
                         $("#baseLoader").hide();
