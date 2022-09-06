@@ -235,7 +235,11 @@ $role = $_SESSION['ROLE'];
                         async: true
                     }).done(function(data) {
                         showAlert(data.type, data.title, data.msg, data.pos);
-                        openModule('usuarios');
+                        if (data.type == 'success') {
+                            createUser();
+                        } else {
+                            $("#baseLoader").hide();
+                        }
                     }).fail(function() {
                         showInternalErrorAlert(); 
                         $("#baseLoader").hide();

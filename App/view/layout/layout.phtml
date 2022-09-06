@@ -369,10 +369,9 @@ $canViewLogs = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-        <strong>&copy; <?php echo date('Y'); ?> <?php echo $config['site_title']; ?></strong>
-        
-        <div class="float-right d-none d-sm-inline-block">
-        <b>Versão</b> 1.0.0
+        <b>Versão</b> <?php echo $config['version']; ?>
+        <div class="float-right ">
+            <strong>Desenvolvido por <a href="https://jabdesenvolvimento.com.br/" target="_blank">JAB Desenvolvimento</a></strong>
         </div>
     </footer>
     </div>

@@ -214,8 +214,11 @@ $role = $_SESSION['ROLE'];
                         async: true
                     }).done(function(data) {
                         showAlert(data.type, data.title, data.msg, data.pos);
-                        $("#baseLoader").hide();
-                        openModule('clientes');
+                        if (data.type == 'success') {
+                            createCustomer();
+                        } else {
+                            $("#baseLoader").hide();
+                        }
                     }).fail(function() {
                         showInternalErrorAlert(); 
                         $("#baseLoader").hide();   
