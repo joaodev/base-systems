@@ -67,7 +67,7 @@ $config = $this->getSiteConfig();
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Informe código recebido</p>
-                <form action="validar-codigo" method="post">
+                <form action="<?php echo baseUrl; ?>validar-codigo" method="post">
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" placeholder="Código" name="code" required>
                         <div class="input-group-append">

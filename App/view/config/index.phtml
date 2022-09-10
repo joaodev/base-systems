@@ -24,19 +24,16 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form method="post" name="formUpdateConfig" id="formUpdateConfig"
-                                enctype="multipart/form-data">
-                                
-                                
-                                <div class="form-group row">
-                                    <label for="default-input" class="col-sm-2 form-control-label">Logo</label>
-                                    <div class="col-sm-10">
+                            <form method="post" name="formUpdateConfig" id="formUpdateConfig" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="default-input" class="form-control-label">Logo</label><br>
                                         <?php if (!empty($entity['logo'])): ?>
                                             <div class="mb-3">
                                                 <a href="<?php echo baseUrl . 'public/uploads/logo/'
                                                     . $entity['logo']; ?>" target="_blank">
                                                     <img src="<?php echo baseUrl . 'public/uploads/logo/'
-                                                        . $entity['logo']; ?>" alt="" style="width: 20%;">
+                                                        . $entity['logo']; ?>" alt="" style="max-height: 100px;">
                                                 </a>
                                             </div>
                                         <?php endif; ?>
@@ -44,17 +41,14 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                             <input type="file" class="form-control" name="logo" id="logo">
                                         <?php endif; ?>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="form-group row">
-                                    <label for="default-input" class="col-sm-2 form-control-label">Ícone</label>
-                                    <div class="col-sm-10">
+                                    <div class="col-md-6">
+                                        <label for="default-input" class="form-control-label">Ícone</label><br>
                                         <?php if (!empty($entity['logo_icon'])): ?>
                                             <div class="mb-3">
                                                 <a href="<?php echo baseUrl . 'public/uploads/logo/'
                                                     . $entity['logo_icon']; ?>" target="_blank">
                                                     <img src="<?php echo baseUrl . 'public/uploads/logo/'
-                                                        . $entity['logo_icon']; ?>" alt="" style="width: 10%;">
+                                                        . $entity['logo_icon']; ?>" alt="" style="max-height: 100px;">
                                                 </a>
                                             </div>
                                         <?php endif; ?>
@@ -64,47 +58,52 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                     </div>
                                 </div>
                                 <hr>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="default-input" class="form-control-label">Cor Primária</label><br>
+                                        <input type="text"name="primary_color" id="primary_color" maxlength="7"
+                                            value="<?php echo $entity['primary_color']; ?>" readonly />
+                                        <?php if ($canUpdate): ?>
+                                            <div id="colorpicker_primary"></div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="default-input" class="form-control-label">Cor Secundária</label><br>
+                                        <input type="text"name="secondary_color" id="secondary_color" maxlength="7"
+                                            value="<?php echo $entity['secondary_color']; ?>" readonly />
+                                        <?php if ($canUpdate): ?>
+                                            <div id="colorpicker_secondary"></div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <hr>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Título</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="site_title" id="site_title" maxlength="100"
-                                            value="<?php echo $entity['site_title']; ?>" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="default-input" class="col-sm-2 form-control-label">Cor Primária</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="primary_color" id="primary_color" maxlength="7"
-                                            value="<?php echo $entity['primary_color']; ?>" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="default-input" class="col-sm-2 form-control-label">Cor Secundária</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="secondary_color" id="secondary_color" maxlength="7"
-                                            value="<?php echo $entity['secondary_color']; ?>" required>
+                                            value="<?php echo $entity['site_title']; ?>" <?php echo ($canUpdate) ? 'required' : 'readonly'; ?>>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Email</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" name="email" id="email" required maxlength="100"
-                                            value="<?php echo $entity['email']; ?>">
+                                        <input type="email" class="form-control" name="email" id="email" maxlength="100"
+                                            value="<?php echo $entity['email']; ?>" <?php echo ($canUpdate) ? 'required' : 'readonly'; ?>>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Telefone</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="phone" id="phone"
-                                            value="<?php echo $entity['phone']; ?>">
+                                            value="<?php echo $entity['phone']; ?>" <?php echo ($canUpdate) ? '' : 'readonly'; ?>>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="default-input" class="col-sm-2 form-control-label">Celular</label>
+                                    <label for="default-input" class="col-sm-2 form-control-label">Celular (Whatsapp)</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="cellphone" id="cellphone" required
-                                            value="<?php echo $entity['cellphone']; ?>">
+                                        <input type="text" class="form-control" name="cellphone" id="cellphone" 
+                                            value="<?php echo $entity['cellphone']; ?>" <?php echo ($canUpdate) ? 'required' : 'readonly'; ?>>
                                     </div>
                                 </div>
                                 <div class="form-group"><hr></div>
@@ -112,7 +111,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                     <label for="default-input" class="col-sm-2 form-control-label">Endereço completo</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="full_address" id="full_address"
-                                            value="<?php echo $entity['full_address']; ?>">
+                                            value="<?php echo $entity['full_address']; ?>" <?php echo ($canUpdate) ? '' : 'readonly'; ?>>
                                     </div>
                                 </div>
                                 <div class="form-group"><hr></div>
@@ -120,41 +119,43 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                                     <label for="default-input" class="col-sm-2 form-control-label">Servidor SMTP</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="mail_host" id="mail_host" maxlength="30"
-                                            value="<?php echo $entity['mail_host']; ?>">
+                                            value="<?php echo $entity['mail_host']; ?>" <?php echo ($canUpdate) ? '' : 'readonly'; ?>>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Porta</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="mail_port" id="mail_port" maxlength="10"
-                                            value="<?php echo $entity['mail_port']; ?>">
+                                            value="<?php echo $entity['mail_port']; ?>" <?php echo ($canUpdate) ? '' : 'readonly'; ?>>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Usuário</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="mail_username" id="mail_username" maxlength="50"
-                                            value="<?php echo $entity['mail_username']; ?>">
+                                            value="<?php echo $entity['mail_username']; ?>" <?php echo ($canUpdate) ? '' : 'readonly'; ?>>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="default-input" class="col-sm-2 form-control-label">Senha</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mail_password" id="mail_password" maxlength="50">
+                                <?php if ($canUpdate): ?>
+                                    <div class="form-group row">
+                                        <label for="default-input" class="col-sm-2 form-control-label">Senha</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="mail_password" id="mail_password" maxlength="50">
+                                        </div>
                                     </div>
-                                </div>
+                                <?php endif; ?>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Email para envio</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="mail_from_address" id="mail_from_address" maxlength="100"
-                                            value="<?php echo $entity['mail_from_address']; ?>">
+                                            value="<?php echo $entity['mail_from_address']; ?>" <?php echo ($canUpdate) ? '' : 'readonly'; ?>>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="default-input" class="col-sm-2 form-control-label">Email para Recebimento</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="mail_to_address" id="mail_to_address" maxlength="100"
-                                            value="<?php echo $entity['mail_to_address']; ?>">
+                                            value="<?php echo $entity['mail_to_address']; ?>" <?php echo ($canUpdate) ? '' : 'readonly'; ?>>
                                     </div>
                                 </div>
                                 <?php if ($canUpdate): ?>
@@ -173,9 +174,22 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
             </div>
         </div>
     </section>
+    
+    <link rel="stylesheet" href="<?php echo baseUrl; ?>public/app/farbtastic/farbtastic.css" type="text/css" />
+    <script type="text/javascript" src="<?php echo baseUrl; ?>public/app/farbtastic/farbtastic.js"></script>
+    <script>
+          $(document).ready(function(){
+
+            $('#colorpicker_primary').farbtastic('#primary_color');
+            $('#colorpicker_secondary').farbtastic('#secondary_color');
+
+          });
+    </script>
     <?php if ($canUpdate): ?>
         <script>
             $(document).ready(function(){
+
+
                 $("#phone").mask("(99)9999-9999");
                 $("#cellphone").mask("(99)99999-9999");
 
@@ -192,7 +206,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                         form_data.append('phone', $("#phone").val());
                         form_data.append('cellphone', $("#cellphone").val());
                         form_data.append('full_address', $("#full_address").val());
-                       
+
                         form_data.append('mail_host', $("#mail_host").val());
                         form_data.append('mail_port', $("#mail_port").val());
                         form_data.append('mail_username', $("#mail_username").val());
@@ -211,7 +225,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
 
                         $.ajax({
                             type: "POST",
-                            url: "configuracoes/processa-edicao",
+                            url: "<?php echo baseUrl; ?>configuracoes/processa-edicao",
                             cache: false,
                             contentType: false,
                             processData: false,
@@ -220,8 +234,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                             async: true
                         }).done(function(data) {
                             showAlert(data.type, data.title, data.msg, data.pos);
-                            $("#baseLoader").hide();
-                            openModule('configuracoes');
+                            window.location.href = "<?php echo baseUrl; ?>?mod=configuracoes";
                         }).fail(function() {
                             showInternalErrorAlert(); 
                             $("#baseLoader").hide();   

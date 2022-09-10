@@ -116,7 +116,7 @@
             $("#baseLoader").show();
             $.ajax({
                 type: 'post',
-                url: "controle-acesso/detalhes",
+                url: "<?php echo baseUrl; ?>controle-acesso/detalhes",
                 data: {uuid:uuid},
                 async: true
             }).done(function(data) {
@@ -132,7 +132,7 @@
             $("#baseLoader").show();
             $.ajax({
                 type: 'post',
-                url: "controle-acesso/permissoes",
+                url: "<?php echo baseUrl; ?>controle-acesso/permissoes",
                 data: {uuid:uuid},
                 async: true
             }).done(function(data) {
@@ -148,7 +148,7 @@
             $("#baseLoader").show();
             $.ajax({
                 type: 'post',
-                url: "controle-acesso/cadastrar",
+                url: "<?php echo baseUrl; ?>controle-acesso/cadastrar",
                 async: true
             }).done(function(data) {
                 $("#sis_content").html(data);
@@ -163,7 +163,7 @@
             $("#baseLoader").show();
             $.ajax({
                 type: 'post',
-                url: "controle-acesso/editar",
+                url: "<?php echo baseUrl; ?>controle-acesso/editar",
                 data: {uuid:uuid},
                 async: true
             }).done(function(data) {
@@ -190,7 +190,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "controle-acesso/excluir",
+                    url: "<?php echo baseUrl; ?>controle-acesso/excluir",
                     data: {uuid: uuid},
                     dataType: 'json',
                     async: true

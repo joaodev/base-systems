@@ -91,7 +91,6 @@ class User extends Model
         }
     }
   
-  
     public function getAllByRoleUuid($uuid)
     {
         try {

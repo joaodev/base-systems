@@ -52,18 +52,26 @@ $router['app'] = [
 	
 	['namespace' => 'app', 'route' => '/meu-perfil', 'controller' => 'my-profile', 'action' => 'index'],
 	['namespace' => 'app', 'route' => '/meu-perfil/processa-edicao', 'controller' => 'my-profile', 'action' => 'update-process'],
+	['namespace' => 'app', 'route' => '/meu-perfil/valor-existente', 'controller' => 'my-profile', 'action' => 'field-exists'],
 
-	/* CustomerController */
-	['namespace' => 'app', 'route' => '/clientes', 'controller' 				  => 'customers', 'action' => 'index'],
-	['namespace' => 'app', 'route' => '/clientes/cadastrar', 'controller' 		  => 'customers', 'action' => 'create'],
+	['namespace' => 'app', 'route' => '/clientes', 'controller' => 'customers', 'action' => 'index'],
+	['namespace' => 'app', 'route' => '/clientes/detalhes', 'controller' => 'customers', 'action' => 'read'],
+	['namespace' => 'app', 'route' => '/clientes/cadastrar', 'controller' => 'customers', 'action' => 'create'],
 	['namespace' => 'app', 'route' => '/clientes/processa-cadastro', 'controller' => 'customers', 'action' => 'create-process'],
-	['namespace' => 'app', 'route' => '/clientes/detalhes', 'controller' 		  => 'customers', 'action' => 'read'],
-	['namespace' => 'app', 'route' => '/clientes/editar', 'controller' 			  => 'customers', 'action' => 'update'],
-	['namespace' => 'app', 'route' => '/clientes/processa-edicao', 'controller'   => 'customers', 'action' => 'update-process'],
-	['namespace' => 'app', 'route' => '/clientes/excluir', 'controller' 		  => 'customers', 'action' => 'delete'],
-	['namespace' => 'app', 'route' => '/clientes/valor-existente', 'controller'   => 'customers', 'action' => 'field-exists'],
-	
+	['namespace' => 'app', 'route' => '/clientes/editar', 'controller' => 'customers', 'action' => 'update'],
+	['namespace' => 'app', 'route' => '/clientes/processa-edicao', 'controller' => 'customers', 'action' => 'update-process'],
+	['namespace' => 'app', 'route' => '/clientes/excluir', 'controller' => 'customers', 'action' => 'delete'],
+	['namespace' => 'app', 'route' => '/clientes/valor-existente', 'controller' => 'customers', 'action' => 'field-exists'],
+
 ];
 
-$systemDir = "/base-systems";
+switch ($_SERVER['HTTP_HOST']) {
+    case 'localhost':
+        $systemDir = "/base-systems";
+        break;
+    default:
+        $systemDir = "";
+        break;
+}
+
 $app = new Core\Init\Bootstrap($router, $systemDir);

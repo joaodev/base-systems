@@ -103,7 +103,7 @@ $data = $this->view->data;
                 processing: true,
                 scrollCollapse: true,
                 paging: true,
-                "pageLength": 18,
+                "pageLength": 10,
                 "language": {
                     "sEmptyTable": "Nenhum registro encontrado",
                     "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -142,7 +142,7 @@ $data = $this->view->data;
         
             $.ajax({
                 type: "POST",
-                url: "controle-acesso/altera-permissao",
+                url: "<?php echo baseUrl; ?>controle-acesso/altera-permissao",
                 data: {
                     uuid: uuid,
                     status: status_acl

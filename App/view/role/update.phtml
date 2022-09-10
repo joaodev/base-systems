@@ -62,7 +62,7 @@
                     name: {
                         remote: { 
                             type: "post",
-                            url: "controle-acesso/valor-existente",
+                            url: "<?php echo baseUrl; ?>controle-acesso/valor-existente",
                             data: {uuid: '<?php echo $_POST['uuid']; ?>'}
                         }
                     },
@@ -78,14 +78,13 @@
                 
                     $.ajax({
                         type: "POST",
-                        url: "controle-acesso/processa-edicao",
+                        url: "<?php echo baseUrl; ?>controle-acesso/processa-edicao",
                         data: dados,
                         dataType: 'json',
                         async: true
                     }).done(function(data) {
                         showAlert(data.type, data.title, data.msg, data.pos);
                         $("#baseLoader").hide();
-                        openModule('controle-acesso');
                     }).fail(function() {
                         showInternalErrorAlert(); 
                         $("#baseLoader").hide();

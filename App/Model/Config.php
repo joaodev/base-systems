@@ -15,7 +15,7 @@ class Config extends Model
     {
         try {
             $query = "
-                SELECT uuid, version, site_title, primary_color, secondary_color, email,phone,
+                SELECT uuid, version, site_title, primary_color, secondary_color, email, phone,
                         cellphone, full_address, logo, logo_icon, mail_host, mail_port,
                         mail_username, mail_password, mail_from_address, mail_to_address, updated_at
                 FROM {$this->getTable()}

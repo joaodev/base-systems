@@ -8,14 +8,11 @@ $canView = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resourceCod
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-6">
+                <div class="col-12">
                     <h1 style="position: relative; top: 5px">
                         <i class="fas fa-th-list"></i>
                         Logs do Sistema
                     </h1>
-                </div>
-                <div class="col-6">
-                    
                 </div>
             </div>
         </div>
@@ -34,6 +31,8 @@ $canView = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resourceCod
                                             <th class="text-white" style="font-size: 14px;">Colaborador</th>
                                             <th class="text-white" style="font-size: 14px;">Ação</th>
                                             <th class="text-white" style="font-size: 14px;">Status</th>
+                                            <th style="display: none;">IP</th>
+                                            <th style="display: none;">Dispositivo</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -58,6 +57,12 @@ $canView = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resourceCod
                                                 </td>
                                                 <td style="font-size: 15px">
                                                     <?php echo $entity['log_status']; ?>
+                                                </td>
+                                                <td style="display: none;">
+                                                    <?php echo $entity['log_ip']; ?>
+                                                </td>
+                                                <td style="display: none;">
+                                                    <?php echo $entity['log_user_agent']; ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -89,7 +94,7 @@ $canView = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resourceCod
                     $.extend( true, {}, buttonCommon, {
                         extend: 'excel',
                         title: 'Lista de Categorias',
-                        exportOptions: {columns: [0,1,2,3]}
+                        exportOptions: {columns: [0,1,2,3,4,5]}
                     })
                 ],
                 order: [ [0, "desc"] ],
@@ -133,7 +138,7 @@ $canView = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resourceCod
 
             $.ajax({
                 type: 'post',
-                url: "logs/detalhes",
+                url: "<?php echo baseUrl; ?>logs/detalhes",
                 data: {uuid:uuid},
                 async: true
             }).done(function(data) {

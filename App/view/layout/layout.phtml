@@ -1,12 +1,11 @@
 <?php 
 $config = $this->getSiteConfig();
 
-$canViewCustomers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('customers'));
 $canViewUsers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('user'));
 $canViewConfigs = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('configs'));
 $canViewPolitics = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('politics'));
 $canViewLogs = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('logs'));
-
+$canViewCustomers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('customers'));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -187,15 +186,15 @@ $canViewLogs = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this
                             Início
                         </p>
                     </a>
-                </li>    
-                <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewCustomers): ?>
-                    <li class="nav-item">
-                        <a onclick="openModule('clientes');" class="nav-link text-white" style="cursor: pointer;" id="box_clientes">
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>Clientes</p>
-                        </a>
-                    </li>
-                <?php endif; ?>
+                </li> 
+                <li class="nav-item">
+                    <a onclick="openModule('clientes');" class="nav-link text-white">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Clientes
+                        </p>
+                    </a>
+                </li> 
                 <?php if (
                         $_SESSION['ROLE_ADM'] == '1' 
                         || $canViewUsers
@@ -222,6 +221,16 @@ $canViewLogs = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this
                                     </a>
                                 </li>
                             <?php endif; ?>     
+                            <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewUsers): ?>
+                                <li class="nav-item ml-2">
+                                    <a onclick="openModule('usuarios');" class="nav-link text-white" style="cursor: pointer;">
+                                        <i class="nav-icon fas fa-user-cog"></i>
+                                        <p>
+                                            Colaboradores 
+                                        </p>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
                             <?php if ($_SESSION['ROLE_ADM'] == '1'): ?>
                                 <li class="nav-item ml-2">
                                     <a onclick="openModule('controle-acesso');" class="nav-link text-white" style="cursor: pointer;">
@@ -248,16 +257,6 @@ $canViewLogs = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this
                                         <i class="nav-icon fas fa-eye"></i>
                                         <p>
                                             Política de Privacidade
-                                        </p>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
-                            <?php if ($_SESSION['ROLE_ADM'] == '1' || $canViewUsers): ?>
-                                <li class="nav-item ml-2">
-                                    <a onclick="openModule('usuarios');" class="nav-link text-white" style="cursor: pointer;">
-                                        <i class="nav-icon fas fa-user-cog"></i>
-                                        <p>
-                                            Colaboradores 
                                         </p>
                                     </a>
                                 </li>
@@ -369,9 +368,9 @@ $canViewLogs = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-        <b>Versão</b> <?php echo $config['version']; ?>
+        <b>Versão</b> <?php echo $config['version']; ?> 
         <div class="float-right ">
-            <strong>Desenvolvido por <a href="https://jabdesenvolvimento.com.br/" target="_blank">JAB Desenvolvimento</a></strong>
+            <strong>Desenvolvido por <a href="https://jabdesenvolvimento.com.br/" target="_blank">JAB Desenvolvimento</a> | <?php echo date('Y'); ?></strong>
         </div>
     </footer>
     </div>
@@ -395,5 +394,10 @@ $canViewLogs = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this
             });
         }
     </script>
+    <?php if (!empty($_GET['mod'])): ?>
+        <script>
+            openModule('<?php echo $_GET['mod']; ?>');
+        </script>
+    <?php endif; ?>
 </body>
 </html>

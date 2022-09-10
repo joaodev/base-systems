@@ -26,7 +26,7 @@ class Bootstrap
                 if ($request_url == $url) {
                     if ($router['namespace'] == "app") {
      
-                        if ($url == $this->project_url . "/admin/login")
+                        if ($url == $this->project_url . "/login")
                             return header("Location: " . $this->project_url);
 
                         $auth = new AuthAdpter();
@@ -103,13 +103,13 @@ class Bootstrap
     public static function getDb()
     {
         $server = "127.0.0.1";
-        $db     = "";
-        $user   = "";
+        $db     = "base_systems";
+        $user   = "root";
         $pass   = ""; 
-        $port   = "";
+        $port   = "3306"; 
 
         $db = new \PDO(
-            "mysql:host={$server};port={$port};dbname={$db}", $user, $pass
+            "mysql:host={$server};port={$port}dbname={$db}", $user, $pass
         );
 
         $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);

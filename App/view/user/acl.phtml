@@ -34,7 +34,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover" id="table_acl" style="width: 99.9%;">
+                                <table class="table table-bordered table-hover" id="table_acl_users" style="width: 99.9%;">
                                     <thead>
                                         <tr class="text-center bg-primary" style="height: 30px;">
                                             <th class="text-white" style="font-size: 14px;">Ação</th>
@@ -73,7 +73,12 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
         </div>
     </section>
     <script>
+        
         $(document).ready(function() {
+            $("input[data-bootstrap-switch]").each(function(){
+                $(this).bootstrapSwitch();
+            });
+
             var buttonCommon = {
                 exportOptions: {
                     format: {
@@ -84,7 +89,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                 }
             };	
 
-            $('#table_acl').DataTable({
+            $('#table_acl_users').DataTable({
                 "sDom": 'fltip',
                 searching: true,
                 buttons: [
@@ -106,7 +111,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                 processing: true,
                 scrollCollapse: true,
                 paging: true,
-                "pageLength": 18,
+                "pageLength": 10,
                 "language": {
                     "sEmptyTable": "Nenhum registro encontrado",
                     "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -135,12 +140,6 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
     </script>
     <?php if ($canUpdate): ?>
         <script>
-            $(document).ready(function() {
-                $("input[data-bootstrap-switch]").each(function(){
-                    $(this).bootstrapSwitch();
-                });
-            });
-
             function getVal(uuid) {
                 let status_acl = "";
                 if ($('#my-checkbox-' + uuid).is(":checked")) {
@@ -152,7 +151,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
                 $("#baseLoader").show();
                 $.ajax({
                     type: "POST",
-                    url: "usuarios/altera-permissao",
+                    url: "<?php echo baseUrl; ?>usuarios/altera-permissao",
                     data: {
                         uuid: uuid,
                         status: status_acl

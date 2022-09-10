@@ -90,13 +90,84 @@ class LoginController extends ActionController
 
                 if ($updateCode) {
                     $config = $this->getSiteConfig();
+                    $message = '<!DOCTYPE html>
+                                <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <meta name="viewport" content="width=device-width,initial-scale=1">
+                                    <meta name="x-apple-disable-message-reformatting">
+                                    <title></title>
+                                    <!--[if mso]>
+                                    <noscript>
+                                        <xml>
+                                            <o:OfficeDocumentSettings>
+                                                <o:PixelsPerInch>96</o:PixelsPerInch>
+                                            </o:OfficeDocumentSettings>
+                                        </xml>
+                                    </noscript>
+                                    <![endif]-->
+                                    <style>
+                                        table, td, div, h1, p {font-family: Arial, sans-serif;}
+                                    </style>
+                                </head>
+                                <body style="margin:0;padding:0;">
+                                    <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
+                                        <tr>
+                                            <td align="center" style="padding:0;">
+                                                <table role="presentation" style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                                                    <tr>
+                                                        <td align="center" style="padding:10px 0 10px 0;background:'.$config['primary_color'].';">
+                                                            <h1 style="color: white; text-shadow: black 0.1em 0.1em 0.2em;">'.$config['site_title'].'</h1>
+                                                            <img src="'. baseUrl . 'public/uploads/logo/' . $config['logo'].'" 
+                                                                alt="'.$config['site_title'].'" width="300" style="height:auto;display:block;" />
+                                                            <h2 style="color: white; text-shadow: black 0.1em 0.1em 0.2em;">Código de Verificação</h2>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:36px 30px 42px 30px;">
+                                                            <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+                                                                <tr>
+                                                                    <td style="padding:0 0 10px 0;color:#153643;">
+                                                                        <p>Olá, '.$user['name'].', tudo bem? </p>
+                                                                        <p>Este é o seu código para validar sua alteração de senha:</p>
+                                                                        <br>
+                                                                        <h1 style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;">'.$code.'</h1>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding:0;">
+                                                                        <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+                                                                            <tr>
+                                                                                <td style="width:260px;padding:0;vertical-align:top;color:#153643;">
+                                                                                    <p style="margin:0 0 12px 0;font-size:11px;line-height:15px;font-family:Arial,sans-serif;">*Esta é uma mensagem automática, não responda este email.</p>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:30px;background:'.$config['primary_color'].';">
+                                                            <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;font-size:9px;font-family:Arial,sans-serif;">
+                                                                <tr>
+                                                                    <td style="padding:0;width:100%;" align="right">
+                                                                        <p style="margin:0;font-size:14px;line-height:16px;font-family:Arial,sans-serif;color:#ffffff;">
+                                                                            &reg; '.$config['site_title'].'<br/>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </body>
+                                </html>';   
 
-                    $message = "
-                        <p>Olá, " . $user['name'] . "!</p>
-                        <p>Este é o seu código para validar sua alteração da sua senha:</p>
-                        <p style='font-size: 30px;'><b>" . $code . "</b></p>
-                    ";
-        
                     $mail = new PHPMailer();
                     $mail->isSMTP();                                            
                     $mail->Host       = $config['mail_host'];
@@ -110,7 +181,7 @@ class LoginController extends ActionController
         
                     $message = wordwrap($message, 70, "\r\n");
                     $mail->isHTML(true);                                  
-                    $mail->Subject = utf8_decode($config['site_title'] . ' - CÓDIGO DE RECUPERAÇÃO');
+                    $mail->Subject = utf8_decode('Código de Verificação' . $config['site_title']);
                     $mail->Body    = utf8_decode($message);
                     $mail->send();
 

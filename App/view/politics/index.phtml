@@ -85,7 +85,7 @@ $canUpdate  = ($_SESSION['ROLE_ADM'] == '1' || $this->acl($role, $this->resource
 
                     $.ajax({
                         type: "POST",
-                        url: "politica-privacidade/processa-edicao",
+                        url: "<?php echo baseUrl; ?>politica-privacidade/processa-edicao",
                         data: dados,
                         dataType: 'json',
                     }).done(function(data) {

@@ -27,6 +27,19 @@ class MyProfileController extends ActionController
     public function updateProcessAction()
     {
         if (!empty($_POST)) {
+            $exists = $this->model->fieldExists('email', $_POST['email'], 'uuid', $_SESSION['COD']);
+            if ($exists) {
+                $data  = [
+                    'title' => 'Erro!', 
+                    'msg' => 'Não é possível utilizar este email.',
+                    'type' => 'error',
+                    'pos'   => 'top-center'
+                ];
+
+                echo json_encode($data);
+                return true;
+            }
+
             if (!empty($_POST['password']) && !empty($_POST['confirmation'])) {
                 if (($_POST['password'] != $_POST['confirmation'])) {
                     $data  = [

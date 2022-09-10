@@ -50,7 +50,20 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                                             <th class="text-white" style="font-size: 14px;">Cargo</th>
                                             <th class="text-white" style="font-size: 14px;">Perfil</th>
                                             <th class="text-white" style="font-size: 14px;">Status</th>
+                                            <th style="display: none;">CPF</th>
+                                            <th style="display: none;">CNPJ</th>
+                                            <th style="display: none;">Telefone</th>
+                                            <th style="display: none;">Whatsapp</th>
+                                            <th style="display: none;">CEP</th>
+                                            <th style="display: none;">Endereço</th>
+                                            <th style="display: none;">Número</th>
+                                            <th style="display: none;">Complemento</th>
+                                            <th style="display: none;">Bairro</th>
+                                            <th style="display: none;">Cidade</th>
+                                            <th style="display: none;">UF</th>
                                             <th style="display: none;">Status</th>
+                                            <th style="display: none;">Cadastrado em</th>
+                                            <th style="display: none;">Atualizado em</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -72,7 +85,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                                                 <td style="font-size: 15px">
                                                     <?php echo $entity['role']; ?>
                                                 </td>
-                                                <td>
+                                                <td style="width: 80px;">
                                                     <?php if ($entity['status'] == '1'): ?>
                                                         <i class="fa fa-circle" style="color: green;"></i>
                                                     <?php else: ?>
@@ -80,7 +93,46 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                                                     <?php endif; ?>
                                                 </td>  
                                                 <td style="display: none;">
+                                                    <?php echo $entity['document_1']; ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $entity['document_2']; ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $entity['phone']; ?>
+                                                </td>  
+                                                <td style="display: none;">
+                                                    <?php echo $entity['whatsapp']; ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $entity['postal_code']; ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $entity['address']; ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $entity['number']; ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $entity['complement']; ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $entity['neighborhood']; ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $entity['city']; ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $entity['state']; ?>
+                                                </td> 
+                                                <td style="display: none;">
                                                     <?php echo ($entity['status'] == '1') ? 'Ativo' : 'Inativo'; ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $this->formatDateTime($entity['created_at']); ?>
+                                                </td> 
+                                                <td style="display: none;">
+                                                    <?php echo $this->formatDateTime($entity['updated_at']); ?>
                                                 </td> 
                                             </tr>
                                         <?php endforeach; ?>
@@ -112,7 +164,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                     $.extend( true, {}, buttonCommon, {
                         extend: 'excel',
                         title: 'USUÁRIOS',
-                        exportOptions: {columns: [0,1,2,3,4,6]}
+                        exportOptions: {columns: [0,1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,17,18,19]}
                     })
                 ],
                 order: [ [4, "asc"] ],
@@ -153,7 +205,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
             $("#baseLoader").show();
             $.ajax({
                 type: 'post',
-                url: "usuarios/detalhes",
+                url: "<?php echo baseUrl; ?>usuarios/detalhes",
                 data: {uuid:uuid},
                 async: true
             }).done(function(data) {
@@ -172,7 +224,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                 $("#baseLoader").show();
                 $.ajax({
                     type: 'post',
-                    url: "usuarios/cadastrar",
+                    url: "<?php echo baseUrl; ?>usuarios/cadastrar",
                     async: true
                 }).done(function(data) {
                     $("#sis_content").html(data);
@@ -190,7 +242,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                 $("#baseLoader").show();
                 $.ajax({
                     type: 'post',
-                    url: "usuarios/editar",
+                    url: "<?php echo baseUrl; ?>usuarios/editar",
                     data: {uuid:uuid},
                     async: true
                 }).done(function(data) {
@@ -220,7 +272,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
 
                     $.ajax({
                         type: "POST",
-                        url: "usuarios/excluir",
+                        url: "<?php echo baseUrl; ?>usuarios/excluir",
                         data: {uuid: uuid},
                         dataType: 'json',
                         async: true
@@ -243,7 +295,7 @@ $canViewAcl = ($isAdmin || $this->acl($role, $this->resourceCodes('view'), $this
                 $("#baseLoader").show();
                 $.ajax({
                     type: 'post',
-                    url: "usuarios/acl",
+                    url: "<?php echo baseUrl; ?>usuarios/acl",
                     data: {uuid:uuid},
                     async: true
                 }).done(function(data) {

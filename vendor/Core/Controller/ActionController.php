@@ -20,7 +20,7 @@ class ActionController
         }
 
         if (!empty($_POST)) {
-            if (empty($_POST['description'])) {
+            if (empty($_POST['description']) && empty($_POST['description_1']) && empty($_POST['description_2'])) {
                 self::dataValidation($_POST);
             }
         }
@@ -274,9 +274,9 @@ class ActionController
             'configs' => 'c315421e-af07-aa52-8c8e-715a511be94d',
             'logs' => 'a985e89b-ca02-cf03-5080-c81b8578709b',
             'politics' => 'eccd0f74-2c1a-3600-fafb-ff14d65b0160',
-            'customers' => '4a779c2b-1864-e061-9c12-615f9466b5df',
+            'customers' => '4a779c2b-9c12-e061-1864-61466b5f95df',
         ];
-
+        
         return $codes[$key];
     }
 }

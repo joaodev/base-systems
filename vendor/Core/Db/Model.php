@@ -51,6 +51,38 @@ class Model extends InitDb
         }
     }
 
+    
+    public function findActive($uuid, $stringFields, $uuidField, $view = null)
+    {
+        try {
+            if (!empty($view)) {
+                $table = $view;
+            } else {
+                $table = $this->getTable();
+            }   
+
+            $query = "
+                SELECT {$stringFields}
+                FROM {$table} 
+                WHERE {$uuidField} = :uuid
+                AND deleted = :deleted
+            ";
+
+            $stmt = $this->openDb()->prepare($query);
+            $stmt->bindValue(":uuid", $uuid);
+            $stmt->bindValue(":deleted", '0');
+            $stmt->execute();
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            $stmt = null;
+            $this->closeDb();
+
+            return $result;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function findAll($stringFields)
     {
         try {
@@ -61,6 +93,32 @@ class Model extends InitDb
             ";
 
             $stmt = $this->openDb()->prepare($query);
+            $stmt->bindValue(":deleted", '0');
+            $stmt->execute();
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $stmt = null;
+            $this->closeDb();
+
+            return $result;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function findAllBy($stringFields, $whereField, $whereValue)
+    {
+        try {
+            $query = "
+                SELECT {$stringFields}
+                FROM {$this->getTable()} 
+                WHERE 
+                    {$whereField} = :whereValue
+                    AND deleted = :deleted
+            ";
+
+            $stmt = $this->openDb()->prepare($query);
+            $stmt->bindValue(":whereValue", $whereValue);
             $stmt->bindValue(":deleted", '0');
             $stmt->execute();
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);

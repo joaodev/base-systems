@@ -34,43 +34,65 @@ $entity = $this->view->entity;
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-12" style="border-radius: 5px;">
+                                    <hr>
+                                    <h5><i class="fas fa-user pr-1"></i> Dados Pessoais</h5>
+                                    <hr>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name">Nome</label>
                                         <input type="text" class="form-control" name="name" id="name" required maxlength="100"
                                             value="<?php echo $entity['name']; ?>">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="cnpj">CPF</label>
+                                        <input type="text" class="form-control" name="document_1" id="document_1" 
+                                            value="<?php echo $entity['document_1']; ?>" onchange="validateCPF();">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="cnpj">CNPJ</label>
+                                        <input type="text" class="form-control" name="document_2" id="document_2" 
+                                            value="<?php echo $entity['document_2']; ?>" onchange="validateCNPJ();">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="job_role">Cargo</label>
                                         <input type="text" class="form-control" name="job_role" id="job_role" required maxlength="50"
                                             value="<?php echo $entity['job_role']; ?>">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="phone">Telefone</label>
                                         <input type="text" class="form-control" name="phone" id="phone" maxlength="13"
                                             value="<?php echo $entity['phone']; ?>">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="cellphone">Celular</label>
                                         <input type="text" class="form-control" name="cellphone" id="cellphone" maxlength="14"
                                             value="<?php echo $entity['cellphone']; ?>">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="whatsapp">WhatsApp</label>
                                         <input type="text" class="form-control" name="whatsapp" id="whatsapp" maxlength="14"
                                             value="<?php echo $entity['whatsapp']; ?>">
                                     </div>
                                 </div>
-                                <div class="col-md-12"><hr></div>
-                                
+                                <div class="col-md-12" style="border-radius: 5px;">
+                                    <hr>
+                                    <h5 class="pt-2"><i class="fas fa-lock pr-1"></i> Dados de Acesso</h5>
+                                    <hr>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name">Email</label>
@@ -90,6 +112,60 @@ $entity = $this->view->entity;
                                         <input type="password" class="form-control" name="confirmation" id="confirmation" minlength="8"  maxlength="100">
                                     </div>
                                 </div>
+                                <div class="col-md-12" style="border-radius: 5px;">
+                                    <hr>
+                                    <h5 class="pt-2"><i class="fas fa-map-marker-alt pr-1"></i> Localização</h5>
+                                    <hr>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="postal_code">CEP</label>
+                                        <input type="text" class="form-control" name="postal_code" id="postal_code" 
+                                            value="<?php echo $entity['postal_code']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="address">Endereço</label>
+                                        <input type="text" class="form-control" name="address" id="address"  maxlength="100"
+                                            value="<?php echo $entity['address']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="number">Número</label>
+                                        <input type="text" class="form-control" name="number" id="number"  maxlength="50"
+                                            value="<?php echo $entity['number']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="complement">Complemento</label>
+                                        <input type="text" class="form-control" name="complement" id="complement"  maxlength="50"
+                                            value="<?php echo $entity['complement']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="neighborhood">Bairro</label>
+                                        <input type="text" class="form-control" name="neighborhood" id="neighborhood"  maxlength="100"
+                                            value="<?php echo $entity['neighborhood']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="city">Cidade</label>
+                                        <input type="text" class="form-control" name="city" id="city"  maxlength="100"
+                                            value="<?php echo $entity['city']; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="state">UF</label>
+                                        <input type="text" class="form-control" name="state" id="state"  maxlength="2"
+                                            value="<?php echo $entity['state']; ?>">
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 text-right mt-3 mb-2">
@@ -106,6 +182,8 @@ $entity = $this->view->entity;
     </div>
 </section>
 <script src="<?php echo baseUrl; ?>public/js/md5.min.js"></script>
+<script src="<?php echo baseUrl; ?>public/js/api_cep.js"></script>
+<script src="<?php echo baseUrl; ?>public/js/documents_validators.js"></script>
 <script>
     function hashPass(form) {
         if (form.password.value != '') {
@@ -121,11 +199,49 @@ $entity = $this->view->entity;
 </script>
 <script>
     $(document).ready(function() {
+        $("#document_1").mask("999.999.999-99");
+        $("#document_2").mask("99.999.999/9999-99");
         $("#phone").mask("(99)9999-9999");
         $("#cellphone").mask("(99)99999-9999");
         $("#whatsapp").mask("(99)99999-9999");
+        $("#postal_code").mask("99999-999");
+
 
         $('#formUpdateMyProfile').validate({
+            rules: {
+                name: {
+                    remote: { 
+                        type: "post",
+                        url: "<?php echo baseUrl; ?>usuarios/valor-existente",
+                        data: {uuid: '<?php echo $_SESSION['COD']; ?>'}
+                    }
+                },
+                email: {
+                    remote: { 
+                        type: "post",
+                        url: "<?php echo baseUrl; ?>usuarios/valor-existente",
+                        data: {uuid: '<?php echo $_SESSION['COD']; ?>'}
+                    }
+                },
+                cellphone: {
+                    remote: { 
+                        type: "post",
+                        url: "<?php echo baseUrl; ?>usuarios/valor-existente",
+                        data: {uuid: '<?php echo $_SESSION['COD']; ?>'}
+                    }
+                },
+            },
+            messages: {
+                name: {
+                    remote: "Nome já cadastrado"
+                },
+                email: {
+                    remote: "Email já cadastrado"
+                },
+                cellphone: {
+                    remote: "Celular já cadastrado"
+                }
+            },
             submitHandler: function( form ){
                 var dados = $( form ).serialize();
                 var file_data = $('#file').prop('files')[0];   
@@ -133,6 +249,8 @@ $entity = $this->view->entity;
 
                 form_data.append('file', file_data);    
                 form_data.append('name', $("#name").val());    
+                form_data.append('document_1', $("#document_1").val());    
+                form_data.append('document_2', $("#document_2").val());    
                 form_data.append('job_role', $("#job_role").val());    
                 form_data.append('email', $("#email").val());    
                 form_data.append('phone', $("#phone").val());    
@@ -141,12 +259,20 @@ $entity = $this->view->entity;
                 form_data.append('password', $("#password").val());    
                 form_data.append('confirmation', $("#confirmation").val());    
 
+                form_data.append('postal_code', $("#postal_code").val());    
+                form_data.append('address', $("#address").val());    
+                form_data.append('number', $("#number").val());    
+                form_data.append('complement', $("#complement").val());    
+                form_data.append('neighborhood', $("#neighborhood").val());    
+                form_data.append('city', $("#city").val());    
+                form_data.append('state', $("#state").val());    
+
                 $("#baseLoader").show();
                 $("#btnSubmit").show('disabled', true);
 
                 $.ajax({
                     type: "POST",
-                    url: "meu-perfil/processa-edicao",
+                    url: "<?php echo baseUrl; ?>meu-perfil/processa-edicao",
                     cache: false,
                     contentType: false,
                     processData: false,
@@ -155,8 +281,12 @@ $entity = $this->view->entity;
                     async: true
                 }).done(function(data) {
                     showAlert(data.type, data.title, data.msg, data.pos);
-                    $("#baseLoader").hide();  
-                    openModule('meu-perfil');
+                    if(data.type == 'success') {
+                        window.location.href = "<?php echo baseUrl; ?>?mod=meu-perfil";
+                    } else {
+                        $("#btnSubmit").show('disabled', false);
+                        $("#baseLoader").hide();   
+                    }
                 }).fail(function() {
                     showInternalErrorAlert(); 
                     $("#baseLoader").hide();   

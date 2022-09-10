@@ -193,21 +193,21 @@ $role = $_SESSION['ROLE'];
                     name: {
                         remote: { 
                             type: "post",
-                            url: "usuarios/valor-existente",
+                            url: "<?php echo baseUrl; ?>usuarios/valor-existente",
                             data: {uuid: '<?php echo $_POST['uuid']; ?>'}
                         }
                     },
                     email: {
                         remote: { 
                             type: "post",
-                            url: "usuarios/valor-existente",
+                            url: "<?php echo baseUrl; ?>usuarios/valor-existente",
                             data: {uuid: '<?php echo $_POST['uuid']; ?>'}
                         }
                     },
                     cellphone: {
                         remote: { 
                             type: "post",
-                            url: "usuarios/valor-existente",
+                            url: "<?php echo baseUrl; ?>usuarios/valor-existente",
                             data: {uuid: '<?php echo $_POST['uuid']; ?>'}
                         }
                     },
@@ -229,13 +229,18 @@ $role = $_SESSION['ROLE'];
                 
                     $.ajax({
                         type: "POST",
-                        url: "usuarios/processa-edicao",
+                        url: "<?php echo baseUrl; ?>usuarios/processa-edicao",
                         data: dados,
                         dataType: 'json',
                         async: true
                     }).done(function(data) {
                         showAlert(data.type, data.title, data.msg, data.pos);
-                        $("#baseLoader").hide(); 
+                        if (data.type == 'success') {
+                            updateUser('<?php echo $entity['uuid']; ?>');
+                        } else {
+                            $("#baseLoader").hide();
+                            $("#btnSubmit").show('disabled', false);
+                        }
                     }).fail(function() {
                         showInternalErrorAlert(); 
                         $("#baseLoader").hide(); 

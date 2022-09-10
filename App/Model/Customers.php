@@ -72,6 +72,37 @@ class Customers extends Model
         }
     }
 
+    public function getAllActives()
+    {
+        try {
+            $query = " 
+                SELECT uuid, name, email, phone, cellphone, 
+                    document_1, document_2, whatsapp, 
+                    postal_code, address, number, complement, 
+                    neighborhood, city, state, 
+                    status, created_at, updated_at, user_uuid
+                FROM {$this->getTable()}
+                WHERE status = :status
+                    AND deleted = :deleted
+                ORDER BY name ASC
+            ";
+
+            $stmt = $this->openDb()->prepare($query);
+            $stmt->bindValue(":status", '1');
+            $stmt->bindValue(":deleted", '0');
+            $stmt->execute();
+
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $stmt = null;
+            $this->closeDb();
+
+            return $result;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function totalCustomers()
     {
         try {

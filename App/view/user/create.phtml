@@ -195,19 +195,19 @@ $role = $_SESSION['ROLE'];
                     name: {
                         remote: { 
                             type: "post",
-                            url: "usuarios/valor-existente",
+                            url: "<?php echo baseUrl; ?>usuarios/valor-existente",
                         }
                     },
                     email: {
                         remote: { 
                             type: "post",
-                            url: "usuarios/valor-existente",
+                            url: "<?php echo baseUrl; ?>usuarios/valor-existente",
                         }
                     },
                     cellphone: {
                         remote: { 
                             type: "post",
-                            url: "usuarios/valor-existente",
+                            url: "<?php echo baseUrl; ?>usuarios/valor-existente",
                         }
                     },
                 },
@@ -229,7 +229,7 @@ $role = $_SESSION['ROLE'];
                     
                     $.ajax({
                         type: "POST",
-                        url: "usuarios/processa-cadastro",
+                        url: "<?php echo baseUrl; ?>usuarios/processa-cadastro",
                         data: dados,
                         dataType: 'json',
                         async: true

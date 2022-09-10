@@ -1,6 +1,6 @@
 <?php
-$canViewCustomers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('customers'));
 $canViewUsers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('user'));
+$canViewCustomers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $this->moduleCodes('customers'));
 ?>
 <section class="content-header">
     <div class="container-fluid">
@@ -27,7 +27,7 @@ $canViewUsers = $this->acl($_SESSION['ROLE'], $this->resourceCodes('view'), $thi
                         <div class="icon">
                             <i class="fas fa-users text-white"></i>
                         </div>
-                        <a  class="small-box-footer" style="cursor: pointer;">
+                        <a class="small-box-footer" style="cursor: pointer;">
                             Mais informações <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
